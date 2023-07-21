@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/ebancking?createDatabaseIfNotExist=true
+    username: root
+    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+      format_sql: true
+    show-sql: false
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQLDialect
+
+server:
+  port: 8200
