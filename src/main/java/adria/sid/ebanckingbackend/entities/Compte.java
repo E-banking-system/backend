@@ -9,6 +9,7 @@ import java.util.Date;
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Compte {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;

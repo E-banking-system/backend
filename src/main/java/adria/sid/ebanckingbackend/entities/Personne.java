@@ -1,5 +1,6 @@
 package adria.sid.ebanckingbackend.entities;
 
+import adria.sid.ebanckingbackend.ennumerations.*;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -7,16 +8,6 @@ import lombok.Data;
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Personne {
-
-    enum EGender {
-        MALE,
-        FEMALE
-    }
-
-    enum EPType {
-        MORALE,
-        PHYSIQUE
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

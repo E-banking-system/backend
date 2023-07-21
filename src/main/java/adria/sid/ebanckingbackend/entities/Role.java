@@ -1,5 +1,6 @@
 package adria.sid.ebanckingbackend.entities;
 
+import adria.sid.ebanckingbackend.ennumerations.*;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -8,11 +9,6 @@ import java.util.List;
 @Entity
 @Data
 public class Role {
-
-    enum ERole {
-        CLIENT,
-        BANQUIER
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
