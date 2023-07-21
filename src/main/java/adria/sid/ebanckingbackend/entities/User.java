@@ -11,7 +11,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @PrimaryKeyJoinColumn(name = "user_id")
-public class User extends Personne{
+public class User extends Personne {
+
     private String userName;
     private String password;
 
@@ -21,7 +22,7 @@ public class User extends Personne{
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private List<Compte> comptes;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne // Many users can have the same role
     @JoinColumn(name = "role_id")
     private Role role;
 
