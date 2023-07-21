@@ -7,24 +7,24 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@PrimaryKeyJoinColumn(name = "compte_id")
 public class Message {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
 
     private String message;
 
     private Boolean isRead;
 
-    @OneToOne
-    @JoinColumn(name = "message_id")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "address_id")
     private PJ pj;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "banquier_id")
     private Banquier banquier;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "client_id")
     private Client client;
 

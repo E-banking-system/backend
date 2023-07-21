@@ -9,10 +9,9 @@ import java.io.File;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@PrimaryKeyJoinColumn(name = "pj_id")
 public class PJ {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
 
     private String name;

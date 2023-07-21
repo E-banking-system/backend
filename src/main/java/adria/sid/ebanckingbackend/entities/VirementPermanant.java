@@ -2,6 +2,7 @@ package adria.sid.ebanckingbackend.entities;
 
 import adria.sid.ebanckingbackend.ennumerations.*;
 import jakarta.persistence.Entity;
+import jakarta.persistence.PrimaryKeyJoinColumn;
 import lombok.*;
 
 import java.util.Date;

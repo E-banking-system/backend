@@ -10,12 +10,14 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@PrimaryKeyJoinColumn(name = "banquier_id")
 public class Banquier extends User{
 
-    @OneToOne(mappedBy = "banquier")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "personne_id")
     private Personne personne;
 
-    @OneToMany(mappedBy = "banquier", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "banquier")
     private List<Message> messages;
 
     public void addMsg(Message msg) {

@@ -8,11 +8,10 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED) // Change the inheritance strategy to JOINED
+@PrimaryKeyJoinColumn(name = "personne_id")
 public class Personne {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
 
     private String nom;
@@ -25,7 +24,7 @@ public class Personne {
     private EPType personneType;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "banquier_id")
+    @JoinColumn(name = "banquier_id", referencedColumnName = "id")
     private Banquier banquier;
 
 }

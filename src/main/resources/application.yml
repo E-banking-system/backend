@@ -7,11 +7,11 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
       format_sql: true
     show-sql: false
     database: mysql
     database-platform: org.hibernate.dialect.MySQLDialect
 
-  server:
-    port: 8200
+server:
+  port: 8200

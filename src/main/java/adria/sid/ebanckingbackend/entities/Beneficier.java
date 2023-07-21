@@ -10,13 +10,12 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@PrimaryKeyJoinColumn(name = "beneficier_id")
 public class Beneficier extends Personne{
     private String RIB;
 
-    @OneToMany(mappedBy = "beneficier", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "beneficier")
     private List<Virement> virements;
-<<<<<<< HEAD
-=======
 
     public void addVirement(Virement vrmnt) {
         if (virements == null) {
@@ -25,6 +24,4 @@ public class Beneficier extends Personne{
         virements.add(vrmnt);
         vrmnt.setBeneficier(this); // Set the user reference in the notification
     }
-
->>>>>>> f80cadb886e0d92277c4e12ba065a87741d9b5db
 }

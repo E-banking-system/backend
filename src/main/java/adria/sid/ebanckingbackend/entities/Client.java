@@ -10,7 +10,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Client extends User{
+@PrimaryKeyJoinColumn(name = "client_id")
+public class Client extends Personne {
+
     private String operateur;
     private String address;
     private Long tel;
@@ -38,5 +40,4 @@ public class Client extends User{
         virements.add(vrmnt);
         vrmnt.setClient(this); // Set the user reference in the notification
     }
-
 }
