@@ -11,9 +11,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Entity
 public class VirementPermanant extends Virement{
-
+    private Boolean estPermanent;
     private Date horaire;
-
     private EVType virementType;
-
 }

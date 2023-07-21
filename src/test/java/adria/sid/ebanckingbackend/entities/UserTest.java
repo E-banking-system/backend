@@ -69,7 +69,6 @@ class UserTest {
         compte1.setDateCreation(new Date());
         compte1.setSold(8745.0);
 
-
         Compte compte2 = new Compte();
         String compte2Id = UUID.randomUUID().toString();
         compte2.setId(compte2Id);

@@ -5,6 +5,8 @@ import lombok.*;
 
 @Data
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 public class VirementUnitaire extends Virement{
-
+    private Boolean estUnitaire;
 }
