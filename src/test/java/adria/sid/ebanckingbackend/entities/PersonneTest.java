@@ -44,8 +44,8 @@ public class PersonneTest {
         Personne personne = new Personne();
         String personneID = UUID.randomUUID().toString();
         personne.setId(personneID);
-        personne.setNom("p1");
-        personne.setPrenom("p1");
+        personne.setNom("nom");
+        personne.setPrenom("prenom");
 
         personne.setBanquier(banquier);
         banquier.setPersonne(personne);
