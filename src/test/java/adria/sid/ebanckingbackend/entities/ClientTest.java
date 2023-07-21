@@ -63,7 +63,6 @@ public class ClientTest {
 
         assertEquals(1, clt.getVirements().size());
         assertTrue(clt.getVirements().contains(virement));
-        assertTrue(clt.getVirements().contains(virement));
 
     }
 
