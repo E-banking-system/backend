@@ -13,5 +13,5 @@ spring:
     database: mysql
     database-platform: org.hibernate.dialect.MySQLDialect
 
-server:
-  port: 8200
+  server:
+    port: 8200

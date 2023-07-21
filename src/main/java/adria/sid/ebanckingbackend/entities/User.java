@@ -20,5 +20,4 @@ public class User extends Personne{
     @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;
-
 }
