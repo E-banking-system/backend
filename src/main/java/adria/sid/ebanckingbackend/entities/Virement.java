@@ -1,7 +1,7 @@
 package adria.sid.ebanckingbackend.entities;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.util.Date;
 
@@ -20,5 +20,9 @@ public class Virement {
     @ManyToOne
     @JoinColumn(name = "client_id")
     private Client client;
+
+    @ManyToOne
+    @JoinColumn(name = "beneficier_id")
+    private Beneficier beneficier;
 
 }

@@ -11,8 +11,6 @@ import java.util.List;
 @Entity
 public class VirementPermanant extends Virement{
 
-    private List<Beneficier> listBeneficiers;
-
     private Date horaire;
 
     private EVType virementType;
