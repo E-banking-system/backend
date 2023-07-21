@@ -16,7 +16,8 @@ public class Message {
 
     private Boolean isRead;
 
-    @OneToOne(mappedBy = "message")
+    @OneToOne
+    @JoinColumn(name = "message_id")
     private PJ pj;
 
     @ManyToOne

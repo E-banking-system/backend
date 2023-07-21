@@ -14,5 +14,4 @@ public class Beneficier extends Personne{
 
     @OneToMany(mappedBy = "beneficier", cascade = CascadeType.ALL)
     private List<Virement> virements;
-
 }
