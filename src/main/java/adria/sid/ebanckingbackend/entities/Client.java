@@ -11,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @PrimaryKeyJoinColumn(name = "client_id")
-public class Client extends Personne {
+public class Client extends User {
 
     private String operateur;
     private String address;
