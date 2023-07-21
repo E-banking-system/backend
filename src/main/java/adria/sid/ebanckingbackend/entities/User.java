@@ -3,6 +3,7 @@ package adria.sid.ebanckingbackend.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -22,4 +23,21 @@ public class User extends Personne{
     @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;
+
+    // Add a method to add notifications to the list safely
+    public void addNotification(Notification notification) {
+        if (notifications == null) {
+            notifications = new ArrayList<>();
+        }
+        notifications.add(notification);
+        notification.setUser(this); // Set the user reference in the notification
+    }
+
+    public void addCompte(Compte compte) {
+        if (comptes == null) {
+            comptes = new ArrayList<>();
+        }
+        comptes.add(compte);
+        compte.setUser(this); // Set the user reference in the notification
+    }
 }

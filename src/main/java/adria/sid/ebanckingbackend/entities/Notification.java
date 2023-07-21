@@ -3,6 +3,8 @@ package adria.sid.ebanckingbackend.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Date;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -13,7 +15,7 @@ public class Notification {
     private String id;
     private String titre;
     private String contenu;
-    private String dateEnvoie;
+    private Date dateEnvoie;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
