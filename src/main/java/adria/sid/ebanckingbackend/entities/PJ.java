@@ -1,12 +1,14 @@
 package adria.sid.ebanckingbackend.entities;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.io.File;
 
 @Entity
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class PJ {
 
     @Id

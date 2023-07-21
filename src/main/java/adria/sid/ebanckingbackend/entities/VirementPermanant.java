@@ -2,16 +2,15 @@ package adria.sid.ebanckingbackend.entities;
 
 import adria.sid.ebanckingbackend.ennumerations.*;
 import jakarta.persistence.Entity;
-import lombok.Data;
+import lombok.*;
 
 import java.util.Date;
-import java.util.List;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class VirementPermanant extends Virement{
-
-    private List<Beneficier> listBeneficiers;
 
     private Date horaire;
 

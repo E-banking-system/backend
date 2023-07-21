@@ -1,12 +1,14 @@
 package adria.sid.ebanckingbackend.entities;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.util.List;
 
 @Entity
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Banquier extends Personne{
 
     @OneToOne(mappedBy = "banquier")
