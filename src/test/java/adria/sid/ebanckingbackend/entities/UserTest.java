@@ -1,6 +1,7 @@
 package adria.sid.ebanckingbackend.entities;
 
 import adria.sid.ebanckingbackend.ennumerations.ERole;
+import adria.sid.ebanckingbackend.ennumerations.EtatCompte;
 import org.junit.jupiter.api.Test;
 
 import java.util.Date;
