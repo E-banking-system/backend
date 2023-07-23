@@ -10,7 +10,7 @@ import lombok.*;
 @Entity
 @Builder
 @PrimaryKeyJoinColumn(name = "personne_id")
-public abstract class Personne {
+public class Personne {
 
     @Id
     private String id;
