@@ -43,29 +43,17 @@ public class MessageTest {
         assertEquals(msg, pj.getMessage());
     }
 
-    @Test
-    void testBanquier() {
-        Message msg = new Message();
-        Banquier banquier = new Banquier();
-
-        String roleId = UUID.randomUUID().toString();
-        banquier.setId(roleId);
-
-        msg.setBanquier(banquier);
-
-        assertEquals(banquier, msg.getBanquier());
-    }
 
     @Test
-    void testClient() {
+    void testUser() {
         Message msg = new Message();
-        Client clt = new Client();
+        UserEntity user = new UserEntity();
 
-        String clientId = UUID.randomUUID().toString();
-        clt.setId(clientId);
+        String userId = UUID.randomUUID().toString();
+        user.setId(userId);
 
-        msg.setClient(clt);
+        msg.setUser(user);
 
-        assertEquals(clt, msg.getClient());
+        assertEquals(user, msg.getUser());
     }
 }

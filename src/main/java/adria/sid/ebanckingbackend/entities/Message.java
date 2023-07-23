@@ -21,11 +21,7 @@ public class Message {
     private PJ pj;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "banquier_id")
-    private Banquier banquier;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "client_id")
-    private Client client;
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
 
 }

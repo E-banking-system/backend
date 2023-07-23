@@ -8,6 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Builder
 @PrimaryKeyJoinColumn(name = "personne_id")
 public class Personne {
 
@@ -17,14 +18,14 @@ public class Personne {
     private String nom;
     private String prenom;
     private EGender gender;
+    private String operateur;
+    private String address;
+    private Long tel;
+    private String CIN;
 
     private String raisonSociale;
     private String registerNumber;
 
     private EPType personneType;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "banquier_id", referencedColumnName = "id")
-    private Banquier banquier;
 
 }

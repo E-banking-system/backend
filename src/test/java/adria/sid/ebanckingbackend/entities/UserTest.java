@@ -14,24 +14,24 @@ class UserTest {
     void testGettersAndSetters() {
         // Test the getters and setters
         String userId = UUID.randomUUID().toString();
-        User user = new User();
+        UserEntity user = new UserEntity();
         user.setId(userId);
         user.setNom("John");
         user.setPrenom("Doe");
-        user.setUserName("johndoe");
+        user.setEmail("johndoe");
         user.setPassword("mypassword");
 
         assertEquals(userId, user.getId());
         assertEquals("John", user.getNom());
         assertEquals("Doe", user.getPrenom());
-        assertEquals("johndoe", user.getUserName());
+        assertEquals("johndoe", user.getUsername());
         assertEquals("mypassword", user.getPassword());
     }
 
     @Test
     void testNotifications() {
         // Test adding notifications
-        User user = new User();
+        UserEntity user = new UserEntity();
 
         Notification notification1 = new Notification();
         String notification1Id = UUID.randomUUID().toString();
@@ -58,7 +58,7 @@ class UserTest {
     @Test
     void testComptes() {
         // Test adding comptes
-        User user = new User();
+        UserEntity user = new UserEntity();
 
         Compte compte1 = new Compte();
         String compte1Id = UUID.randomUUID().toString();
@@ -86,18 +86,4 @@ class UserTest {
         assertTrue(user.getComptes().contains(compte2));
     }
 
-    @Test
-    void testRole() {
-        // Test the role association
-        User user = new User();
-        Role role = new Role();
-
-        String roleId = UUID.randomUUID().toString();
-        role.setId(roleId);
-        role.setName(ERole.BANQUIER);
-
-        user.setRole(role);
-
-        assertEquals(role, user.getRole());
-    }
 }

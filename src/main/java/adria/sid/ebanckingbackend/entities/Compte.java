@@ -36,7 +36,7 @@ public class Compte {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private User user;
+    private UserEntity user;
 
     public void activerCompte() {
         this.setEtatCompte(EtatCompte.ACTIVE);

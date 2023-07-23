@@ -29,7 +29,7 @@ class NotificationTest {
     void testUserAssociation() {
         // Test the association with the User class
         Notification notification = new Notification();
-        User user = new User();
+        UserEntity user = new UserEntity();
         String userId = UUID.randomUUID().toString();
         user.setId(userId);
 
@@ -41,7 +41,7 @@ class NotificationTest {
     @Test
     void testMultipleNotificationsForUser() {
         // Test the association with multiple notifications for a single user
-        User user = new User();
+        UserEntity user = new UserEntity();
         String userId = UUID.randomUUID().toString();
         user.setId(userId);
 

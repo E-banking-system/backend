@@ -31,27 +31,5 @@ public class PersonneTest {
         assertEquals("PHYSIQUE", personne.getPersonneType().toString());
     }
 
-    @Test
-    void testBanquier(){
-        Banquier banquier = new Banquier();
-        String baquierID = UUID.randomUUID().toString();
-        banquier.setId(baquierID);
-        banquier.setNom("kaoutar");
-        banquier.setPrenom("sougrati");
-        banquier.setUserName("kaokao");
-        banquier.setPassword("1234");
-
-        Personne personne = new Personne();
-        String personneID = UUID.randomUUID().toString();
-        personne.setId(personneID);
-        personne.setNom("nom");
-        personne.setPrenom("prenom");
-
-        personne.setBanquier(banquier);
-        banquier.setPersonne(personne);
-
-        assertEquals(personne, banquier.getPersonne());
-        assertEquals(banquier, personne.getBanquier());
-    }
 
 }

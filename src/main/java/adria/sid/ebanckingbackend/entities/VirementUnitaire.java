@@ -1,5 +1,6 @@
 package adria.sid.ebanckingbackend.entities;
 
+import adria.sid.ebanckingbackend.ennumerations.TokenType;
 import jakarta.persistence.*;
 import lombok.*;
 

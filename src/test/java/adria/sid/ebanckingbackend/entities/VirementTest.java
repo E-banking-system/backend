@@ -27,14 +27,14 @@ public class VirementTest {
     @Test
     void testClient() {
         Virement vrmnt = new Virement();
-        Client clt = new Client();
+        UserEntity clt = new UserEntity();
 
         String clientId = UUID.randomUUID().toString();
         clt.setId(clientId);
 
-        vrmnt.setClient(clt);
+        vrmnt.setUser(clt);
 
-        assertEquals(clt, vrmnt.getClient());
+        assertEquals(clt, vrmnt.getUser());
     }
 
     @Test
