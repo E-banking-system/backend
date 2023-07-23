@@ -1,8 +1,5 @@
 package adria.sid.ebanckingbackend.dtos;
 
-import adria.sid.ebanckingbackend.ennumerations.EGender;
-import adria.sid.ebanckingbackend.ennumerations.EPType;
-import adria.sid.ebanckingbackend.ennumerations.ERole;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegisterClientPersonnePhysiqueRequest {
+public class ReqRegisterClientPhysiqueDTO {
 
   private String nom;
   private String prenom;

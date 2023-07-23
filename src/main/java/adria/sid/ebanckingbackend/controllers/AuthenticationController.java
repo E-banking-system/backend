@@ -1,8 +1,8 @@
 package adria.sid.ebanckingbackend.controllers;
 
-import adria.sid.ebanckingbackend.dtos.AuthenticationRequest;
-import adria.sid.ebanckingbackend.dtos.AuthenticationResponse;
-import adria.sid.ebanckingbackend.dtos.RegisterClientPersonnePhysiqueRequest;
+import adria.sid.ebanckingbackend.dtos.AuthReqDTO;
+import adria.sid.ebanckingbackend.dtos.AuthResDTO;
+import adria.sid.ebanckingbackend.dtos.ReqRegisterClientPhysiqueDTO;
 import adria.sid.ebanckingbackend.services.AuthenticationClientService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -22,14 +22,14 @@ public class AuthenticationController {
 
   private final AuthenticationClientService service;
   @PostMapping("/register")
-  public ResponseEntity<AuthenticationResponse> register(
-      @RequestBody RegisterClientPersonnePhysiqueRequest request
+  public ResponseEntity<AuthResDTO> register(
+      @RequestBody ReqRegisterClientPhysiqueDTO request
   ) {
     return ResponseEntity.ok(service.register(request));
   }
   @PostMapping("/authenticate")
-  public ResponseEntity<AuthenticationResponse> authenticate(
-      @RequestBody AuthenticationRequest request
+  public ResponseEntity<AuthResDTO> authenticate(
+      @RequestBody AuthReqDTO request
   ) {
     return ResponseEntity.ok(service.authenticate(request));
   }

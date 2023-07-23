@@ -1,8 +1,8 @@
 package adria.sid.ebanckingbackend.services;
 
-import adria.sid.ebanckingbackend.dtos.AuthenticationRequest;
-import adria.sid.ebanckingbackend.dtos.AuthenticationResponse;
-import adria.sid.ebanckingbackend.dtos.RegisterClientPersonnePhysiqueRequest;
+import adria.sid.ebanckingbackend.dtos.AuthReqDTO;
+import adria.sid.ebanckingbackend.dtos.AuthResDTO;
+import adria.sid.ebanckingbackend.dtos.ReqRegisterClientPhysiqueDTO;
 import adria.sid.ebanckingbackend.ennumerations.EGender;
 import adria.sid.ebanckingbackend.ennumerations.EPType;
 import adria.sid.ebanckingbackend.ennumerations.ERole;
@@ -34,7 +34,7 @@ public class AuthenticationClientService {
   private final JwtService jwtService;
   private final AuthenticationManager authenticationManager;
 
-  public AuthenticationResponse register(RegisterClientPersonnePhysiqueRequest request) {
+  public AuthResDTO register(ReqRegisterClientPhysiqueDTO request) {
     var user=new UserEntity();
     user.setId(UUID.randomUUID().toString());
     user.setNom(request.getNom());
@@ -57,13 +57,13 @@ public class AuthenticationClientService {
     var jwtToken = jwtService.generateToken(user);
     var refreshToken = jwtService.generateRefreshToken(user);
     saveUserToken(savedUser, jwtToken);
-    return AuthenticationResponse.builder()
+    return AuthResDTO.builder()
         .accessToken(jwtToken)
             .refreshToken(refreshToken)
         .build();
   }
 
-  public AuthenticationResponse authenticate(AuthenticationRequest request) {
+  public AuthResDTO authenticate(AuthReqDTO request) {
     authenticationManager.authenticate(
         new UsernamePasswordAuthenticationToken(
             request.getEmail(),
@@ -76,7 +76,7 @@ public class AuthenticationClientService {
     var refreshToken = jwtService.generateRefreshToken(user);
     revokeAllUserTokens(user);
     saveUserToken(user, jwtToken);
-    return AuthenticationResponse.builder()
+    return AuthResDTO.builder()
         .accessToken(jwtToken)
             .refreshToken(refreshToken)
         .build();
@@ -123,7 +123,7 @@ public class AuthenticationClientService {
         var accessToken = jwtService.generateToken(user);
         revokeAllUserTokens(user);
         saveUserToken(user, accessToken);
-        var authResponse = AuthenticationResponse.builder()
+        var authResponse = AuthResDTO.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
