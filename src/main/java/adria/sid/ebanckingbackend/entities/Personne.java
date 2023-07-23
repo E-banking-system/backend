@@ -29,4 +29,7 @@ public class Personne {
 
     private EPType personneType;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "personne_id")
+    private Personne personne;
 }

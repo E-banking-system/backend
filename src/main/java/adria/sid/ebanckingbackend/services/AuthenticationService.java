@@ -2,10 +2,12 @@ package adria.sid.ebanckingbackend.services;
 
 import adria.sid.ebanckingbackend.dtos.AuthReqDTO;
 import adria.sid.ebanckingbackend.dtos.AuthResDTO;
-import adria.sid.ebanckingbackend.dtos.ReqRegisterClientPhysiqueDTO;
+import adria.sid.ebanckingbackend.dtos.ReqRegisterBanquierDTO;
+import adria.sid.ebanckingbackend.dtos.ReqRegisterClientDTO;
 import adria.sid.ebanckingbackend.ennumerations.EGender;
 import adria.sid.ebanckingbackend.ennumerations.EPType;
 import adria.sid.ebanckingbackend.ennumerations.ERole;
+import adria.sid.ebanckingbackend.entities.Personne;
 import adria.sid.ebanckingbackend.entities.Token;
 import adria.sid.ebanckingbackend.repositories.TokenRepository;
 import adria.sid.ebanckingbackend.security.JwtService;
@@ -27,18 +29,58 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class AuthenticationClientService {
+public class AuthenticationService {
   private final UserRepository repository;
   private final TokenRepository tokenRepository;
   private final PasswordEncoder passwordEncoder;
   private final JwtService jwtService;
   private final AuthenticationManager authenticationManager;
 
-  public AuthResDTO register(ReqRegisterClientPhysiqueDTO request) {
+  public AuthResDTO registerBanquier(ReqRegisterBanquierDTO request) {
     var user=new UserEntity();
     user.setId(UUID.randomUUID().toString());
     user.setNom(request.getNom());
     user.setPrenom(request.getPrenom());
+    user.setEmail(request.getEmail());
+    user.setTel(request.getTelephone());
+    user.setOperateur(request.getOperateur());
+    user.setCIN(request.getCin());
+    user.setAddress(request.getAdresse());
+
+    Personne personne=new Personne();
+    personne.setId(request.getBanqueId());
+
+    user.setPersonne(personne);
+    user.setGender(EGender.valueOf(request.getGender()));
+
+    user.setPersonneType(EPType.PHYSIQUE);
+    user.setPassword(passwordEncoder.encode(request.getPassword()));
+    user.setRole(ERole.valueOf(request.getRole()));
+
+    var savedUser = repository.save(user);
+
+    var jwtToken = jwtService.generateToken(user);
+    var refreshToken = jwtService.generateRefreshToken(user);
+    saveUserToken(savedUser, jwtToken);
+    return AuthResDTO.builder()
+        .accessToken(jwtToken)
+            .refreshToken(refreshToken)
+        .build();
+  }
+
+  public AuthResDTO registerClient(ReqRegisterClientDTO request) {
+    var user=new UserEntity();
+    user.setId(UUID.randomUUID().toString());
+
+    if(request.getEpType().toString().equals(EPType.PHYSIQUE.toString())){
+      user.setNom(request.getNom());
+      user.setPrenom(request.getPrenom());
+    }
+    else{
+      user.setRaisonSociale(request.getRaisonSociale());
+      user.setRegisterNumber(request.getRegisterNumber());
+    }
+
     user.setRIB(request.getRib());
     user.setEmail(request.getEmail());
     user.setTel(request.getTelephone());
@@ -51,16 +93,15 @@ public class AuthenticationClientService {
     user.setPassword(passwordEncoder.encode(request.getPassword()));
     user.setRole(ERole.valueOf(request.getRole()));
 
-
     var savedUser = repository.save(user);
 
     var jwtToken = jwtService.generateToken(user);
     var refreshToken = jwtService.generateRefreshToken(user);
     saveUserToken(savedUser, jwtToken);
     return AuthResDTO.builder()
-        .accessToken(jwtToken)
+            .accessToken(jwtToken)
             .refreshToken(refreshToken)
-        .build();
+            .build();
   }
 
   public AuthResDTO authenticate(AuthReqDTO request) {

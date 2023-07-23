@@ -9,18 +9,16 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReqRegisterClientPhysiqueDTO {
-
+public class ReqRegisterBanquierDTO {
   private String nom;
   private String prenom;
-  private String rib;
   private String email;
   private String gender;
   private String adresse;
   private String cin;
   private String telephone;
   private String operateur;
-  private String epType;
+  private String banqueId;
   private String password;
   private String role;
 }

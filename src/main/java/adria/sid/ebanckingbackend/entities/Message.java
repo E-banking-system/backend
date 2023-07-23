@@ -11,9 +11,7 @@ import lombok.*;
 public class Message {
     @Id
     private String id;
-
     private String message;
-
     private Boolean isRead;
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -23,5 +21,4 @@ public class Message {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private UserEntity user;
-
 }
