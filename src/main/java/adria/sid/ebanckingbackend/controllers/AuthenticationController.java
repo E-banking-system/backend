@@ -2,8 +2,8 @@ package adria.sid.ebanckingbackend.controllers;
 
 import adria.sid.ebanckingbackend.dtos.AuthenticationRequest;
 import adria.sid.ebanckingbackend.dtos.AuthenticationResponse;
-import adria.sid.ebanckingbackend.dtos.RegisterRequest;
-import adria.sid.ebanckingbackend.services.AuthenticationService;
+import adria.sid.ebanckingbackend.dtos.RegisterClientPersonnePhysiqueRequest;
+import adria.sid.ebanckingbackend.services.AuthenticationClientService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -20,10 +20,10 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class AuthenticationController {
 
-  private final AuthenticationService service;
+  private final AuthenticationClientService service;
   @PostMapping("/register")
   public ResponseEntity<AuthenticationResponse> register(
-      @RequestBody RegisterRequest request
+      @RequestBody RegisterClientPersonnePhysiqueRequest request
   ) {
     return ResponseEntity.ok(service.register(request));
   }

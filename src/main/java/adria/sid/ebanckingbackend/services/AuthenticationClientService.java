@@ -2,9 +2,11 @@ package adria.sid.ebanckingbackend.services;
 
 import adria.sid.ebanckingbackend.dtos.AuthenticationRequest;
 import adria.sid.ebanckingbackend.dtos.AuthenticationResponse;
-import adria.sid.ebanckingbackend.dtos.RegisterRequest;
+import adria.sid.ebanckingbackend.dtos.RegisterClientPersonnePhysiqueRequest;
+import adria.sid.ebanckingbackend.ennumerations.EGender;
+import adria.sid.ebanckingbackend.ennumerations.EPType;
+import adria.sid.ebanckingbackend.ennumerations.ERole;
 import adria.sid.ebanckingbackend.entities.Token;
-import adria.sid.ebanckingbackend.entities.VirementUnitaire;
 import adria.sid.ebanckingbackend.repositories.TokenRepository;
 import adria.sid.ebanckingbackend.security.JwtService;
 import adria.sid.ebanckingbackend.entities.UserEntity;
@@ -25,30 +27,33 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class AuthenticationService {
+public class AuthenticationClientService {
   private final UserRepository repository;
   private final TokenRepository tokenRepository;
   private final PasswordEncoder passwordEncoder;
   private final JwtService jwtService;
   private final AuthenticationManager authenticationManager;
 
-  public AuthenticationResponse register(RegisterRequest request) {
-    System.out.println("register -> email : "+request.getEmail()+"\n password : "+request.getPassword()+"\n");
+  public AuthenticationResponse register(RegisterClientPersonnePhysiqueRequest request) {
     var user=new UserEntity();
     user.setId(UUID.randomUUID().toString());
-    user.setNom(request.getFirstname());
-    user.setPrenom(request.getLastname());
+    user.setNom(request.getNom());
+    user.setPrenom(request.getPrenom());
+    user.setRIB(request.getRib());
     user.setEmail(request.getEmail());
+    user.setTel(request.getTelephone());
+    user.setOperateur(request.getOperateur());
+    user.setCIN(request.getCin());
+    user.setAddress(request.getAdresse());
+    user.setGender(EGender.valueOf(request.getGender()));
+
+    user.setPersonneType(EPType.PHYSIQUE);
     user.setPassword(passwordEncoder.encode(request.getPassword()));
-    user.setRole(request.getRole());
-    System.out.println("registerUser -> email : "+user.getEmail()+"\n password : "+user.getPassword()+"\n");
+    user.setRole(ERole.valueOf(request.getRole()));
 
 
     var savedUser = repository.save(user);
 
-    var userRep = repository.findByEmail(request.getEmail())
-            .orElseThrow();
-    System.out.println("userRep -> email : "+userRep.getEmail()+"\n password : "+userRep.getPassword()+"\n");
     var jwtToken = jwtService.generateToken(user);
     var refreshToken = jwtService.generateRefreshToken(user);
     saveUserToken(savedUser, jwtToken);
@@ -59,7 +64,6 @@ public class AuthenticationService {
   }
 
   public AuthenticationResponse authenticate(AuthenticationRequest request) {
-    System.out.println("Start : Authentification service \n");
     authenticationManager.authenticate(
         new UsernamePasswordAuthenticationToken(
             request.getEmail(),
@@ -68,12 +72,10 @@ public class AuthenticationService {
     );
     var user = repository.findByEmail(request.getEmail())
         .orElseThrow();
-    System.out.println("repository -> email : "+user.getEmail()+"\n password : "+user.getPassword()+"\n");
     var jwtToken = jwtService.generateToken(user);
     var refreshToken = jwtService.generateRefreshToken(user);
     revokeAllUserTokens(user);
     saveUserToken(user, jwtToken);
-    System.out.println("End : Authentification service \n");
     return AuthenticationResponse.builder()
         .accessToken(jwtToken)
             .refreshToken(refreshToken)
