@@ -8,7 +8,7 @@ import adria.sid.ebanckingbackend.ennumerations.EGender;
 import adria.sid.ebanckingbackend.ennumerations.EPType;
 import adria.sid.ebanckingbackend.ennumerations.ERole;
 import adria.sid.ebanckingbackend.entities.Personne;
-import adria.sid.ebanckingbackend.entities.Token;
+import adria.sid.ebanckingbackend.security.Token;
 import adria.sid.ebanckingbackend.repositories.TokenRepository;
 import adria.sid.ebanckingbackend.security.JwtService;
 import adria.sid.ebanckingbackend.entities.UserEntity;

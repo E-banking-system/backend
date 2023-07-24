@@ -18,7 +18,7 @@ public class Compte {
 
     private String nature;
 
-    private Double sold;
+    private Double solde;
 
     private String RIB;
 

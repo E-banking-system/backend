@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import adria.sid.ebanckingbackend.ennumerations.ERole;
 import org.junit.jupiter.api.Test;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 class UserEntityTest {
 
@@ -38,7 +39,11 @@ class UserEntityTest {
 
         assertNotNull(user.getAuthorities());
         assertEquals(1, user.getAuthorities().size());
-        assertTrue(user.getAuthorities().contains(ERole.USER));
+
+        // Convert the ERole.USER to a SimpleGrantedAuthority object
+        SimpleGrantedAuthority expectedAuthority = new SimpleGrantedAuthority("ROLE_" + ERole.USER.name());
+
+        assertTrue(user.getAuthorities().contains(expectedAuthority));
     }
 
     @Test

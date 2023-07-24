@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static adria.sid.ebanckingbackend.ennumerations.PERMISSION.*;
+
 @RequiredArgsConstructor
 public enum ERole {
 
@@ -42,4 +43,6 @@ public enum ERole {
         authorities.add(new SimpleGrantedAuthority("ROLE_" + this.name()));
         return authorities;
     }
+
 }
+

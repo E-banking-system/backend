@@ -67,7 +67,7 @@ class UserTest {
         compte1.setNature("cheque");
         compte1.setDatePeremption(new Date());
         compte1.setDateCreation(new Date());
-        compte1.setSold(8745.0);
+        compte1.setSolde(8745.0);
 
         Compte compte2 = new Compte();
         String compte2Id = UUID.randomUUID().toString();
@@ -76,7 +76,7 @@ class UserTest {
         compte2.setNature("cheque");
         compte2.setDatePeremption(new Date());
         compte2.setDateCreation(new Date());
-        compte2.setSold(8745.0);
+        compte2.setSolde(8745.0);
 
         user.addCompte(compte1);
         user.addCompte(compte2);

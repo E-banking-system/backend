@@ -42,17 +42,18 @@ class ERoleTest {
         assertTrue(user.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_USER")));
 
         assertEquals(5, banquier.getAuthorities().size());
-        assertTrue(banquier.getAuthorities().contains(new SimpleGrantedAuthority("BANQUIER_READ")));
-        assertTrue(banquier.getAuthorities().contains(new SimpleGrantedAuthority("BANQUIER_UPDATE")));
-        assertTrue(banquier.getAuthorities().contains(new SimpleGrantedAuthority("BANQUIER_DELETE")));
-        assertTrue(banquier.getAuthorities().contains(new SimpleGrantedAuthority("BANQUIER_CREATE")));
+        assertTrue(banquier.getAuthorities().contains(new SimpleGrantedAuthority("banquier:read")));
+        assertTrue(banquier.getAuthorities().contains(new SimpleGrantedAuthority("banquier:update")));
+        assertTrue(banquier.getAuthorities().contains(new SimpleGrantedAuthority("banquier:delete")));
+        assertTrue(banquier.getAuthorities().contains(new SimpleGrantedAuthority("banquier:create")));
         assertTrue(banquier.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_BANQUIER")));
 
         assertEquals(5, client.getAuthorities().size());
-        assertTrue(client.getAuthorities().contains(new SimpleGrantedAuthority("CLIENT_READ")));
-        assertTrue(client.getAuthorities().contains(new SimpleGrantedAuthority("CLIENT_UPDATE")));
-        assertTrue(client.getAuthorities().contains(new SimpleGrantedAuthority("CLIENT_DELETE")));
-        assertTrue(client.getAuthorities().contains(new SimpleGrantedAuthority("CLIENT_CREATE")));
+        assertTrue(client.getAuthorities().contains(new SimpleGrantedAuthority("client:read")));
+        assertTrue(client.getAuthorities().contains(new SimpleGrantedAuthority("client:update")));
+        assertTrue(client.getAuthorities().contains(new SimpleGrantedAuthority("client:delete")));
+        assertTrue(client.getAuthorities().contains(new SimpleGrantedAuthority("client:create")));
         assertTrue(client.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_CLIENT")));
     }
+
 }

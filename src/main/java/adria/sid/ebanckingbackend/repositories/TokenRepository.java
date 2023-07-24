@@ -1,6 +1,6 @@
 package adria.sid.ebanckingbackend.repositories;
 
-import adria.sid.ebanckingbackend.entities.Token;
+import adria.sid.ebanckingbackend.security.Token;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

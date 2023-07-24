@@ -1,6 +1,7 @@
 package adria.sid.ebanckingbackend.entities;
 
 import adria.sid.ebanckingbackend.ennumerations.ERole;
+import adria.sid.ebanckingbackend.security.Token;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;

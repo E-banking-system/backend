@@ -1,6 +1,7 @@
-package adria.sid.ebanckingbackend.entities;
+package adria.sid.ebanckingbackend.security;
 
 import adria.sid.ebanckingbackend.ennumerations.TokenType;
+import adria.sid.ebanckingbackend.entities.UserEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
