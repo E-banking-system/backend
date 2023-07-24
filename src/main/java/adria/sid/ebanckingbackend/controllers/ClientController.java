@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/client")
 @Tag(name = "Client")
+@CrossOrigin("*")
 public class ClientController {
     @Operation(
             description = "Get endpoint for manager",
