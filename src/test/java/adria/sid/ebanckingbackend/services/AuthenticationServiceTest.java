@@ -209,5 +209,4 @@ class AuthenticationServiceTest {
         verify(tokenRepository, never()).saveAll(anyList());
     }
 
-
 }
