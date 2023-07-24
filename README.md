@@ -2,6 +2,16 @@
 
 This is the backend application for an E-banking system.
 
+## Architecture Diagram
+
+![Backend Architecture Diagram](./assets/Backend.jpg)
+*Backend Architecture Diagram*
+
+## Class Diagram
+
+![Class Diagram](./assets/class%20diagram.jpg)
+*Class Diagram*
+
 ## Dependencies
 
 The project uses the following dependencies:
@@ -30,3 +40,6 @@ This will compile the project, run the tests, and package the application into a
 ## Usage
 
 Provide any necessary information about using the application here.
+
+add class image backend archtecture diagram that it exists on ./assets/Backend.jpg
+add class image class  diagram that it exists on ./assets/class diagram.jpg
