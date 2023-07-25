@@ -1,5 +1,6 @@
 package adria.sid.ebanckingbackend.sender.listener;
 
+import adria.sid.ebanckingbackend.ennumerations.EPType;
 import adria.sid.ebanckingbackend.entities.UserEntity;
 import adria.sid.ebanckingbackend.sender.RegistrationEvent;
 import adria.sid.ebanckingbackend.services.AuthenticationService;
@@ -29,7 +30,8 @@ public class SendMail implements ApplicationListener<RegistrationEvent> {
         theUser = event.getUser();
         String verificationToken = UUID.randomUUID().toString();
         userService.saveUserVerificationToken(theUser, verificationToken);
-        String url = event.getApplicationUrl()+"/inscription/verifieremail?token="+verificationToken;
+        String url = event.getApplicationUrl()+"/api/v1/register/client/verifieremail?token="+verificationToken;
+
         try {
             sendVerificationEmail(url);
         } catch (MessagingException | UnsupportedEncodingException e) {

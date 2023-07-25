@@ -18,7 +18,7 @@ spring:
             enable: true
   jpa:
     hibernate:
-      ddl-auto: create-drop   # Change this line to create-drop to recreate the database
+      ddl-auto: update
       format_sql: true
     show-sql: false
     database: mysql

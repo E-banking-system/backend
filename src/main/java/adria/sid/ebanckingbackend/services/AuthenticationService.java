@@ -1,9 +1,6 @@
 package adria.sid.ebanckingbackend.services;
 
-import adria.sid.ebanckingbackend.dtos.AuthReqDTO;
-import adria.sid.ebanckingbackend.dtos.AuthResDTO;
-import adria.sid.ebanckingbackend.dtos.ReqRegisterBanquierDTO;
-import adria.sid.ebanckingbackend.dtos.ReqRegisterClientDTO;
+import adria.sid.ebanckingbackend.dtos.*;
 import adria.sid.ebanckingbackend.ennumerations.EGender;
 import adria.sid.ebanckingbackend.ennumerations.EPType;
 import adria.sid.ebanckingbackend.ennumerations.ERole;
@@ -97,20 +94,12 @@ public class AuthenticationService {
     return savedUser;
   }
 
-  public UserEntity registerClient(ReqRegisterClientDTO request) {
+  public UserEntity registerClientPhysique(ReqRegisterClientPhysiqueDTO request) {
     var user=new UserEntity();
     user.setId(UUID.randomUUID().toString());
 
-    if(request.getEpType().toString().equals(EPType.PHYSIQUE.toString())){
-      user.setNom(request.getNom());
-      user.setPrenom(request.getPrenom());
-    }
-    else{
-      user.setRaisonSociale(request.getRaisonSociale());
-      user.setRegisterNumber(request.getRegisterNumber());
-    }
-
-    user.setRIB(request.getRib());
+    user.setNom(request.getNom());
+    user.setPrenom(request.getPrenom());
     user.setEmail(request.getEmail());
     user.setTel(request.getTelephone());
     user.setOperateur(request.getOperateur());
@@ -120,7 +109,28 @@ public class AuthenticationService {
 
     user.setPersonneType(EPType.PHYSIQUE);
     user.setPassword(passwordEncoder.encode(request.getPassword()));
-    user.setRole(ERole.valueOf(request.getRole()));
+    user.setRole(ERole.CLIENT);
+
+    var savedUser = userRepository.save(user);
+
+    var jwtToken = jwtService.generateToken(user);
+    var refreshToken = jwtService.generateRefreshToken(user);
+    saveUserToken(savedUser, jwtToken);
+    return savedUser;
+  }
+
+  public UserEntity registerClientMorale(ReqRegisterClientMoraleDTO request) {
+    var user=new UserEntity();
+    user.setId(UUID.randomUUID().toString());
+
+    user.setEmail(request.getEmail());
+    user.setTel(request.getTelephone());
+    user.setOperateur(request.getOperateur());
+    user.setAddress(request.getAdresse());
+
+    user.setPersonneType(EPType.MORALE);
+    user.setPassword(passwordEncoder.encode(request.getPassword()));
+    user.setRole(ERole.CLIENT);
 
     var savedUser = userRepository.save(user);
 
@@ -146,6 +156,8 @@ public class AuthenticationService {
     return AuthResDTO.builder()
         .accessToken(jwtToken)
             .refreshToken(refreshToken)
+            .compteActive(user.getEnabled())
+            .role(user.getRole().toString())
         .build();
   }
 

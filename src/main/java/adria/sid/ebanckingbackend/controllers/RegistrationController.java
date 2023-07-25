@@ -1,6 +1,7 @@
 package adria.sid.ebanckingbackend.controllers;
 
-import adria.sid.ebanckingbackend.dtos.ReqRegisterClientDTO;
+import adria.sid.ebanckingbackend.dtos.ReqRegisterClientMoraleDTO;
+import adria.sid.ebanckingbackend.dtos.ReqRegisterClientPhysiqueDTO;
 import adria.sid.ebanckingbackend.entities.UserEntity;
 import adria.sid.ebanckingbackend.security.emailToken.VerificationToken;
 import adria.sid.ebanckingbackend.security.emailToken.VerificationTokenRepository;
@@ -16,18 +17,25 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/inscription")
+@RequestMapping("/api/v1/register/client")
 @CrossOrigin("*")
-public class InscriptionController {
+public class RegistrationController {
 
     private final AuthenticationService userService;
     private final ApplicationEventPublisher publisher;
     private final VerificationTokenRepository tokenRepository;
     private final HtmlCodeGenerator htmlCodeGenerator;
 
-    @PostMapping
-    public String registerUser(@RequestBody ReqRegisterClientDTO registrationRequest, final HttpServletRequest request) {
-        UserEntity userEntity = userService.registerClient(registrationRequest);
+    @PostMapping("/physique")
+    public String registerClientPhysique(@RequestBody ReqRegisterClientPhysiqueDTO registrationRequest, final HttpServletRequest request) {
+        UserEntity userEntity = userService.registerClientPhysique(registrationRequest);
+        publisher.publishEvent(new RegistrationEvent(userEntity, applicationUrl(request)));
+        return "Bravo ! check your e-mail pour finaliser votre inscription";
+    }
+
+    @PostMapping("/morale")
+    public String registerClientMorale(@RequestBody ReqRegisterClientMoraleDTO registrationRequest, final HttpServletRequest request) {
+        UserEntity userEntity = userService.registerClientMorale(registrationRequest);
         publisher.publishEvent(new RegistrationEvent(userEntity, applicationUrl(request)));
         return "Bravo ! check your e-mail pour finaliser votre inscription";
     }
@@ -44,7 +52,6 @@ public class InscriptionController {
         }
         return htmlCodeGenerator.generateVerifiedEmailHTML("Token de vérification invalide.");
     }
-
 
     public String applicationUrl(HttpServletRequest request) {
         return "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();

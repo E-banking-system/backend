@@ -2,9 +2,6 @@ package adria.sid.ebanckingbackend.controllers;
 
 import adria.sid.ebanckingbackend.dtos.AuthReqDTO;
 import adria.sid.ebanckingbackend.dtos.AuthResDTO;
-import adria.sid.ebanckingbackend.dtos.ReqRegisterBanquierDTO;
-import adria.sid.ebanckingbackend.dtos.ReqRegisterClientDTO;
-import adria.sid.ebanckingbackend.entities.UserEntity;
 import adria.sid.ebanckingbackend.services.AuthenticationService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -15,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.naming.AuthenticationException;
 import java.io.IOException;
 
 @RestController
@@ -25,26 +21,12 @@ import java.io.IOException;
 @Validated
 public class AuthenticationController {
 
-  private final AuthenticationService service;
-
-  @PostMapping("/client/register")
-  public ResponseEntity<UserEntity> registerClient(
-          @RequestBody @Valid ReqRegisterClientDTO request
-  ) {
-    return ResponseEntity.ok(service.registerClient(request));
-  }
-
-  @PostMapping("/banquier/register")
-  public ResponseEntity<UserEntity> registerBanquier(
-          @RequestBody @Valid ReqRegisterBanquierDTO request
-  ) {
-    return ResponseEntity.ok(service.registerBanquier(request));
-  }
+  private final AuthenticationService authenticationService;
 
   @PostMapping("/authenticate")
   public ResponseEntity<AuthResDTO> authenticate(@RequestBody @Valid AuthReqDTO request) {
     try {
-      AuthResDTO response = service.authenticate(request);
+      AuthResDTO response = authenticationService.authenticate(request);
       return ResponseEntity.ok(response);
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -56,7 +38,7 @@ public class AuthenticationController {
           HttpServletRequest request,
           HttpServletResponse response
   ) throws IOException {
-    service.refreshToken(request, response);
+    authenticationService.refreshToken(request, response);
   }
 
 }
