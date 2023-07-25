@@ -7,9 +7,11 @@ import adria.sid.ebanckingbackend.dtos.ReqRegisterClientDTO;
 import adria.sid.ebanckingbackend.services.AuthenticationService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.naming.AuthenticationException;
@@ -19,26 +21,27 @@ import java.io.IOException;
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 @CrossOrigin("*")
+@Validated
 public class AuthenticationController {
 
   private final AuthenticationService service;
 
   /*@PostMapping("/client/register")
   public ResponseEntity<AuthResDTO> registerClient(
-          @RequestBody ReqRegisterClientDTO request
+          @RequestBody @Valid ReqRegisterClientDTO request
   ) {
     return ResponseEntity.ok(service.registerClient(request));
   }
 
   @PostMapping("/banquier/register")
   public ResponseEntity<AuthResDTO> registerBanquier(
-          @RequestBody ReqRegisterBanquierDTO request
+          @RequestBody @Valid ReqRegisterBanquierDTO request
   ) {
     return ResponseEntity.ok(service.registerBanquier(request));
   }*/
 
   @PostMapping("/authenticate")
-  public ResponseEntity<AuthResDTO> authenticate(@RequestBody AuthReqDTO request) {
+  public ResponseEntity<AuthResDTO> authenticate(@RequestBody @Valid AuthReqDTO request) {
     try {
       AuthResDTO response = service.authenticate(request);
       return ResponseEntity.ok(response);
