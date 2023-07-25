@@ -1,6 +1,6 @@
 package adria.sid.ebanckingbackend.services;
 
-import adria.sid.ebanckingbackend.repositories.TokenRepository;
+import adria.sid.ebanckingbackend.repositories.TokenUserRepository;
 import adria.sid.ebanckingbackend.security.Token;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,7 +21,7 @@ import static org.mockito.Mockito.*;
 class LogoutServiceTest {
 
     @Mock
-    private TokenRepository tokenRepository;
+    private TokenUserRepository tokenRepository;
 
     @InjectMocks
     private LogoutService logoutService;

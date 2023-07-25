@@ -21,6 +21,7 @@ import java.util.List;
 public class UserEntity extends Personne implements UserDetails {
     private String email;
     private String password;
+    private Boolean enabled=false;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private List<Notification> notifications;

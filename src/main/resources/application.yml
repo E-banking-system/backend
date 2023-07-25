@@ -4,10 +4,20 @@ spring:
     username: root
     password:
     driver-class-name: com.mysql.cj.jdbc.Driver
-
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: etafweb2021@gmail.com
+    password: xjytiacxqqdypspe
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
       format_sql: true
     show-sql: false
     database: mysql
@@ -23,3 +33,5 @@ application:
 
 server:
   port: 8200
+
+

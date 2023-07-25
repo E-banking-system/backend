@@ -1,6 +1,6 @@
 package adria.sid.ebanckingbackend.services;
 
-import adria.sid.ebanckingbackend.repositories.TokenRepository;
+import adria.sid.ebanckingbackend.repositories.TokenUserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class LogoutService implements LogoutHandler {
 
-  private final TokenRepository tokenRepository;
+  private final TokenUserRepository tokenRepository;
 
   @Override
   public void logout(

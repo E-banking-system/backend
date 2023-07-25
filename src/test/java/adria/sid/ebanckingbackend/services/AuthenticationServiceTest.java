@@ -10,7 +10,7 @@ import static org.mockito.ArgumentMatchers.any;
 
 import adria.sid.ebanckingbackend.ennumerations.TokenType;
 import adria.sid.ebanckingbackend.entities.UserEntity;
-import adria.sid.ebanckingbackend.repositories.TokenRepository;
+import adria.sid.ebanckingbackend.repositories.TokenUserRepository;
 import adria.sid.ebanckingbackend.repositories.UserRepository;
 import adria.sid.ebanckingbackend.security.JwtService;
 import adria.sid.ebanckingbackend.security.Token;
@@ -38,7 +38,7 @@ class AuthenticationServiceTest {
     private UserRepository userRepository;
 
     @Mock
-    private TokenRepository tokenRepository;
+    private TokenUserRepository tokenRepository;
 
     @Mock
     private PasswordEncoder passwordEncoder;

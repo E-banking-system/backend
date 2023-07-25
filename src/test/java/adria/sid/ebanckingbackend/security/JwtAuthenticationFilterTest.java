@@ -1,6 +1,6 @@
 package adria.sid.ebanckingbackend.security;
 
-import adria.sid.ebanckingbackend.repositories.TokenRepository;
+import adria.sid.ebanckingbackend.repositories.TokenUserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -33,7 +33,7 @@ class JwtAuthenticationFilterTest {
     private UserDetailsService userDetailsService;
 
     @Mock
-    private TokenRepository tokenRepository;
+    private TokenUserRepository tokenRepository;
 
     @InjectMocks
     private JwtAuthenticationFilter jwtAuthenticationFilter;

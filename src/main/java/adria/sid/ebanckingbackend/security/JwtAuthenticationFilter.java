@@ -1,7 +1,6 @@
 package adria.sid.ebanckingbackend.security;
 
-import adria.sid.ebanckingbackend.repositories.TokenRepository;
-import adria.sid.ebanckingbackend.repositories.UserRepository;
+import adria.sid.ebanckingbackend.repositories.TokenUserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,7 +23,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
   private final JwtService jwtService;
   private final UserDetailsService userDetailsService;
-  private final TokenRepository tokenRepository;
+  private final TokenUserRepository tokenRepository;
 
   @Override
   protected void doFilterInternal(

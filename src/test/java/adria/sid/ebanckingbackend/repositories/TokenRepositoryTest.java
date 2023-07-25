@@ -17,7 +17,7 @@ import java.util.Optional;
 class TokenRepositoryTest {
 
     @Mock
-    private TokenRepository tokenRepository;
+    private TokenUserRepository tokenRepository;
 
     @Test
     void testFindAllValidTokenByUser() {

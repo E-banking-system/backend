@@ -23,7 +23,7 @@ public class AuthenticationController {
 
   private final AuthenticationService service;
 
-  @PostMapping("/client/register")
+  /*@PostMapping("/client/register")
   public ResponseEntity<AuthResDTO> registerClient(
           @RequestBody ReqRegisterClientDTO request
   ) {
@@ -35,7 +35,7 @@ public class AuthenticationController {
           @RequestBody ReqRegisterBanquierDTO request
   ) {
     return ResponseEntity.ok(service.registerBanquier(request));
-  }
+  }*/
 
   @PostMapping("/authenticate")
   public ResponseEntity<AuthResDTO> authenticate(@RequestBody AuthReqDTO request) {

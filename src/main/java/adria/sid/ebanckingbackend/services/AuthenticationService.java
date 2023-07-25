@@ -9,11 +9,13 @@ import adria.sid.ebanckingbackend.ennumerations.EPType;
 import adria.sid.ebanckingbackend.ennumerations.ERole;
 import adria.sid.ebanckingbackend.entities.Personne;
 import adria.sid.ebanckingbackend.security.Token;
-import adria.sid.ebanckingbackend.repositories.TokenRepository;
+import adria.sid.ebanckingbackend.repositories.TokenUserRepository;
 import adria.sid.ebanckingbackend.security.JwtService;
 import adria.sid.ebanckingbackend.entities.UserEntity;
 import adria.sid.ebanckingbackend.repositories.UserRepository;
 import adria.sid.ebanckingbackend.ennumerations.TokenType;
+import adria.sid.ebanckingbackend.security.token.VerificationTokenRepository;
+import adria.sid.ebanckingbackend.security.token.VerificationToken;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -25,18 +27,48 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
-  private final UserRepository repository;
-  private final TokenRepository tokenRepository;
+  private final UserRepository userRepository;
+  private final TokenUserRepository tokenUserRepository;
+  private final VerificationTokenRepository tokenVerificationRepository;
   private final PasswordEncoder passwordEncoder;
   private final JwtService jwtService;
   private final AuthenticationManager authenticationManager;
 
-  public AuthResDTO registerBanquier(ReqRegisterBanquierDTO request) {
+  private String generateAccessToken() {
+    // Generate and return an access token using a suitable mechanism
+    // For example, you can use UUID.randomUUID().toString() to generate a random token
+    return UUID.randomUUID().toString();
+  }
+
+  public void saveUserVerificationToken(UserEntity theUser, String token) {
+    var verificationToken = new VerificationToken(token, theUser);
+    tokenVerificationRepository.save(verificationToken);
+  }
+
+
+  public String validateToken(String theToken) {
+    VerificationToken token = tokenVerificationRepository.findByToken(theToken);
+    if(token == null){
+      return "Token invalid";
+    }
+    UserEntity user = token.getUser();
+    Calendar calendar = Calendar.getInstance();
+    if ((token.getExpirationTime().getTime() - calendar.getTime().getTime()) <= 0){
+      tokenVerificationRepository.delete(token);
+      return "Token a expiré";
+    }
+    user.setEnabled(true);
+    userRepository.save(user);
+    return "valid";
+  }
+
+  public UserEntity registerBanquier(ReqRegisterBanquierDTO request) {
     var user=new UserEntity();
     user.setId(UUID.randomUUID().toString());
     user.setNom(request.getNom());
@@ -57,18 +89,15 @@ public class AuthenticationService {
     user.setPassword(passwordEncoder.encode(request.getPassword()));
     user.setRole(ERole.valueOf(request.getRole()));
 
-    var savedUser = repository.save(user);
+    var savedUser = userRepository.save(user);
 
     var jwtToken = jwtService.generateToken(user);
     var refreshToken = jwtService.generateRefreshToken(user);
     saveUserToken(savedUser, jwtToken);
-    return AuthResDTO.builder()
-        .accessToken(jwtToken)
-            .refreshToken(refreshToken)
-        .build();
+    return savedUser;
   }
 
-  public AuthResDTO registerClient(ReqRegisterClientDTO request) {
+  public UserEntity registerClient(ReqRegisterClientDTO request) {
     var user=new UserEntity();
     user.setId(UUID.randomUUID().toString());
 
@@ -93,15 +122,12 @@ public class AuthenticationService {
     user.setPassword(passwordEncoder.encode(request.getPassword()));
     user.setRole(ERole.valueOf(request.getRole()));
 
-    var savedUser = repository.save(user);
+    var savedUser = userRepository.save(user);
 
     var jwtToken = jwtService.generateToken(user);
     var refreshToken = jwtService.generateRefreshToken(user);
     saveUserToken(savedUser, jwtToken);
-    return AuthResDTO.builder()
-            .accessToken(jwtToken)
-            .refreshToken(refreshToken)
-            .build();
+    return savedUser;
   }
 
   public AuthResDTO authenticate(AuthReqDTO request) {
@@ -111,7 +137,7 @@ public class AuthenticationService {
             request.getPassword()
         )
     );
-    var user = repository.findByEmail(request.getEmail())
+    var user = userRepository.findByEmail(request.getEmail())
         .orElseThrow();
     var jwtToken = jwtService.generateToken(user);
     var refreshToken = jwtService.generateRefreshToken(user);
@@ -131,18 +157,18 @@ public class AuthenticationService {
         .expired(false)
         .revoked(false)
         .build();
-    tokenRepository.save(token);
+    tokenUserRepository.save(token);
   }
 
   void revokeAllUserTokens(UserEntity user) {
-    var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId());
+    var validUserTokens = tokenUserRepository.findAllValidTokenByUser(user.getId());
     if (validUserTokens.isEmpty())
       return;
     validUserTokens.forEach(token -> {
       token.setExpired(true);
       token.setRevoked(true);
     });
-    tokenRepository.saveAll(validUserTokens);
+    tokenUserRepository.saveAll(validUserTokens);
   }
 
   public void refreshToken(
@@ -158,7 +184,7 @@ public class AuthenticationService {
     refreshToken = authHeader.substring(7);
     userEmail = jwtService.extractUsername(refreshToken);
     if (userEmail != null) {
-      var user = this.repository.findByEmail(userEmail)
+      var user = this.userRepository.findByEmail(userEmail)
               .orElseThrow();
       if (jwtService.isTokenValid(refreshToken, user)) {
         var accessToken = jwtService.generateToken(user);
