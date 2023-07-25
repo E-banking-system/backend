@@ -4,6 +4,7 @@ import adria.sid.ebanckingbackend.dtos.AuthReqDTO;
 import adria.sid.ebanckingbackend.dtos.AuthResDTO;
 import adria.sid.ebanckingbackend.dtos.ReqRegisterBanquierDTO;
 import adria.sid.ebanckingbackend.dtos.ReqRegisterClientDTO;
+import adria.sid.ebanckingbackend.entities.UserEntity;
 import adria.sid.ebanckingbackend.services.AuthenticationService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -26,19 +27,19 @@ public class AuthenticationController {
 
   private final AuthenticationService service;
 
-  /*@PostMapping("/client/register")
-  public ResponseEntity<AuthResDTO> registerClient(
+  @PostMapping("/client/register")
+  public ResponseEntity<UserEntity> registerClient(
           @RequestBody @Valid ReqRegisterClientDTO request
   ) {
     return ResponseEntity.ok(service.registerClient(request));
   }
 
   @PostMapping("/banquier/register")
-  public ResponseEntity<AuthResDTO> registerBanquier(
+  public ResponseEntity<UserEntity> registerBanquier(
           @RequestBody @Valid ReqRegisterBanquierDTO request
   ) {
     return ResponseEntity.ok(service.registerBanquier(request));
-  }*/
+  }
 
   @PostMapping("/authenticate")
   public ResponseEntity<AuthResDTO> authenticate(@RequestBody @Valid AuthReqDTO request) {

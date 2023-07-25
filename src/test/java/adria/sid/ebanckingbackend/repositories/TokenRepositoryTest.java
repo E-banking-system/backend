@@ -1,6 +1,7 @@
 package adria.sid.ebanckingbackend.repositories;
 
-import adria.sid.ebanckingbackend.security.Token;
+import adria.sid.ebanckingbackend.security.accessToken.Token;
+import adria.sid.ebanckingbackend.security.accessToken.TokenUserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;

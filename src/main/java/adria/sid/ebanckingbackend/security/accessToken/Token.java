@@ -1,4 +1,4 @@
-package adria.sid.ebanckingbackend.security;
+package adria.sid.ebanckingbackend.security.accessToken;
 
 import adria.sid.ebanckingbackend.ennumerations.TokenType;
 import adria.sid.ebanckingbackend.entities.UserEntity;

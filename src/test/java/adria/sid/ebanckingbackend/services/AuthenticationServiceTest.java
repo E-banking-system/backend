@@ -10,10 +10,10 @@ import static org.mockito.ArgumentMatchers.any;
 
 import adria.sid.ebanckingbackend.ennumerations.TokenType;
 import adria.sid.ebanckingbackend.entities.UserEntity;
-import adria.sid.ebanckingbackend.repositories.TokenUserRepository;
+import adria.sid.ebanckingbackend.security.accessToken.TokenUserRepository;
 import adria.sid.ebanckingbackend.repositories.UserRepository;
 import adria.sid.ebanckingbackend.security.JwtService;
-import adria.sid.ebanckingbackend.security.Token;
+import adria.sid.ebanckingbackend.security.accessToken.Token;
 import jakarta.validation.Validation;
 import jakarta.validation.ValidatorFactory;
 import org.junit.jupiter.api.Test;

@@ -1,6 +1,6 @@
 package adria.sid.ebanckingbackend.security;
 
-import adria.sid.ebanckingbackend.repositories.TokenUserRepository;
+import adria.sid.ebanckingbackend.security.accessToken.TokenUserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

@@ -1,9 +1,10 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/ebancking?createDatabaseIfNotExist=true
+    url: jdbc:mysql://localhost:3306/ebanking?createDatabaseIfNotExist=true
     username: root
     password:
     driver-class-name: com.mysql.cj.jdbc.Driver
+
   mail:
     host: smtp.gmail.com
     port: 587
@@ -17,11 +18,14 @@ spring:
             enable: true
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: create-drop   # Change this line to create-drop to recreate the database
       format_sql: true
     show-sql: false
     database: mysql
     database-platform: org.hibernate.dialect.MySQLDialect
+  sql:
+    init:
+      mode: always
 
 application:
   security:
@@ -33,5 +37,3 @@ application:
 
 server:
   port: 8200
-
-

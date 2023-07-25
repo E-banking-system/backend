@@ -7,7 +7,6 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@PrimaryKeyJoinColumn(name = "compte_id")
 public class Message {
     @Id
     private String id;

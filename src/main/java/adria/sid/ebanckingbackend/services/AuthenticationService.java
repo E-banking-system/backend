@@ -8,14 +8,14 @@ import adria.sid.ebanckingbackend.ennumerations.EGender;
 import adria.sid.ebanckingbackend.ennumerations.EPType;
 import adria.sid.ebanckingbackend.ennumerations.ERole;
 import adria.sid.ebanckingbackend.entities.Personne;
-import adria.sid.ebanckingbackend.security.Token;
-import adria.sid.ebanckingbackend.repositories.TokenUserRepository;
+import adria.sid.ebanckingbackend.security.accessToken.Token;
+import adria.sid.ebanckingbackend.security.accessToken.TokenUserRepository;
 import adria.sid.ebanckingbackend.security.JwtService;
 import adria.sid.ebanckingbackend.entities.UserEntity;
 import adria.sid.ebanckingbackend.repositories.UserRepository;
 import adria.sid.ebanckingbackend.ennumerations.TokenType;
-import adria.sid.ebanckingbackend.security.token.VerificationTokenRepository;
-import adria.sid.ebanckingbackend.security.token.VerificationToken;
+import adria.sid.ebanckingbackend.security.emailToken.VerificationTokenRepository;
+import adria.sid.ebanckingbackend.security.emailToken.VerificationToken;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -82,7 +82,7 @@ public class AuthenticationService {
     Personne personne=new Personne();
     personne.setId(request.getBanqueId());
 
-    user.setPersonne(personne);
+    user.setRelatedPersonne(personne);
     user.setGender(EGender.valueOf(request.getGender()));
 
     user.setPersonneType(EPType.PHYSIQUE);

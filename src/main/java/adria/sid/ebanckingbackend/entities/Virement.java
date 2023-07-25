@@ -5,11 +5,11 @@ import lombok.*;
 
 import java.util.Date;
 
+@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@PrimaryKeyJoinColumn(name = "virement_id")
+
 public class Virement {
     @Id
     private String id;

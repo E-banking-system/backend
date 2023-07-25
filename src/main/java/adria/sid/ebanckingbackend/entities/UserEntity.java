@@ -1,7 +1,7 @@
 package adria.sid.ebanckingbackend.entities;
 
 import adria.sid.ebanckingbackend.ennumerations.ERole;
-import adria.sid.ebanckingbackend.security.Token;
+import adria.sid.ebanckingbackend.security.accessToken.Token;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,10 +15,9 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@PrimaryKeyJoinColumn(name = "user_id")
 @Table(name = "user")
-
 public class UserEntity extends Personne implements UserDetails {
+
     private String email;
     private String password;
     private Boolean enabled=false;

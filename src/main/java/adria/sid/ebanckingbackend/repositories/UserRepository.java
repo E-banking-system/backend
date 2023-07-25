@@ -1,16 +1,13 @@
 package adria.sid.ebanckingbackend.repositories;
 
 import adria.sid.ebanckingbackend.entities.UserEntity;
-import adria.sid.ebanckingbackend.entities.VirementUnitaire;
-import adria.sid.ebanckingbackend.exceptions.UtilisateurExisteDeja;
+import adria.sid.ebanckingbackend.exceptions.UserAlreadyExists;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity,String> {
-    Optional<UserEntity> findByEmail(String email) throws UtilisateurExisteDeja;
+    Optional<UserEntity> findByEmail(String email) throws UserAlreadyExists;
 }

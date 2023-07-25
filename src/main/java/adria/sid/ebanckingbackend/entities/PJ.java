@@ -9,7 +9,6 @@ import java.io.File;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@PrimaryKeyJoinColumn(name = "pj_id")
 public class PJ {
     @Id
     private String id;

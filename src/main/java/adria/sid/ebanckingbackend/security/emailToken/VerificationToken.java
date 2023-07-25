@@ -1,4 +1,4 @@
-package adria.sid.ebanckingbackend.security.token;
+package adria.sid.ebanckingbackend.security.emailToken;
 
 import adria.sid.ebanckingbackend.entities.UserEntity;
 import jakarta.persistence.*;

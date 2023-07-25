@@ -1,6 +1,5 @@
-package adria.sid.ebanckingbackend.repositories;
+package adria.sid.ebanckingbackend.security.accessToken;
 
-import adria.sid.ebanckingbackend.security.Token;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -10,7 +9,6 @@ import java.util.Optional;
 
 @Repository
 public interface TokenUserRepository extends JpaRepository<Token, Integer> {
-
   @Query(value = """
       select t from Token t inner join UserEntity u\s
       on t.user.id = u.id\s

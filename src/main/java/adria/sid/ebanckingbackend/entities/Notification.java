@@ -9,7 +9,6 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@PrimaryKeyJoinColumn(name = "notification_id")
 public class Notification {
     @Id
     private String id;

@@ -9,7 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 @Entity
 @Builder
-@PrimaryKeyJoinColumn(name = "personne_id")
+@Inheritance(strategy = InheritanceType.JOINED) // Use appropriate inheritance strategy
 public class Personne {
 
     @Id
@@ -30,6 +30,6 @@ public class Personne {
     private EPType personneType;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "personne_id")
-    private Personne personne;
+    @JoinColumn(name = "related_personne_id")
+    private Personne relatedPersonne;
 }

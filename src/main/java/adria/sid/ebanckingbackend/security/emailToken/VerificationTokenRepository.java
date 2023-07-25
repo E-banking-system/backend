@@ -1,4 +1,4 @@
-package adria.sid.ebanckingbackend.security.token;
+package adria.sid.ebanckingbackend.security.emailToken;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -10,7 +10,6 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@PrimaryKeyJoinColumn(name = "compte_id")
 public class Compte {
 
     @Id

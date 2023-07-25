@@ -22,8 +22,8 @@ public class ExceptionHandling {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(UtilisateurExisteDeja.class)
-    public Map<String, String> userNotFound(UtilisateurExisteDeja ex){
+    @ExceptionHandler(UserAlreadyExists.class)
+    public Map<String, String> userNotFound(UserAlreadyExists ex){
         Map<String, String> error = new HashMap<>();
         error.put("error", ex.getMessage());
         return error;
