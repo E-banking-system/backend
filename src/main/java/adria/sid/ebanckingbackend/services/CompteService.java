@@ -70,9 +70,17 @@ public class CompteService {
 
     private void sendAccountCreationEmail(String userEmail) {
         SimpleMailMessage message = new SimpleMailMessage();
+
+        Random random = new Random();
+        int min = 1000;
+        int max = 9999;
+
+        int randomPIN = random.nextInt(max - min + 1) + min;
+
+
         message.setTo(userEmail);
         message.setSubject("Compte créé");
-        message.setText("Votre compte est bien activé, voici votre code PIN: " + );
+        message.setText("Votre compte est bien activé, voici votre code PIN: " + randomPIN);
 
         javaMailSender.send(message);
 
