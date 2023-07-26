@@ -12,7 +12,6 @@ import java.util.Date;
 @AllArgsConstructor
 public class ReqCreateAccountDTO {
 
-    private String id;
     private String nature;
     private Double solde;
     private String RIB;
@@ -22,5 +21,4 @@ public class ReqCreateAccountDTO {
     private Date derniereDateSuspention;
     private Date derniereDateBloquage;
     private EtatCompte etatCompte;
-    private String userId; // Represents the ID of the associated UserEntity
 }

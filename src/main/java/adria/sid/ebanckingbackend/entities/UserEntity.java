@@ -25,7 +25,7 @@ public class UserEntity extends Personne implements UserDetails {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private List<Notification> notifications;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
     private List<Compte> comptes;
 
     @Enumerated(EnumType.STRING)
