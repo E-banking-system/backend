@@ -1,13 +1,12 @@
 package adria.sid.ebanckingbackend.services;
 
-import adria.sid.ebanckingbackend.dtos.AuthReqDTO;
-import adria.sid.ebanckingbackend.dtos.AuthResDTO;
-import adria.sid.ebanckingbackend.dtos.ReqRegisterBanquierDTO;
-import adria.sid.ebanckingbackend.dtos.ReqRegisterClientDTO;
+import adria.sid.ebanckingbackend.dtos.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 
+import adria.sid.ebanckingbackend.ennumerations.EPType;
+import adria.sid.ebanckingbackend.ennumerations.ERole;
 import adria.sid.ebanckingbackend.ennumerations.TokenType;
 import adria.sid.ebanckingbackend.entities.UserEntity;
 import adria.sid.ebanckingbackend.security.accessToken.TokenUserRepository;
@@ -29,6 +28,7 @@ import jakarta.validation.Validator;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
@@ -75,80 +75,70 @@ class AuthenticationServiceTest {
 
     @InjectMocks
     private AuthenticationService authenticationService;
-/*
+
+    @Mock
+    private UserEntity userEntity;
+
     @Test
-    void testRegisterBanquier() {
-        ReqRegisterBanquierDTO request = ReqRegisterBanquierDTO.builder()
-                .nom("John")
-                .prenom("Doe")
-                .email("john.doe@example.com")
-                .gender("MALE")
-                .adresse("123 Main St")
-                .cin("AB123456")
-                .telephone("1234567890")
-                .operateur("Operator")
-                .banqueId("123456")
-                .password("password")
-                .role("BANQUIER")
-                .build();
+    void testRegisterClientMorale() {
+        ReqRegisterClientMoraleDTO request = new ReqRegisterClientMoraleDTO();
+        request.setEmail("test@example.com");
+        request.setTelephone("1234567890");
+        request.setOperateur("Operator");
+        request.setAdresse("123 Main St");
+        request.setPassword("password");
 
-
-        UserEntity savedUser = new UserEntity();
-        savedUser.setPassword("123");
-        savedUser.setEmail("user@gmail.com");
-        savedUser.setPassword(passwordEncoder.encode(request.getPassword()));
+        when(userRepository.save(any(UserEntity.class))).thenReturn(userEntity);
 
         String jwtToken = "jwt_token";
-        String refreshToken = "refresh_token";
-
-        when(userRepository.save(any(UserEntity.class))).thenReturn(savedUser);
         when(jwtService.generateToken(any(UserEntity.class))).thenReturn(jwtToken);
+
+        String refreshToken = "refresh_token";
         when(jwtService.generateRefreshToken(any(UserEntity.class))).thenReturn(refreshToken);
 
+        UserEntity savedUser = authenticationService.registerClientMorale(request);
 
-        AuthResDTO response = authenticationService.registerBanquier(request);
+        verify(userRepository).save(any(UserEntity.class));
 
-        assertEquals(jwtToken, response.getAccessToken());
-        assertEquals(refreshToken, response.getRefreshToken());
+        verify(jwtService).generateToken(any(UserEntity.class));
+
+        verify(jwtService).generateRefreshToken(any(UserEntity.class));
+
+        assertEquals(userEntity, savedUser);
     }
 
     @Test
-    void testRegisterClient() {
-        ReqRegisterClientDTO request = ReqRegisterClientDTO.builder()
-                .nom("John")
-                .prenom("Doe")
-                .rib("123456789")
-                .email("john@example.com")
-                .gender("MALE")
-                .adresse("1kfejfjle")
-                .cin("AB123456")
-                .telephone("1234567890")
-                .operateur("Operator")
-                .epType("Type")
-                .raisonSociale("Company")
-                .registerNumber("123456")
-                .password("password")
-                .role("CLIENT")
-                .build();
+    void testRegisterClientPhysique() {
+        ReqRegisterClientPhysiqueDTO request = new ReqRegisterClientPhysiqueDTO();
+        request.setEmail("test@example.com");
+        request.setTelephone("1234567890");
+        request.setOperateur("Operator");
+        request.setAdresse("123 Main St");
+        request.setPassword("password");
+        request.setNom("kaoutar");
+        request.setCin("JC616161");
+        request.setPrenom("kaoutar");
+        request.setGender("FEMALE");
 
-        UserEntity savedUser = new UserEntity();
-        savedUser.setPassword("123");
-        savedUser.setEmail("user@gmail.com");
-        savedUser.setPassword(passwordEncoder.encode(request.getPassword()));
+        when(userRepository.save(any(UserEntity.class))).thenReturn(userEntity);
 
         String jwtToken = "jwt_token";
-        String refreshToken = "refresh_token";
-
-        when(userRepository.save(any(UserEntity.class))).thenReturn(savedUser);
         when(jwtService.generateToken(any(UserEntity.class))).thenReturn(jwtToken);
+
+        String refreshToken = "refresh_token";
         when(jwtService.generateRefreshToken(any(UserEntity.class))).thenReturn(refreshToken);
 
-        AuthResDTO response = authenticationService.registerClient(request);
+        UserEntity savedUser = authenticationService.registerClientPhysique(request);
 
-        assertEquals(jwtToken, response.getAccessToken());
-        assertEquals(refreshToken, response.getRefreshToken());
+        verify(userRepository).save(any(UserEntity.class));
+
+        verify(jwtService).generateToken(any(UserEntity.class));
+
+        verify(jwtService).generateRefreshToken(any(UserEntity.class));
+
+        assertEquals(userEntity, savedUser);
     }
-*/
+
     @Test
     void testAuthenticate() {
         AuthReqDTO request = AuthReqDTO.builder()
@@ -159,6 +149,7 @@ class AuthenticationServiceTest {
         UserEntity user = new UserEntity();
         user.setPassword("123");
         user.setEmail("user@gmail.com");
+        user.setRole(ERole.CLIENT);
 
         String jwtToken = "jwt_token";
         String refreshToken = "refresh_token";
