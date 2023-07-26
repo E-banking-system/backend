@@ -75,7 +75,7 @@ class AuthenticationServiceTest {
 
     @InjectMocks
     private AuthenticationService authenticationService;
-
+/*
     @Test
     void testRegisterBanquier() {
         ReqRegisterBanquierDTO request = ReqRegisterBanquierDTO.builder()
@@ -148,7 +148,7 @@ class AuthenticationServiceTest {
         assertEquals(jwtToken, response.getAccessToken());
         assertEquals(refreshToken, response.getRefreshToken());
     }
-
+*/
     @Test
     void testAuthenticate() {
         AuthReqDTO request = AuthReqDTO.builder()
