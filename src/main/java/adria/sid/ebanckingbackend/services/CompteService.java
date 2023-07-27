@@ -8,6 +8,7 @@ import adria.sid.ebanckingbackend.entities.EmailCorps;
 import adria.sid.ebanckingbackend.entities.UserEntity;
 import adria.sid.ebanckingbackend.repositories.CompteRepository;
 import adria.sid.ebanckingbackend.repositories.UserRepository;
+import adria.sid.ebanckingbackend.utils.CodeGenerator;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
@@ -30,18 +31,20 @@ public class CompteService {
 
     private final EmailSender emailSender;
 
+    private final CodeGenerator codeGenerator;
+
 
 
     @Transactional
     public void createAccountForExistingUserAndSendEmail(ReqCreateAccountDTO accountDTO) {
         Compte newCompte = new Compte();
-        String sb=generateRandomDigit(24);
-        String pin=generateRandomDigit(4);
+        String rib=codeGenerator.generateRIBCode();
+        String pin= codeGenerator.generatePinCode();
 
         newCompte.setId(UUID.randomUUID().toString());
         newCompte.setNature(accountDTO.getNature());
         newCompte.setSolde(accountDTO.getSolde());
-        newCompte.setRIB(sb);
+        newCompte.setRIB(rib);
         newCompte.setNumCompte(ThreadLocalRandom.current().nextLong(Long.MAX_VALUE));
         newCompte.setDateCreation(accountDTO.getDateCreation());
         newCompte.setDatePeremption(accountDTO.getDatePeremption());
@@ -70,15 +73,4 @@ public class CompteService {
 
         emailSender.sendAccountInfosByEmail(userEntity,pin);
     }
-
-    private String generateRandomDigit(int capacity){
-        Random random = new Random();
-        StringBuilder sb = new StringBuilder(capacity);
-        for (int i = 0; i < 24; i++) {
-            int digit = random.nextInt(10); // Generates a random digit (0 to 9)
-            sb.append(digit);
-        }
-        return sb.toString();
-    }
-
 }
