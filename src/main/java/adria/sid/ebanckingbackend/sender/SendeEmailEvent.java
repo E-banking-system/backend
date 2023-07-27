@@ -1,5 +1,6 @@
 package adria.sid.ebanckingbackend.sender;
 
+import adria.sid.ebanckingbackend.entities.EmailCorps;
 import adria.sid.ebanckingbackend.entities.UserEntity;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,13 +9,13 @@ import org.springframework.context.ApplicationEvent;
 
 @Getter
 @Setter
-public class RegistrationEvent extends ApplicationEvent {
+public class SendeEmailEvent extends ApplicationEvent {
     private UserEntity user;
-    private String applicationUrl;
+    private EmailCorps emailCorps;
 
-    public RegistrationEvent(UserEntity user, String applicationUrl) {
+    public SendeEmailEvent(UserEntity user, EmailCorps emailCorps) {
         super(user);
         this.user = user;
-        this.applicationUrl = applicationUrl;
+        this.emailCorps = emailCorps;
     }
 }

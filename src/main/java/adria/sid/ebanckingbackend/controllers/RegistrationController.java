@@ -2,11 +2,13 @@ package adria.sid.ebanckingbackend.controllers;
 
 import adria.sid.ebanckingbackend.dtos.ReqRegisterClientMoraleDTO;
 import adria.sid.ebanckingbackend.dtos.ReqRegisterClientPhysiqueDTO;
+import adria.sid.ebanckingbackend.entities.EmailCorps;
 import adria.sid.ebanckingbackend.entities.UserEntity;
 import adria.sid.ebanckingbackend.security.emailToken.VerificationToken;
 import adria.sid.ebanckingbackend.security.emailToken.VerificationTokenRepository;
-import adria.sid.ebanckingbackend.sender.RegistrationEvent;
+import adria.sid.ebanckingbackend.sender.SendeEmailEvent;
 import adria.sid.ebanckingbackend.services.AuthenticationService;
+import adria.sid.ebanckingbackend.services.EmailSender;
 import adria.sid.ebanckingbackend.utils.HtmlCodeGenerator;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -22,21 +24,18 @@ import org.springframework.web.bind.annotation.*;
 public class RegistrationController {
 
     private final AuthenticationService userService;
-    private final ApplicationEventPublisher publisher;
     private final VerificationTokenRepository tokenRepository;
     private final HtmlCodeGenerator htmlCodeGenerator;
 
     @PostMapping("/physique")
     public String registerClientPhysique(@RequestBody ReqRegisterClientPhysiqueDTO registrationRequest, final HttpServletRequest request) {
-        UserEntity userEntity = userService.registerClientPhysique(registrationRequest);
-        publisher.publishEvent(new RegistrationEvent(userEntity, applicationUrl(request)));
+        userService.registerClientPhysique(registrationRequest,applicationUrl(request));
         return "Bravo ! check your e-mail pour finaliser votre inscription";
     }
 
     @PostMapping("/morale")
     public String registerClientMorale(@RequestBody ReqRegisterClientMoraleDTO registrationRequest, final HttpServletRequest request) {
-        UserEntity userEntity = userService.registerClientMorale(registrationRequest);
-        publisher.publishEvent(new RegistrationEvent(userEntity, applicationUrl(request)));
+        userService.registerClientMorale(registrationRequest,applicationUrl(request));
         return "Bravo ! check your e-mail pour finaliser votre inscription";
     }
 

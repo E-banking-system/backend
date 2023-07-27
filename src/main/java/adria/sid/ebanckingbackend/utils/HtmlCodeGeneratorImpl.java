@@ -144,4 +144,74 @@ public class HtmlCodeGeneratorImpl implements HtmlCodeGenerator{
                 + "</html>";
         return mailContent;
     }
+
+    @Override
+    public String generateActivatedAccountInfoEmail(String pin,UserEntity userEntity) {
+        String nom = userEntity.getNom();
+        String prenom = userEntity.getPrenom();
+        String raisonSociale = userEntity.getRaisonSociale();
+
+        String displayName = (nom != null && prenom != null) ? (nom + " " + prenom) : raisonSociale;
+
+
+        String mailContent = "<!DOCTYPE html>"
+                + "<html>"
+                + "<head>"
+                + "<style>"
+                + "/* Styles pour rendre l'email attrayant */"
+                + "body {"
+                + "    font-family: Arial, sans-serif;"
+                + "    background-color: #f5f5f5;"
+                + "    color: #333;"
+                + "    margin: 0;"
+                + "    padding: 0;"
+                + "}"
+                + ".container {"
+                + "    max-width: 600px;"
+                + "    margin: 0 auto;"
+                + "    padding: 20px;"
+                + "    background-color: #fff;"
+                + "    border-radius: 8px;"
+                + "    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);"
+                + "}"
+                + "h1 {"
+                + "    color: #007bff;"
+                + "}"
+                + "p {"
+                + "    margin-bottom: 15px;"
+                + "}"
+                + "a {"
+                + "    display: inline-block;"
+                + "    padding: 10px 20px;"
+                + "    background-color: #007bff;"
+                + "    color: #fff;"
+                + "    text-decoration: none;"
+                + "    border-radius: 5px;"
+                + "    font-weight: bold;"
+                + "}"
+                +  ".text-link {"
+                +  "    color: white;"
+                +  "}"
+                + "a:hover {"
+                + "    background-color: #0056b3;"
+                + "}"
+                + "b {"
+                + "    font-weight: bold;"
+                + "}"
+                + ".activate-link {"
+                + "    color: #fff;"
+                + "}"
+                + "</style>"
+                + "</head>"
+                + "<body>"
+                + "<div class=\"container\">"
+                + "<h1>Bienvenue, " + displayName + "!</h1>"
+                + "<p>Merci pour votre fidélité.</p>"
+                + "<h4>Voila le code PIN de votre compte bancaire : "+pin+"</h4>"
+                + "<p>Merci <br> <b>BANQUE XXX</b></p>"
+                + "</div>"
+                + "</body>"
+                + "</html>";
+        return mailContent;
+    }
 }

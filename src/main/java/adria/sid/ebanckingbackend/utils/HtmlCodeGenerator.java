@@ -7,4 +7,5 @@ import org.springframework.stereotype.Service;
 public interface HtmlCodeGenerator {
     String generateVerifiedEmailHTML(String message);
     String generateActivatedEmailHTML(String url, UserEntity userEntity);
+    String generateActivatedAccountInfoEmail(String pin,UserEntity userEntity);
 }

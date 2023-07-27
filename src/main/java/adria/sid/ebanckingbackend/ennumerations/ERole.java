@@ -17,10 +17,10 @@ public enum ERole {
     USER(Collections.emptySet()),
     BANQUIER(
             Set.of(
+                    BANQUIER_CREATE,
                     BANQUIER_READ,
                     BANQUIER_UPDATE,
-                    BANQUIER_DELETE,
-                    BANQUIER_CREATE
+                    BANQUIER_DELETE
             )
     ),
     CLIENT(

@@ -32,6 +32,7 @@ public class Compte {
     private Date derniereDateBloquage;
 
     private EtatCompte etatCompte=EtatCompte.BLOCKE;
+    private String CodePIN;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

@@ -16,6 +16,7 @@ import adria.sid.ebanckingbackend.security.emailToken.VerificationToken;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.constraints.Email;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -36,6 +37,7 @@ public class AuthenticationService {
   private final PasswordEncoder passwordEncoder;
   private final JwtService jwtService;
   private final AuthenticationManager authenticationManager;
+  private final EmailSender emailSender;
 
   private String generateAccessToken() {
     // Generate and return an access token using a suitable mechanism
@@ -94,7 +96,7 @@ public class AuthenticationService {
     return savedUser;
   }
 
-  public UserEntity registerClientPhysique(ReqRegisterClientPhysiqueDTO request) {
+  public UserEntity registerClientPhysique(ReqRegisterClientPhysiqueDTO request,String url) {
     var user=new UserEntity();
     user.setId(UUID.randomUUID().toString());
 
@@ -116,10 +118,15 @@ public class AuthenticationService {
     var jwtToken = jwtService.generateToken(user);
     var refreshToken = jwtService.generateRefreshToken(user);
     saveUserToken(savedUser, jwtToken);
+
+    String verificationToken = UUID.randomUUID().toString();
+    saveUserVerificationToken(user, verificationToken);
+
+    emailSender.sendVerificationUrlByEmail(user,verificationToken,url);
     return savedUser;
   }
 
-  public UserEntity registerClientMorale(ReqRegisterClientMoraleDTO request) {
+  public UserEntity registerClientMorale(ReqRegisterClientMoraleDTO request,String url) {
     var user=new UserEntity();
     user.setId(UUID.randomUUID().toString());
 
@@ -137,6 +144,11 @@ public class AuthenticationService {
     var jwtToken = jwtService.generateToken(user);
     var refreshToken = jwtService.generateRefreshToken(user);
     saveUserToken(savedUser, jwtToken);
+
+    String verificationToken = UUID.randomUUID().toString();
+    saveUserVerificationToken(user, verificationToken);
+
+    emailSender.sendVerificationUrlByEmail(user,verificationToken,url);
     return savedUser;
   }
 
