@@ -27,11 +27,16 @@ public class AuthenticationController {
   public ResponseEntity<AuthResDTO> authenticate(@RequestBody @Valid AuthReqDTO request) {
     try {
       AuthResDTO response = authenticationService.authenticate(request);
-      return ResponseEntity.ok(response);
+      if (response != null) {
+        return ResponseEntity.ok(response);
+      } else {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+      }
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
   }
+
 
   @PostMapping("/refresh-token")
   public void refreshToken(
