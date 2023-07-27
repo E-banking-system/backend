@@ -6,10 +6,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum PERMISSION {
 
-    BANQUIER_SUITE_REGISTRATION_CLIENT("banquier:create"),
+    BANQUIER_SUITE_REGISTRATION_CLIENT("banquier:banquier_suite_registration_client"),
     BANQUIER_READ("banquier:read"),
     BANQUIER_UPDATE("banquier:update"),
-    BANQUIER_CREATE("banquier:create"),
     BANQUIER_DELETE("banquier:delete"),
     CLIENT_READ("client:read"),
     CLIENT_UPDATE("client:update"),

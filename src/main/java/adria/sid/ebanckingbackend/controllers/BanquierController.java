@@ -26,13 +26,6 @@ public class BanquierController {
         return "GET:: banquier controller";
     }
 
-    /*@PostMapping
-    @PreAuthorize("hasAuthority('banquier:create')")
-    @Hidden
-    public String post() {
-        return "POST:: banquier controller";
-    }*/
-
     @PutMapping
     @PreAuthorize("hasAuthority('banquier:update')")
     @Hidden
@@ -48,11 +41,9 @@ public class BanquierController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAuthority('banquier:create')")
+    @PreAuthorize("hasAuthority('banquier:banquier_suite_registration_client')")
     public ResponseEntity<String> createAccountForExistingUser(@RequestBody ReqCreateAccountDTO accountDTO) {
         compteService.createAccountForExistingUserAndSendEmail(accountDTO);
         return ResponseEntity.ok("Un compte a été créé pour cet utilisateur. Check your e-mail pour voir les informations sur vos compte");
     }
-
-
 }

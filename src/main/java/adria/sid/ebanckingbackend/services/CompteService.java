@@ -16,6 +16,7 @@ import org.springframework.core.task.TaskExecutor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
@@ -46,10 +47,10 @@ public class CompteService {
         newCompte.setSolde(accountDTO.getSolde());
         newCompte.setRIB(rib);
         newCompte.setNumCompte(ThreadLocalRandom.current().nextLong(Long.MAX_VALUE));
-        newCompte.setDateCreation(accountDTO.getDateCreation());
-        newCompte.setDatePeremption(accountDTO.getDatePeremption());
-        newCompte.setDerniereDateSuspention(accountDTO.getDerniereDateSuspention());
-        newCompte.setDerniereDateBloquage(accountDTO.getDerniereDateBloquage());
+        newCompte.setDateCreation(new Date());
+        newCompte.setDatePeremption(null);
+        newCompte.setDerniereDateSuspention(null);
+        newCompte.setDerniereDateBloquage(null);
         newCompte.setEtatCompte(EtatCompte.ACTIVE);
         newCompte.setCodePIN(pin);
 

@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin("*")
 public class ClientController {
     @Operation(
-            description = "Get endpoint for manager",
-            summary = "This is a summary for management get endpoint",
+            description = "Get endpoint for cliebt",
+            summary = "This is a summary for client get endpoint",
             responses = {
                     @ApiResponse(
                             description = "Success",

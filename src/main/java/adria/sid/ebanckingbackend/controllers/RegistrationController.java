@@ -2,18 +2,13 @@ package adria.sid.ebanckingbackend.controllers;
 
 import adria.sid.ebanckingbackend.dtos.ReqRegisterClientMoraleDTO;
 import adria.sid.ebanckingbackend.dtos.ReqRegisterClientPhysiqueDTO;
-import adria.sid.ebanckingbackend.entities.EmailCorps;
-import adria.sid.ebanckingbackend.entities.UserEntity;
 import adria.sid.ebanckingbackend.security.emailToken.VerificationToken;
 import adria.sid.ebanckingbackend.security.emailToken.VerificationTokenRepository;
-import adria.sid.ebanckingbackend.sender.SendeEmailEvent;
 import adria.sid.ebanckingbackend.services.AuthenticationService;
-import adria.sid.ebanckingbackend.services.EmailSender;
 import adria.sid.ebanckingbackend.utils.HtmlCodeGenerator;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j

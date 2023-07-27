@@ -40,7 +40,6 @@ public class SecurityConfiguration {
                 "/api/v1/auth/**",
                 "/api/v1/register/**",
                 "/api/v1/banquier/**",
-                "/inscription/**",
                 "/v2/api-docs",
                 "/v3/api-docs",
                 "/v3/api-docs/**",
@@ -64,7 +63,8 @@ public class SecurityConfiguration {
         .requestMatchers(DELETE, "/api/v1/client/**").hasAnyAuthority(CLIENT_DELETE.name())
 
         .requestMatchers("/api/v1/banquier/**").hasRole(BANQUIER.name())
-        .requestMatchers(POST, "/api/v1/banquier/**").hasAuthority(BANQUIER_CREATE.name())
+
+        .requestMatchers(POST, "/api/v1/banquier/**").hasAuthority(BANQUIER_SUITE_REGISTRATION_CLIENT.name())
         .requestMatchers(GET, "/api/v1/banquier/**").hasAuthority(BANQUIER_READ.name())
         .requestMatchers(PUT, "/api/v1/banquier/**").hasAuthority(BANQUIER_UPDATE.name())
         .requestMatchers(DELETE, "/api/v1/banquier/**").hasAuthority(BANQUIER_DELETE.name())

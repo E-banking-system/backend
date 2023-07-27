@@ -17,7 +17,7 @@ public enum ERole {
     USER(Collections.emptySet()),
     BANQUIER(
             Set.of(
-                    BANQUIER_CREATE,
+                    BANQUIER_SUITE_REGISTRATION_CLIENT,
                     BANQUIER_READ,
                     BANQUIER_UPDATE,
                     BANQUIER_DELETE
