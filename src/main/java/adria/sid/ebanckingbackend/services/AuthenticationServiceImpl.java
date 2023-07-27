@@ -4,7 +4,6 @@ import adria.sid.ebanckingbackend.dtos.*;
 import adria.sid.ebanckingbackend.ennumerations.EGender;
 import adria.sid.ebanckingbackend.ennumerations.EPType;
 import adria.sid.ebanckingbackend.ennumerations.ERole;
-import adria.sid.ebanckingbackend.entities.Personne;
 import adria.sid.ebanckingbackend.security.accessToken.Token;
 import adria.sid.ebanckingbackend.security.accessToken.TokenUserRepository;
 import adria.sid.ebanckingbackend.security.JwtService;
@@ -16,7 +15,7 @@ import adria.sid.ebanckingbackend.security.emailToken.VerificationToken;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.constraints.Email;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -29,8 +28,8 @@ import java.util.Calendar;
 import java.util.UUID;
 
 @Service
-@RequiredArgsConstructor
-public class AuthenticationService {
+@AllArgsConstructor
+public class AuthenticationServiceImpl implements AuthentificationService{
   private final UserRepository userRepository;
   private final TokenUserRepository tokenUserRepository;
   private final VerificationTokenRepository tokenVerificationRepository;
@@ -39,18 +38,13 @@ public class AuthenticationService {
   private final AuthenticationManager authenticationManager;
   private final EmailSender emailSender;
 
-  private String generateAccessToken() {
-    // Generate and return an access token using a suitable mechanism
-    // For example, you can use UUID.randomUUID().toString() to generate a random token
-    return UUID.randomUUID().toString();
-  }
-
+  @Override
   public void saveUserVerificationToken(UserEntity theUser, String token) {
     var verificationToken = new VerificationToken(token, theUser);
     tokenVerificationRepository.save(verificationToken);
   }
 
-
+  @Override
   public String validateToken(String theToken) {
     VerificationToken token = tokenVerificationRepository.findByToken(theToken);
     if(token == null){
@@ -67,35 +61,7 @@ public class AuthenticationService {
     return "valid";
   }
 
-  public UserEntity registerBanquier(ReqRegisterBanquierDTO request) {
-    var user=new UserEntity();
-    user.setId(UUID.randomUUID().toString());
-    user.setNom(request.getNom());
-    user.setPrenom(request.getPrenom());
-    user.setEmail(request.getEmail());
-    user.setTel(request.getTelephone());
-    user.setOperateur(request.getOperateur());
-    user.setCIN(request.getCin());
-    user.setAddress(request.getAdresse());
-
-    Personne personne=new Personne();
-    personne.setId(request.getBanqueId());
-
-    user.setRelatedPersonne(personne);
-    user.setGender(EGender.valueOf(request.getGender()));
-
-    user.setPersonneType(EPType.PHYSIQUE);
-    user.setPassword(passwordEncoder.encode(request.getPassword()));
-    user.setRole(ERole.valueOf(request.getRole()));
-
-    var savedUser = userRepository.save(user);
-
-    var jwtToken = jwtService.generateToken(user);
-    var refreshToken = jwtService.generateRefreshToken(user);
-    saveUserToken(savedUser, jwtToken);
-    return savedUser;
-  }
-
+  @Override
   public UserEntity registerClientPhysique(ReqRegisterClientPhysiqueDTO request,String url) {
     var user=new UserEntity();
     user.setId(UUID.randomUUID().toString());
@@ -126,6 +92,7 @@ public class AuthenticationService {
     return savedUser;
   }
 
+  @Override
   public UserEntity registerClientMorale(ReqRegisterClientMoraleDTO request,String url) {
     var user=new UserEntity();
     user.setId(UUID.randomUUID().toString());
@@ -152,6 +119,7 @@ public class AuthenticationService {
     return savedUser;
   }
 
+  @Override
   public AuthResDTO authenticate(AuthReqDTO request) {
     authenticationManager.authenticate(
         new UsernamePasswordAuthenticationToken(
@@ -176,7 +144,8 @@ public class AuthenticationService {
     return null;
   }
 
-  void saveUserToken(UserEntity user, String jwtToken) {
+  @Override
+  public void saveUserToken(UserEntity user, String jwtToken) {
     var token = Token.builder()
         .user(user)
         .token(jwtToken)
@@ -187,7 +156,8 @@ public class AuthenticationService {
     tokenUserRepository.save(token);
   }
 
-  void revokeAllUserTokens(UserEntity user) {
+  @Override
+  public void revokeAllUserTokens(UserEntity user) {
     var validUserTokens = tokenUserRepository.findAllValidTokenByUser(user.getId());
     if (validUserTokens.isEmpty())
       return;
@@ -198,6 +168,7 @@ public class AuthenticationService {
     tokenUserRepository.saveAll(validUserTokens);
   }
 
+  @Override
   public void refreshToken(
           HttpServletRequest request,
           HttpServletResponse response

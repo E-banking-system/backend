@@ -4,7 +4,7 @@ import adria.sid.ebanckingbackend.dtos.ReqRegisterClientMoraleDTO;
 import adria.sid.ebanckingbackend.dtos.ReqRegisterClientPhysiqueDTO;
 import adria.sid.ebanckingbackend.security.emailToken.VerificationToken;
 import adria.sid.ebanckingbackend.security.emailToken.VerificationTokenRepository;
-import adria.sid.ebanckingbackend.services.AuthenticationService;
+import adria.sid.ebanckingbackend.services.AuthentificationService;
 import adria.sid.ebanckingbackend.utils.HtmlCodeGenerator;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -18,19 +18,19 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin("*")
 public class RegistrationController {
 
-    private final AuthenticationService userService;
+    private final AuthentificationService authentificationService;
     private final VerificationTokenRepository tokenRepository;
     private final HtmlCodeGenerator htmlCodeGenerator;
 
     @PostMapping("/physique")
     public String registerClientPhysique(@RequestBody ReqRegisterClientPhysiqueDTO registrationRequest, final HttpServletRequest request) {
-        userService.registerClientPhysique(registrationRequest,applicationUrl(request));
+        authentificationService.registerClientPhysique(registrationRequest,applicationUrl(request));
         return "Bravo ! check your e-mail pour finaliser votre inscription";
     }
 
     @PostMapping("/morale")
     public String registerClientMorale(@RequestBody ReqRegisterClientMoraleDTO registrationRequest, final HttpServletRequest request) {
-        userService.registerClientMorale(registrationRequest,applicationUrl(request));
+        authentificationService.registerClientMorale(registrationRequest,applicationUrl(request));
         return "Bravo ! check your e-mail pour finaliser votre inscription";
     }
 
@@ -40,7 +40,7 @@ public class RegistrationController {
         if (theToken.getUser().getEnabled()) {
             return htmlCodeGenerator.generateVerifiedEmailHTML("Ce compte a déjà été vérifié, merci de vous connecter.");
         }
-        String verificationResult = userService.validateToken(token);
+        String verificationResult = authentificationService.validateToken(token);
         if (verificationResult.equalsIgnoreCase("valid")) {
             return htmlCodeGenerator.generateVerifiedEmailHTML("Email vérifié avec succès. Vous pouvez maintenant vous connecter.<br/> Vos contrats sont disponibles pour signature, c'est la dernière étape avant de finaliser l'ouverture de votre compte.");
         }
