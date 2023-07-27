@@ -65,7 +65,7 @@ public class CompteService {
             userRepository.save(existingUser);
         }
 
-        taskExecutor.execute(() -> sendAccountCreationEmail(accountDTO.getEmail()));
+        taskExecutor.execute(() -> sendAccountCreationEmail("taffahachraf184@gmail.com"));
     }
 
     private void sendAccountCreationEmail(String userEmail) {
@@ -76,7 +76,7 @@ public class CompteService {
         int max = 9999;
 
         int randomPIN = random.nextInt(max - min + 1) + min;
-
+        System.out.println("Email : "+userEmail);
 
         message.setTo(userEmail);
         message.setSubject("Compte créé");

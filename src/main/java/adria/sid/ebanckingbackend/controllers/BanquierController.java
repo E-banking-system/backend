@@ -25,18 +25,21 @@ public class BanquierController {
     public String get() {
         return "GET:: banquier controller";
     }
-    @PostMapping
+
+    /*@PostMapping
     @PreAuthorize("hasAuthority('banquier:create')")
     @Hidden
     public String post() {
         return "POST:: banquier controller";
-    }
+    }*/
+
     @PutMapping
     @PreAuthorize("hasAuthority('banquier:update')")
     @Hidden
     public String put() {
         return "PUT:: banquier controller";
     }
+
     @DeleteMapping
     @PreAuthorize("hasAuthority('banquier:delete')")
     @Hidden
@@ -45,7 +48,8 @@ public class BanquierController {
     }
 
 
-    @PostMapping("/suiteRegistrationClient")
+    @PostMapping("")
+    @PreAuthorize("hasAuthority('banquier:create')")
     public ResponseEntity<String> createAccountForExistingUser(@RequestBody ReqCreateAccountDTO accountDTO) {
         compteService.createAccountForExistingUserAndSendEmail(accountDTO);
         return ResponseEntity.ok("Un compte a été créé pour cet utilisateur. Check your e-mail pour voir les informations sur vos compte");

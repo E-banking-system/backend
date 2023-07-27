@@ -20,7 +20,6 @@ public class ReqCreateAccountDTO {
     @NotBlank(message = "solde is required")
     private Double solde;
 
-
     @NotBlank(message = "dateCreation is required")
     private Date dateCreation;
 
