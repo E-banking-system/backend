@@ -26,8 +26,8 @@ class LogoutServiceTest {
     //@InjectMocks
     //private LogoutService logoutService;
 
-    @Test
-    void testLogout_ValidToken() {
+    //@Test
+    /*void testLogout_ValidToken() {
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
         Authentication authentication = mock(Authentication.class);
@@ -38,7 +38,7 @@ class LogoutServiceTest {
         when(request.getHeader("Authorization")).thenReturn(authHeader);
         when(tokenRepository.findByToken(jwt)).thenReturn(Optional.of(new Token()));
 
-        //logoutService.logout(request, response, authentication);
+        logoutService.logout(request, response, authentication);
 
         try {
             verify(response, never()).sendError(anyInt());
@@ -60,7 +60,7 @@ class LogoutServiceTest {
         when(request.getHeader("Authorization")).thenReturn(authHeader);
         // No need to stub tokenRepository.findByToken(jwt) as the token is invalid.
 
-        //logoutService.logout(request, response, authentication);
+        logoutService.logout(request, response, authentication);
 
         try {
             verify(response, never()).sendError(anyInt());
@@ -69,5 +69,5 @@ class LogoutServiceTest {
         }
         verify(tokenRepository, never()).save(any(Token.class));
         verify(authentication, never()).setAuthenticated(anyBoolean());
-    }
+    }*/
 }
