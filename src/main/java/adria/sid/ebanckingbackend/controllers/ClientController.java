@@ -3,12 +3,14 @@ package adria.sid.ebanckingbackend.controllers;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/client")
 @Tag(name = "Client")
 @CrossOrigin("*")
+@Slf4j
 public class ClientController {
     @Operation(
             description = "Get endpoint for cliebt",

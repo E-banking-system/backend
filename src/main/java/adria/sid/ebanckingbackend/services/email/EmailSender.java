@@ -1,4 +1,4 @@
-package adria.sid.ebanckingbackend.services;
+package adria.sid.ebanckingbackend.services.email;
 
 import adria.sid.ebanckingbackend.entities.UserEntity;
 import org.springframework.stereotype.Service;

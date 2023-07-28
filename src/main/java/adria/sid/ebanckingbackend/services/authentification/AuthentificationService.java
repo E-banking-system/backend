@@ -1,4 +1,4 @@
-package adria.sid.ebanckingbackend.services;
+package adria.sid.ebanckingbackend.services.authentification;
 
 import adria.sid.ebanckingbackend.dtos.AuthReqDTO;
 import adria.sid.ebanckingbackend.dtos.AuthResDTO;

@@ -17,6 +17,4 @@ public class AuthResDTO {
   private String refreshToken;
   @JsonProperty("role")
   private String role;
-  @JsonProperty("compte_active")
-  private Boolean compteActive;
 }

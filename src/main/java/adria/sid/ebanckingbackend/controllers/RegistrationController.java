@@ -4,8 +4,8 @@ import adria.sid.ebanckingbackend.dtos.ReqRegisterClientMoraleDTO;
 import adria.sid.ebanckingbackend.dtos.ReqRegisterClientPhysiqueDTO;
 import adria.sid.ebanckingbackend.security.emailToken.VerificationToken;
 import adria.sid.ebanckingbackend.security.emailToken.VerificationTokenRepository;
-import adria.sid.ebanckingbackend.services.AuthentificationService;
-import adria.sid.ebanckingbackend.utils.HtmlCodeGenerator;
+import adria.sid.ebanckingbackend.services.authentification.AuthentificationService;
+import adria.sid.ebanckingbackend.utils.codeGenerators.HtmlCodeGenerator;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,33 +18,33 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin("*")
 public class RegistrationController {
 
-    private final AuthentificationService authentificationService;
+    private final AuthentificationService authenticationService;
     private final VerificationTokenRepository tokenRepository;
     private final HtmlCodeGenerator htmlCodeGenerator;
 
     @PostMapping("/physique")
-    public String registerClientPhysique(@RequestBody ReqRegisterClientPhysiqueDTO registrationRequest, final HttpServletRequest request) {
-        authentificationService.registerClientPhysique(registrationRequest,applicationUrl(request));
-        return "Bravo ! check your e-mail pour finaliser votre inscription";
+    public String registerClientPhysique(@RequestBody ReqRegisterClientPhysiqueDTO reqRegisterClientPhysiqueDTO, final HttpServletRequest request) {
+        authenticationService.registerClientPhysique(reqRegisterClientPhysiqueDTO, applicationUrl(request));
+        return "Bravo ! Check your e-mail to finalize your inscription";
     }
 
     @PostMapping("/morale")
-    public String registerClientMorale(@RequestBody ReqRegisterClientMoraleDTO registrationRequest, final HttpServletRequest request) {
-        authentificationService.registerClientMorale(registrationRequest,applicationUrl(request));
-        return "Bravo ! check your e-mail pour finaliser votre inscription";
+    public String registerClientMorale(@RequestBody ReqRegisterClientMoraleDTO reqRegisterClientMoraleDTO, final HttpServletRequest request) {
+        authenticationService.registerClientMorale(reqRegisterClientMoraleDTO, applicationUrl(request));
+        return "Bravo ! Check your e-mail to finalize your inscription";
     }
 
     @GetMapping("/verifieremail")
     public String verifyEmail(@RequestParam("token") String token) {
         VerificationToken theToken = tokenRepository.findByToken(token);
         if (theToken.getUser().getEnabled()) {
-            return htmlCodeGenerator.generateVerifiedEmailHTML("Ce compte a déjà été vérifié, merci de vous connecter.");
+            return htmlCodeGenerator.generateVerifiedEmailHTML("This account has already been verified. Please log in.");
         }
-        String verificationResult = authentificationService.validateToken(token);
+        String verificationResult = authenticationService.validateToken(token);
         if (verificationResult.equalsIgnoreCase("valid")) {
-            return htmlCodeGenerator.generateVerifiedEmailHTML("Email vérifié avec succès. Vous pouvez maintenant vous connecter.<br/> Vos contrats sont disponibles pour signature, c'est la dernière étape avant de finaliser l'ouverture de votre compte.");
+            return htmlCodeGenerator.generateVerifiedEmailHTML("Email successfully verified. You can now log in.<br/> Your contracts are available for signature, this is the last step before finalizing the opening of your account.");
         }
-        return htmlCodeGenerator.generateVerifiedEmailHTML("Token de vérification invalide.");
+        return htmlCodeGenerator.generateVerifiedEmailHTML("Invalid verification token.");
     }
 
     public String applicationUrl(HttpServletRequest request) {

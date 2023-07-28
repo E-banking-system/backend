@@ -12,6 +12,7 @@ import adria.sid.ebanckingbackend.security.accessToken.TokenUserRepository;
 import adria.sid.ebanckingbackend.repositories.UserRepository;
 import adria.sid.ebanckingbackend.security.JwtService;
 import adria.sid.ebanckingbackend.security.accessToken.Token;
+import adria.sid.ebanckingbackend.services.authentification.AuthenticationServiceImpl;
 import jakarta.validation.Validation;
 import jakarta.validation.ValidatorFactory;
 import org.junit.jupiter.api.Test;

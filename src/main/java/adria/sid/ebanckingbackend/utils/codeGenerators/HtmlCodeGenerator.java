@@ -1,4 +1,4 @@
-package adria.sid.ebanckingbackend.utils;
+package adria.sid.ebanckingbackend.utils.codeGenerators;
 
 import adria.sid.ebanckingbackend.entities.UserEntity;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package adria.sid.ebanckingbackend.services;
+package adria.sid.ebanckingbackend.services.authentification;
 
 import adria.sid.ebanckingbackend.security.accessToken.TokenUserRepository;
 import jakarta.servlet.http.HttpServletRequest;

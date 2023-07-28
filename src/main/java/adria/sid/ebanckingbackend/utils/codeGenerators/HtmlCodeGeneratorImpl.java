@@ -1,10 +1,7 @@
-package adria.sid.ebanckingbackend.utils;
+package adria.sid.ebanckingbackend.utils.codeGenerators;
 
 import adria.sid.ebanckingbackend.entities.UserEntity;
-import jakarta.mail.MessagingException;
 import org.springframework.stereotype.Service;
-
-import java.io.UnsupportedEncodingException;
 
 @Service
 public class HtmlCodeGeneratorImpl implements HtmlCodeGenerator{
