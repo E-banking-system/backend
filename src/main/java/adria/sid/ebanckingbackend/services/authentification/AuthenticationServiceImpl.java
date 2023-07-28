@@ -28,6 +28,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -40,6 +41,7 @@ public class AuthenticationServiceImpl implements AuthentificationService {
   private final JwtService jwtService;
   private final AuthenticationManager authenticationManager;
   private final EmailSender emailSender;
+  private final MotdepasseTokenService passwordResetTokenService;
 
   @Override
   public void saveUserVerificationToken(UserEntity theUser, String token) {
@@ -203,4 +205,33 @@ public class AuthenticationServiceImpl implements AuthentificationService {
       }
     }
   }
+
+  @Override
+  public void createPasswordResetTokenForUser(UserEntity user, String passwordToken) {
+    passwordResetTokenService.createPasswordResetTokenForUser(user, passwordToken);
+  }
+
+  @Override
+  public String validatePasswordResetToken(String passwordResetToken) {
+    return passwordResetTokenService.validatePasswordResetToken(passwordResetToken);
+  }
+
+  @Override
+  public UserEntity findUserByPasswordToken(String passwordResetToken) {
+    return passwordResetTokenService.findUserByPasswordToken(passwordResetToken).get();
+  }
+
+  @Override
+  public void resetUserPassword(UserEntity user, String newPassword) {
+    System.out.println("The password after encoding is : "+newPassword);
+    user.setPassword(passwordEncoder.encode(newPassword));
+    System.out.println("The password before encoding is : "+user.getPassword());
+    userRepository.save(user);
+  }
+
+  @Override
+  public Optional<UserEntity> findByEmail(String email) {
+    return userRepository.findByEmail(email);
+  }
+
 }

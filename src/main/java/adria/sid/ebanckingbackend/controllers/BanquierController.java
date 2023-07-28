@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -44,7 +45,11 @@ public class BanquierController {
     @PostMapping
     @PreAuthorize("hasAuthority('banquier:banquier_suite_registration_client')")
     public ResponseEntity<String> createAccountForExistingUser(@RequestBody ReqCreateAccountDTO accountDTO) {
-        compteService.createAccountForExistingUserAndSendEmail(accountDTO);
-        return ResponseEntity.ok("Un compte a été créé pour cet utilisateur. Check your e-mail pour voir les informations sur vos compte");
+        try {
+            compteService.createAccountForExistingUserAndSendEmail(accountDTO);
+            return ResponseEntity.ok("Un compte a été créé pour cet utilisateur. Check your e-mail pour voir les informations sur vos compte");
+        } catch (InternalError e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage());
+        }
     }
 }

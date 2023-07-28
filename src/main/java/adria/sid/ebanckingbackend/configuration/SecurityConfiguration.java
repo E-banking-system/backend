@@ -52,12 +52,9 @@ public class SecurityConfiguration {
                 "/swagger-ui.html"
         )
           .permitAll()
+            .requestMatchers("/api/v1/client/**").hasRole(CLIENT.name())
 
-
-        .requestMatchers("/api/v1/client/**").hasRole(CLIENT.name())
-
-
-        .requestMatchers(GET, "/api/v1/client/**").hasAnyAuthority(CLIENT_READ.name())
+            .requestMatchers(GET, "/api/v1/client/**").hasAnyAuthority(CLIENT_READ.name())
         .requestMatchers(POST, "/api/v1/client/**").hasAnyAuthority(CLIENT_CREATE.name())
         .requestMatchers(PUT, "/api/v1/client/**").hasAnyAuthority(CLIENT_UPDATE.name())
         .requestMatchers(DELETE, "/api/v1/client/**").hasAnyAuthority(CLIENT_DELETE.name())
