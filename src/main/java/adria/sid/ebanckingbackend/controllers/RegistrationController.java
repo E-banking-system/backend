@@ -92,8 +92,7 @@ public class RegistrationController {
 
 
     @PostMapping("/motdepasseoublie")
-    public String resetPasswordRequest(@RequestBody ForgetPassword passwordResetRequest,
-                                       final HttpServletRequest request) {
+    public String resetPasswordRequest(@RequestBody ForgetPassword passwordResetRequest, final HttpServletRequest request) {
         try {
             Optional<UserEntity> user = authenticationService.findByEmail(passwordResetRequest.getEmail());
 
@@ -102,16 +101,19 @@ public class RegistrationController {
                 String passwordResetToken = UUID.randomUUID().toString();
                 authenticationService.createPasswordResetTokenForUser(user.get(), passwordResetToken);
                 System.out.println("confirmed password : " + passwordResetRequest.getPassword());
-                passwordResetUrl = passwordResetEmailLink(user.get(), applicationUrl(request), passwordResetToken, passwordResetRequest.getPassword());
+                passwordResetUrl = passwordResetEmailLink(applicationUrl(request), passwordResetToken, passwordResetRequest.getPassword());
                 authenticationService.sendPasswordResetEmail(user.get(), passwordResetUrl);
+            } else {
+                return "User not found"; // Return an appropriate error message if the user is not found.
             }
+
             return passwordResetUrl;
         } catch (Exception e) {
             return "An error occurred while processing password reset request: " + e.getMessage();
         }
     }
 
-    private String passwordResetEmailLink(UserEntity user, String applicationUrl, String passwordResetToken, String pw) {
+    private String passwordResetEmailLink(String applicationUrl, String passwordResetToken, String pw) {
         String url = applicationUrl + "/api/v1/register/client/nouveaumdp?token=" + passwordResetToken + "&password=" + pw;
         return url;
     }
