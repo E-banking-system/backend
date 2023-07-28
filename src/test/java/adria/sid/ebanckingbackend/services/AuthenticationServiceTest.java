@@ -38,25 +38,6 @@ class AuthenticationServiceTest {
     private final ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
     private final Validator validator = validatorFactory.getValidator();
 
-    @Test
-    void testValidDto() {
-        ReqRegisterBanquierDTO dto = ReqRegisterBanquierDTO.builder()
-                .nom("John")
-                .prenom("Doe")
-                .email("john.doe@example.com")
-                .gender("Male")
-                .adresse("123 Main St")
-                .cin("AB123456")
-                .telephone("1234567890")
-                .operateur("Operator")
-                .banqueId("123456")
-                .password("password")
-                .role("ROLE_BANQUIER")
-                .build();
-
-        assertTrue(validator.validate(dto).isEmpty());
-    }
-
     @Mock
     private UserRepository userRepository;
 

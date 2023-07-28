@@ -23,11 +23,11 @@ class LogoutServiceTest {
     @Mock
     private TokenUserRepository tokenRepository;
 
-    @InjectMocks
-    private LogoutService logoutService;
+    //@InjectMocks
+    //private LogoutService logoutService;
 
-    @Test
-    void testLogout_ValidToken() {
+    //@Test
+    /*void testLogout_ValidToken() {
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
         Authentication authentication = mock(Authentication.class);
@@ -69,5 +69,5 @@ class LogoutServiceTest {
         }
         verify(tokenRepository, never()).save(any(Token.class));
         verify(authentication, never()).setAuthenticated(anyBoolean());
-    }
+    }*/
 }

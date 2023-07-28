@@ -10,7 +10,7 @@ class PERMISSIONTest {
     void testEnumValues() {
         PERMISSION banquierRead = PERMISSION.BANQUIER_READ;
         PERMISSION banquierUpdate = PERMISSION.BANQUIER_UPDATE;
-        PERMISSION banquierCreate = PERMISSION.BANQUIER_CREATE;
+        PERMISSION banquierCreate = PERMISSION.BANQUIER_SUITE_REGISTRATION_CLIENT;
         PERMISSION banquierDelete = PERMISSION.BANQUIER_DELETE;
         PERMISSION clientRead = PERMISSION.CLIENT_READ;
         PERMISSION clientUpdate = PERMISSION.CLIENT_UPDATE;
@@ -31,7 +31,7 @@ class PERMISSIONTest {
     void testEnumPermissions() {
         PERMISSION banquierRead = PERMISSION.BANQUIER_READ;
         PERMISSION banquierUpdate = PERMISSION.BANQUIER_UPDATE;
-        PERMISSION banquierCreate = PERMISSION.BANQUIER_CREATE;
+        PERMISSION banquierCreate = PERMISSION.BANQUIER_SUITE_REGISTRATION_CLIENT;
         PERMISSION banquierDelete = PERMISSION.BANQUIER_DELETE;
         PERMISSION clientRead = PERMISSION.CLIENT_READ;
         PERMISSION clientUpdate = PERMISSION.CLIENT_UPDATE;
@@ -52,7 +52,7 @@ class PERMISSIONTest {
     void testEnumToString() {
         PERMISSION banquierRead = PERMISSION.BANQUIER_READ;
         PERMISSION banquierUpdate = PERMISSION.BANQUIER_UPDATE;
-        PERMISSION banquierCreate = PERMISSION.BANQUIER_CREATE;
+        PERMISSION banquierCreate = PERMISSION.BANQUIER_SUITE_REGISTRATION_CLIENT;
         PERMISSION banquierDelete = PERMISSION.BANQUIER_DELETE;
         PERMISSION clientRead = PERMISSION.CLIENT_READ;
         PERMISSION clientUpdate = PERMISSION.CLIENT_UPDATE;
@@ -82,7 +82,7 @@ class PERMISSIONTest {
 
         assertEquals(PERMISSION.BANQUIER_READ, banquierRead);
         assertEquals(PERMISSION.BANQUIER_UPDATE, banquierUpdate);
-        assertEquals(PERMISSION.BANQUIER_CREATE, banquierCreate);
+        assertEquals(PERMISSION.BANQUIER_SUITE_REGISTRATION_CLIENT, banquierCreate);
         assertEquals(PERMISSION.BANQUIER_DELETE, banquierDelete);
         assertEquals(PERMISSION.CLIENT_READ, clientRead);
         assertEquals(PERMISSION.CLIENT_UPDATE, clientUpdate);
@@ -94,7 +94,7 @@ class PERMISSIONTest {
     void testEnumOrdinal() {
         PERMISSION banquierRead = PERMISSION.BANQUIER_READ;
         PERMISSION banquierUpdate = PERMISSION.BANQUIER_UPDATE;
-        PERMISSION banquierCreate = PERMISSION.BANQUIER_CREATE;
+        PERMISSION banquierCreate = PERMISSION.BANQUIER_SUITE_REGISTRATION_CLIENT;
         PERMISSION banquierDelete = PERMISSION.BANQUIER_DELETE;
         PERMISSION clientRead = PERMISSION.CLIENT_READ;
         PERMISSION clientUpdate = PERMISSION.CLIENT_UPDATE;
