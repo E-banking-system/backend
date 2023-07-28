@@ -4,6 +4,7 @@ import adria.sid.ebanckingbackend.dtos.*;
 import adria.sid.ebanckingbackend.ennumerations.EGender;
 import adria.sid.ebanckingbackend.ennumerations.EPType;
 import adria.sid.ebanckingbackend.ennumerations.ERole;
+import adria.sid.ebanckingbackend.exceptions.UserAlreadyExists;
 import adria.sid.ebanckingbackend.exceptions.UserNotEnabledException;
 import adria.sid.ebanckingbackend.security.accessToken.Token;
 import adria.sid.ebanckingbackend.security.accessToken.TokenUserRepository;
@@ -68,6 +69,12 @@ public class AuthenticationServiceImpl implements AuthentificationService {
 
   @Override
   public UserEntity registerClientPhysique(ReqRegisterClientPhysiqueDTO reqRegisterClientPhysiqueDTO, String url) {
+    String email = reqRegisterClientPhysiqueDTO.getEmail();
+    Optional<UserEntity> existingUser = userRepository.findByEmail(email);
+    if (existingUser.isPresent()) {
+      throw new UserAlreadyExists("Email already exists: " + email);
+    }
+
     var user = new UserEntity();
     user.setId(UUID.randomUUID().toString());
 
@@ -99,6 +106,12 @@ public class AuthenticationServiceImpl implements AuthentificationService {
 
   @Override
   public UserEntity registerClientMorale(ReqRegisterClientMoraleDTO reqRegisterClientMoraleDTO, String url) {
+    String email = reqRegisterClientMoraleDTO.getEmail();
+    Optional<UserEntity> existingUser = userRepository.findByEmail(email);
+    if (existingUser.isPresent()) {
+      throw new UserAlreadyExists("Email already exists: " + email);
+    }
+
     var user = new UserEntity();
     user.setId(UUID.randomUUID().toString());
 

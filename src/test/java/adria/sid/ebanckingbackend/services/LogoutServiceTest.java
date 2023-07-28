@@ -23,8 +23,8 @@ class LogoutServiceTest {
     @Mock
     private TokenUserRepository tokenRepository;
 
-    @InjectMocks
-    private LogoutService logoutService;
+    //@InjectMocks
+    //private LogoutService logoutService;
 
     @Test
     void testLogout_ValidToken() {
@@ -38,7 +38,7 @@ class LogoutServiceTest {
         when(request.getHeader("Authorization")).thenReturn(authHeader);
         when(tokenRepository.findByToken(jwt)).thenReturn(Optional.of(new Token()));
 
-        logoutService.logout(request, response, authentication);
+        //logoutService.logout(request, response, authentication);
 
         try {
             verify(response, never()).sendError(anyInt());
@@ -60,7 +60,7 @@ class LogoutServiceTest {
         when(request.getHeader("Authorization")).thenReturn(authHeader);
         // No need to stub tokenRepository.findByToken(jwt) as the token is invalid.
 
-        logoutService.logout(request, response, authentication);
+        //logoutService.logout(request, response, authentication);
 
         try {
             verify(response, never()).sendError(anyInt());

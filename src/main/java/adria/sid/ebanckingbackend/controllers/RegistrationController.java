@@ -4,6 +4,7 @@ import adria.sid.ebanckingbackend.dtos.ForgetPassword;
 import adria.sid.ebanckingbackend.dtos.ReqRegisterClientMoraleDTO;
 import adria.sid.ebanckingbackend.dtos.ReqRegisterClientPhysiqueDTO;
 import adria.sid.ebanckingbackend.entities.UserEntity;
+import adria.sid.ebanckingbackend.exceptions.UserAlreadyExists;
 import adria.sid.ebanckingbackend.security.emailToken.VerificationToken;
 import adria.sid.ebanckingbackend.security.emailToken.VerificationTokenRepository;
 import adria.sid.ebanckingbackend.services.authentification.AuthentificationService;
@@ -33,14 +34,22 @@ public class RegistrationController {
 
     @PostMapping("/physique")
     public String registerClientPhysique(@RequestBody ReqRegisterClientPhysiqueDTO reqRegisterClientPhysiqueDTO, final HttpServletRequest request) {
-        authenticationService.registerClientPhysique(reqRegisterClientPhysiqueDTO, applicationUrl(request));
-        return "Bravo ! Check your e-mail to finalize your inscription";
+        try {
+            authenticationService.registerClientPhysique(reqRegisterClientPhysiqueDTO, applicationUrl(request));
+            return "Bravo ! Check your e-mail to finalize your inscription";
+        } catch (UserAlreadyExists ex) {
+            return "Error: " + ex.getMessage();
+        }
     }
 
     @PostMapping("/morale")
     public String registerClientMorale(@RequestBody ReqRegisterClientMoraleDTO reqRegisterClientMoraleDTO, final HttpServletRequest request) {
-        authenticationService.registerClientMorale(reqRegisterClientMoraleDTO, applicationUrl(request));
-        return "Bravo ! Check your e-mail to finalize your inscription";
+        try {
+            authenticationService.registerClientMorale(reqRegisterClientMoraleDTO, applicationUrl(request));
+            return "Bravo ! Check your e-mail to finalize your inscription";
+        } catch (UserAlreadyExists ex) {
+            return "Error: " + ex.getMessage();
+        }
     }
 
     @GetMapping("/verifieremail")

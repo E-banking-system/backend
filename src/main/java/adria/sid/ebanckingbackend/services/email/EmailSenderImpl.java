@@ -77,7 +77,4 @@
             }
         }
 
-        public void sendPasswordResetVerificationEmail(UserEntity user, String passwordResetUrl) {
-            // Your logic to send the email with the password reset verification URL
-        }
     }

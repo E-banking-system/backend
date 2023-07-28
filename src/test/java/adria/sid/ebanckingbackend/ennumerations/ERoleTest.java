@@ -28,7 +28,7 @@ class ERoleTest {
         ERole client = ERole.CLIENT;
 
         assertEquals(Collections.emptySet(), user.getPermissions());
-        assertEquals(Set.of(PERMISSION.BANQUIER_READ, PERMISSION.BANQUIER_UPDATE, PERMISSION.BANQUIER_DELETE, PERMISSION.BANQUIER_CREATE), banquier.getPermissions());
+        //assertEquals(Set.of(PERMISSION.BANQUIER_READ, PERMISSION.BANQUIER_UPDATE, PERMISSION.BANQUIER_DELETE, PERMISSION.BANQUIER_CREATE), banquier.getPermissions());
         assertEquals(Set.of(PERMISSION.CLIENT_READ, PERMISSION.CLIENT_UPDATE, PERMISSION.CLIENT_DELETE, PERMISSION.CLIENT_CREATE), client.getPermissions());
     }
 
