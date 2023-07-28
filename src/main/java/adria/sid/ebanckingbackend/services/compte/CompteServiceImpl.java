@@ -56,12 +56,12 @@ public class CompteServiceImpl implements CompteService {
         newCompte.setEtatCompte(EtatCompte.ACTIVE);
         newCompte.setCodePIN(pin);
 
-        compteRepository.save(newCompte);
 
         // Get the existing user if present
         Optional<UserEntity> existingUserOptional = userRepository.findByEmail(accountDTO.getEmail());
 
         if (existingUserOptional.isPresent()) {
+            compteRepository.save(newCompte);
             UserEntity existingUser = existingUserOptional.get();
             existingUser.addCompte(newCompte);
             userRepository.save(existingUser);
