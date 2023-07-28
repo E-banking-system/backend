@@ -25,8 +25,17 @@ public class EmailSenderImpl implements EmailSender {
         emailCorps.setFromEmail("etafweb2021@gmail.com");
         emailCorps.setToEmail(userEntity.getEmail());
         emailCorps.setBody(emailBody);
-        emailCorps.setSenderName(userEntity.getNom());
-        emailCorps.setSubject(userEntity.getPrenom());
+
+        String senderName;
+        if(userEntity.getNom() != null){
+            senderName = userEntity.getNom()+" "+userEntity.getPrenom();
+        }
+        else{
+            senderName = userEntity.getRaisonSociale();
+        }
+
+        emailCorps.setSenderName(senderName);
+        emailCorps.setSubject("vérification email");
 
         try {
             publisher.publishEvent(new SendeEmailEvent(userEntity, emailCorps));
@@ -39,7 +48,13 @@ public class EmailSenderImpl implements EmailSender {
     @Override
     public void sentPasswordResetVerificationEmail(UserEntity userEntity, String url) {
         String subject = "réinitialiser votre mot de passe";
-        String senderName = userEntity.getNom();
+        String senderName;
+        if(userEntity.getNom() != null){
+            senderName = userEntity.getNom()+" "+userEntity.getPrenom();
+        }
+        else{
+            senderName = userEntity.getRaisonSociale();
+        }
         EmailCorps emailCorps = new EmailCorps();
         emailCorps.setFromEmail("etafweb2021@gmail.com");
         emailCorps.setToEmail(userEntity.getEmail());
@@ -61,8 +76,17 @@ public class EmailSenderImpl implements EmailSender {
         emailCorps.setBody(htmlCodeGenerator.generateActivatedAccountInfoEmail(pin, userEntity));
         emailCorps.setFromEmail("etafweb2021@gmail.com");
         emailCorps.setToEmail(userEntity.getEmail());
-        emailCorps.setSenderName(userEntity.getNom());
-        emailCorps.setSubject(userEntity.getPrenom());
+
+        String senderName;
+        if(userEntity.getNom() != null){
+            senderName = userEntity.getNom()+" "+userEntity.getPrenom();
+        }
+        else{
+            senderName = userEntity.getRaisonSociale();
+        }
+
+        emailCorps.setSenderName(senderName);
+        emailCorps.setSubject("account infos");
 
         try {
             publisher.publishEvent(new SendeEmailEvent(userEntity, emailCorps));
