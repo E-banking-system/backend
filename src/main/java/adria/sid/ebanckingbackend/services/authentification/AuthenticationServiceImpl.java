@@ -121,7 +121,8 @@ public class AuthenticationServiceImpl implements AuthentificationService {
     user.setTel(reqRegisterClientMoraleDTO.getTelephone());
     user.setOperateur(reqRegisterClientMoraleDTO.getOperateur());
     user.setAddress(reqRegisterClientMoraleDTO.getAdresse());
-
+    user.setRaisonSociale(reqRegisterClientMoraleDTO.getRaisonSociale());
+    user.setRegisterNumber(reqRegisterClientMoraleDTO.getRegisterNumber());
     user.setPersonneType(EPType.MORALE);
     user.setPassword(passwordEncoder.encode(reqRegisterClientMoraleDTO.getPassword()));
     user.setRole(ERole.CLIENT);

@@ -20,12 +20,6 @@ public class EmailSenderImpl implements EmailSender {
     @Override
     public void sendVerificationUrlByEmail(UserEntity userEntity, String verificationToken, String applicationUrl) {
         EmailCorps emailCorps = new EmailCorps();
-        String url = applicationUrl + "/api/v1/register/client/verifieremail?token=" + verificationToken;
-        String emailBody = htmlCodeGenerator.generateActivatedEmailHTML(url, userEntity);
-        emailCorps.setFromEmail("etafweb2021@gmail.com");
-        emailCorps.setToEmail(userEntity.getEmail());
-        emailCorps.setBody(emailBody);
-
         String senderName;
         if(userEntity.getNom() != null){
             senderName = userEntity.getNom()+" "+userEntity.getPrenom();
@@ -33,6 +27,13 @@ public class EmailSenderImpl implements EmailSender {
         else{
             senderName = userEntity.getRaisonSociale();
         }
+        String url = applicationUrl + "/api/v1/register/client/verifieremail?token=" + verificationToken;
+        String emailBody = htmlCodeGenerator.generateActivatedEmailHTML(url, senderName);
+        emailCorps.setFromEmail("etafweb2021@gmail.com");
+        emailCorps.setToEmail(userEntity.getEmail());
+        emailCorps.setBody(emailBody);
+
+
 
         emailCorps.setSenderName(senderName);
         emailCorps.setSubject("vérification email");
@@ -58,7 +59,7 @@ public class EmailSenderImpl implements EmailSender {
         EmailCorps emailCorps = new EmailCorps();
         emailCorps.setFromEmail("etafweb2021@gmail.com");
         emailCorps.setToEmail(userEntity.getEmail());
-        emailCorps.setBody(htmlCodeGenerator.generateResetPasswordEmailHTML(userEntity,url));
+        emailCorps.setBody(htmlCodeGenerator.generateResetPasswordEmailHTML(senderName,url));
         emailCorps.setSenderName(senderName);
         emailCorps.setSubject(subject);
 
@@ -73,10 +74,6 @@ public class EmailSenderImpl implements EmailSender {
     @Override
     public void sendAccountInfosByEmail(UserEntity userEntity, String pin) {
         EmailCorps emailCorps = new EmailCorps();
-        emailCorps.setBody(htmlCodeGenerator.generateActivatedAccountInfoEmail(pin, userEntity));
-        emailCorps.setFromEmail("etafweb2021@gmail.com");
-        emailCorps.setToEmail(userEntity.getEmail());
-
         String senderName;
         if(userEntity.getNom() != null){
             senderName = userEntity.getNom()+" "+userEntity.getPrenom();
@@ -84,6 +81,11 @@ public class EmailSenderImpl implements EmailSender {
         else{
             senderName = userEntity.getRaisonSociale();
         }
+        emailCorps.setBody(htmlCodeGenerator.generateActivatedAccountInfoEmail(pin, senderName));
+        emailCorps.setFromEmail("etafweb2021@gmail.com");
+        emailCorps.setToEmail(userEntity.getEmail());
+
+
 
         emailCorps.setSenderName(senderName);
         emailCorps.setSubject("account infos");

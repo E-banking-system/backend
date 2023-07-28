@@ -77,12 +77,7 @@ public class HtmlCodeGeneratorImpl implements HtmlCodeGenerator {
     }
 
     @Override
-    public String generateActivatedEmailHTML(String url, UserEntity userEntity) {
-        String nom = userEntity.getNom();
-        String prenom = userEntity.getPrenom();
-        String raisonSociale = userEntity.getRaisonSociale();
-        String displayName = (nom != null && prenom != null) ? (nom + " " + prenom) : raisonSociale;
-
+    public String generateActivatedEmailHTML(String url, String username) {
         String mailContent = "<!DOCTYPE html>"
                 + "<html>"
                 + "<head>"
@@ -95,7 +90,7 @@ public class HtmlCodeGeneratorImpl implements HtmlCodeGenerator {
                 + "</head>"
                 + "<body>"
                 + "<div class=\"container\">"
-                + "<h1>Bienvenue, " + displayName + "!</h1>"
+                + "<h1>Bienvenue, " + username + "!</h1>"
                 + "<p>Merci pour votre souscription, veuillez suivre les instructions pour finaliser votre inscription.</p>"
                 + "<a class=\"activate-link\" href=\"" + url + "\"><div class=\"text-link\">Cliquez ici pour activer votre compte utilisateur</div></a>"
                 + "<p>Merci <br> <b>BANQUE XXX</b></p>"
@@ -106,11 +101,7 @@ public class HtmlCodeGeneratorImpl implements HtmlCodeGenerator {
     }
 
     @Override
-    public String generateActivatedAccountInfoEmail(String pin, UserEntity userEntity) {
-        String nom = userEntity.getNom();
-        String prenom = userEntity.getPrenom();
-        String raisonSociale = userEntity.getRaisonSociale();
-        String displayName = (nom != null && prenom != null) ? (nom + " " + prenom) : raisonSociale;
+    public String generateActivatedAccountInfoEmail(String pin, String username) {
 
         String mailContent = "<!DOCTYPE html>"
                 + "<html>"
@@ -124,7 +115,7 @@ public class HtmlCodeGeneratorImpl implements HtmlCodeGenerator {
                 + "</head>"
                 + "<body>"
                 + "<div class=\"container\">"
-                + "<h1>Bienvenue, " + displayName + "!</h1>"
+                + "<h1>Bienvenue, " + username + "!</h1>"
                 + "<p>Merci pour votre fidélité.</p>"
                 + "<h4>Voici le code PIN de votre compte bancaire : " + pin + "</h4>"
                 + "<p>Merci <br> <b>BANQUE XXX</b></p>"
@@ -134,7 +125,7 @@ public class HtmlCodeGeneratorImpl implements HtmlCodeGenerator {
         return mailContent;
     }
     @Override
-    public String generateResetPasswordEmailHTML(UserEntity userEntity,String url) {
+    public String generateResetPasswordEmailHTML(String username,String url) {
         return "<!DOCTYPE html>"
                 + "<html>"
                 + "<head>"
@@ -147,7 +138,7 @@ public class HtmlCodeGeneratorImpl implements HtmlCodeGenerator {
                 + "</head>"
                 + "<body>"
                 + "<div class=\"container\">"
-                + "<h1>Bienvenue, " + userEntity.getNom() + "!</h1>"
+                + "<h1>Bienvenue, " + username + "!</h1>"
                 + "<h4>Consulter ce lien pour réinitialiser votre mot de passe: </h4>"
                 + "<h4>"+ url + "</h4>"
                 + "<p>Merci <br> <b>BANQUE XXX</b></p>"

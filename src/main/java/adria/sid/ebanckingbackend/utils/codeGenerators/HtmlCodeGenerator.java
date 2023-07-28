@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 @Service
 public interface HtmlCodeGenerator {
     String generateVerifiedEmailHTML(String message);
-    String generateActivatedEmailHTML(String url, UserEntity userEntity);
-    String generateActivatedAccountInfoEmail(String pin,UserEntity userEntity);
-    String generateResetPasswordEmailHTML(UserEntity userEntity,String url);
+    String generateActivatedEmailHTML(String url, String username);
+    String generateActivatedAccountInfoEmail(String pin,String username);
+    String generateResetPasswordEmailHTML(String username,String url);
 }
