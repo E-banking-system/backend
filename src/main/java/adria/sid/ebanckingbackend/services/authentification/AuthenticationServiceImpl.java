@@ -16,6 +16,7 @@ import adria.sid.ebanckingbackend.security.emailToken.VerificationTokenRepositor
 import adria.sid.ebanckingbackend.security.emailToken.VerificationToken;
 import adria.sid.ebanckingbackend.services.email.EmailSender;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
@@ -28,6 +29,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Calendar;
 import java.util.Optional;
 import java.util.UUID;
@@ -247,4 +249,11 @@ public class AuthenticationServiceImpl implements AuthentificationService {
     return userRepository.findByEmail(email);
   }
 
+  @Override
+  public void sendPasswordResetEmail(UserEntity user, String resetPasswordUrl) {
+    String verificationToken = UUID.randomUUID().toString();
+    saveUserVerificationToken(user, verificationToken);
+
+    emailSender.sentPasswordResetVerificationEmail(user,resetPasswordUrl);
+  }
 }

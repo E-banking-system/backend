@@ -8,4 +8,5 @@ public interface HtmlCodeGenerator {
     String generateVerifiedEmailHTML(String message);
     String generateActivatedEmailHTML(String url, UserEntity userEntity);
     String generateActivatedAccountInfoEmail(String pin,UserEntity userEntity);
+    String generateResetPasswordEmailHTML(UserEntity userEntity,String url);
 }
