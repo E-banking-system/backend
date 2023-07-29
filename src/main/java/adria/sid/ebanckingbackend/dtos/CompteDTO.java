@@ -1,7 +1,9 @@
 package adria.sid.ebanckingbackend.dtos;
 
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,7 +16,8 @@ public class CompteDTO {
     @NotBlank(message = "nature is required")
     private String nature;
 
-    @NotBlank(message = "solde is required")
+    @NotNull(message = "solde is required")
+    @Min(value = 0, message = "solde must be greater than zero")
     private Double solde;
 
     @NotBlank(message = "Email is required")
