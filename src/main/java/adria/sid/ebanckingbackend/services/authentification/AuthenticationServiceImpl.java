@@ -1,7 +1,6 @@
 package adria.sid.ebanckingbackend.services.authentification;
 
 import adria.sid.ebanckingbackend.dtos.*;
-import adria.sid.ebanckingbackend.ennumerations.EPType;
 import adria.sid.ebanckingbackend.ennumerations.ERole;
 import adria.sid.ebanckingbackend.exceptions.UserAlreadyExists;
 import adria.sid.ebanckingbackend.exceptions.UserHasNotAnyCompte;
@@ -36,7 +35,7 @@ import java.util.UUID;
 
 @Service
 @AllArgsConstructor
-public class AuthenticationServiceImpl implements AuthentificationService {
+public class AuthenticationServiceImpl implements AuthenticationService {
   private final UserRepository userRepository;
   private final TokenUserRepository tokenUserRepository;
   private final VerificationTokenRepository tokenVerificationRepository;
@@ -48,28 +47,6 @@ public class AuthenticationServiceImpl implements AuthentificationService {
   private final ClientPhysiqueMapper clientPhysiqueMapper;
   private final ClientMoraleMapper clientMoraleMapper;
 
-  @Override
-  public void saveUserVerificationToken(UserEntity theUser, String token) {
-    var verificationToken = new VerificationToken(token, theUser);
-    tokenVerificationRepository.save(verificationToken);
-  }
-
-  @Override
-  public String validateToken(String theToken) {
-    VerificationToken token = tokenVerificationRepository.findByToken(theToken);
-    if (token == null) {
-      return "Token invalid";
-    }
-    UserEntity user = token.getUser();
-    Calendar calendar = Calendar.getInstance();
-    if ((token.getExpirationTime().getTime() - calendar.getTime().getTime()) <= 0) {
-      tokenVerificationRepository.delete(token);
-      return "Token has expired";
-    }
-    user.setEnabled(true);
-    userRepository.save(user);
-    return "valid";
-  }
 
   @Override
   public UserEntity registerClientPhysique(ClientPhysiqueDTO clientPhysiqueDTO, String url) {
@@ -81,16 +58,7 @@ public class AuthenticationServiceImpl implements AuthentificationService {
 
     UserEntity user = clientPhysiqueMapper.fromClientPhysiqueToUser(clientPhysiqueDTO);
 
-    var savedUser = userRepository.save(user);
-
-    var jwtToken = jwtService.generateToken(user);
-    saveUserToken(savedUser, jwtToken);
-
-    String verificationToken = UUID.randomUUID().toString();
-    saveUserVerificationToken(user, verificationToken);
-
-    emailSender.sendVerificationUrlByEmail(user, verificationToken, url);
-    return savedUser;
+    return getUserEntity(url, user);
   }
 
   @Override
@@ -103,16 +71,7 @@ public class AuthenticationServiceImpl implements AuthentificationService {
 
     UserEntity user = clientMoraleMapper.fromClientMoraleToUser(clientMoraleDTO);
 
-    var savedUser = userRepository.save(user);
-
-    var jwtToken = jwtService.generateToken(user);
-    saveUserToken(savedUser, jwtToken);
-
-    String verificationToken = UUID.randomUUID().toString();
-    saveUserVerificationToken(user, verificationToken);
-
-    emailSender.sendVerificationUrlByEmail(user, verificationToken, url);
-    return savedUser;
+    return getUserEntity(url, user);
   }
 
   @Override
@@ -150,6 +109,42 @@ public class AuthenticationServiceImpl implements AuthentificationService {
     } catch (UserHasNotAnyCompte e) {
       throw e;
     }
+  }
+
+  @Override
+  public void saveUserVerificationToken(UserEntity theUser, String token) {
+    var verificationToken = new VerificationToken(token, theUser);
+    tokenVerificationRepository.save(verificationToken);
+  }
+
+  @Override
+  public String validateToken(String theToken) {
+    VerificationToken token = tokenVerificationRepository.findByToken(theToken);
+    if (token == null) {
+      return "Token invalid";
+    }
+    UserEntity user = token.getUser();
+    Calendar calendar = Calendar.getInstance();
+    if ((token.getExpirationTime().getTime() - calendar.getTime().getTime()) <= 0) {
+      tokenVerificationRepository.delete(token);
+      return "Token has expired";
+    }
+    user.setEnabled(true);
+    userRepository.save(user);
+    return "valid";
+  }
+
+  private UserEntity getUserEntity(String url, UserEntity user) {
+    var savedUser = userRepository.save(user);
+
+    var jwtToken = jwtService.generateToken(user);
+    saveUserToken(savedUser, jwtToken);
+
+    String verificationToken = UUID.randomUUID().toString();
+    saveUserVerificationToken(user, verificationToken);
+
+    emailSender.sendVerificationUrlByEmail(user, verificationToken, url);
+    return savedUser;
   }
 
   @Override
@@ -220,9 +215,7 @@ public class AuthenticationServiceImpl implements AuthentificationService {
 
   @Override
   public void resetUserPassword(UserEntity user, String newPassword) {
-    System.out.println("The password after encoding is : "+newPassword);
     user.setPassword(passwordEncoder.encode(newPassword));
-    System.out.println("The password before encoding is : "+user.getPassword());
     userRepository.save(user);
   }
 

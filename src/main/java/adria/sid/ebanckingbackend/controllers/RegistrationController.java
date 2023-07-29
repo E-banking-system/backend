@@ -7,9 +7,10 @@ import adria.sid.ebanckingbackend.entities.UserEntity;
 import adria.sid.ebanckingbackend.exceptions.UserAlreadyExists;
 import adria.sid.ebanckingbackend.security.emailToken.VerificationToken;
 import adria.sid.ebanckingbackend.security.emailToken.VerificationTokenRepository;
-import adria.sid.ebanckingbackend.services.authentification.AuthentificationService;
+import adria.sid.ebanckingbackend.services.authentification.AuthenticationService;
 import adria.sid.ebanckingbackend.utils.codeGenerators.HtmlCodeGenerator;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -24,12 +25,12 @@ import java.util.UUID;
 @CrossOrigin("*")
 public class RegistrationController {
 
-    private final AuthentificationService authenticationService;
+    private final AuthenticationService authenticationService;
     private final VerificationTokenRepository tokenRepository;
     private final HtmlCodeGenerator htmlCodeGenerator;
 
     @PostMapping("/physique")
-    public String registerClientPhysique(@RequestBody ClientPhysiqueDTO reqRegisterClientPhysiqueDTO, final HttpServletRequest request) {
+    public String registerClientPhysique(@RequestBody @Valid ClientPhysiqueDTO reqRegisterClientPhysiqueDTO, final HttpServletRequest request) {
         try {
             authenticationService.registerClientPhysique(reqRegisterClientPhysiqueDTO, applicationUrl(request));
             return "Bravo ! Check your e-mail to finalize your inscription";
@@ -41,7 +42,7 @@ public class RegistrationController {
     }
 
     @PostMapping("/morale")
-    public String registerClientMorale(@RequestBody ClientMoraleDTO reqRegisterClientMoraleDTO, final HttpServletRequest request) {
+    public String registerClientMorale(@RequestBody @Valid ClientMoraleDTO reqRegisterClientMoraleDTO, final HttpServletRequest request) {
         try {
             authenticationService.registerClientMorale(reqRegisterClientMoraleDTO, applicationUrl(request));
             return "Bravo ! Check your e-mail to finalize your inscription";
@@ -92,7 +93,7 @@ public class RegistrationController {
 
 
     @PostMapping("/motdepasseoublie")
-    public String resetPasswordRequest(@RequestBody ForgetPassword passwordResetRequest, final HttpServletRequest request) {
+    public String resetPasswordRequest(@RequestBody @Valid ForgetPassword passwordResetRequest, final HttpServletRequest request) {
         try {
             Optional<UserEntity> user = authenticationService.findByEmail(passwordResetRequest.getEmail());
 

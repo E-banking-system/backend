@@ -3,7 +3,7 @@ package adria.sid.ebanckingbackend.controllers;
 import adria.sid.ebanckingbackend.dtos.AuthReqDTO;
 import adria.sid.ebanckingbackend.dtos.AuthResDTO;
 import adria.sid.ebanckingbackend.exceptions.UserHasNotAnyCompte;
-import adria.sid.ebanckingbackend.services.authentification.AuthentificationService;
+import adria.sid.ebanckingbackend.services.authentification.AuthenticationService;
 import adria.sid.ebanckingbackend.exceptions.UserNotEnabledException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -26,7 +26,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @Slf4j
 public class AuthenticationController {
-  private final AuthentificationService authenticationService;
+  private final AuthenticationService authenticationService;
 
   @PostMapping("/authenticate")
   public ResponseEntity<?> authenticate(@RequestBody @Valid AuthReqDTO request) {

@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 
-public interface AuthentificationService {
+public interface AuthenticationService {
     void saveUserVerificationToken(UserEntity theUser, String token);
     String validateToken(String theToken);
     UserEntity registerClientPhysique(ClientPhysiqueDTO clientPhysiqueDTO, String url);

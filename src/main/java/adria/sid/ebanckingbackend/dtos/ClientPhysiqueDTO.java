@@ -26,7 +26,7 @@ public class ClientPhysiqueDTO {
   private String email;
 
   @NotBlank(message = "Gender is required")
-  private EGender gender;
+  private String gender;
 
   @NotBlank(message = "Adresse is required")
   private String address;

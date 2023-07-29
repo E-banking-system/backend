@@ -1,6 +1,7 @@
 package adria.sid.ebanckingbackend.mappers;
 
 import adria.sid.ebanckingbackend.dtos.ClientPhysiqueDTO;
+import adria.sid.ebanckingbackend.ennumerations.EGender;
 import adria.sid.ebanckingbackend.ennumerations.EPType;
 import adria.sid.ebanckingbackend.ennumerations.ERole;
 import adria.sid.ebanckingbackend.entities.UserEntity;
@@ -29,6 +30,7 @@ public class ClientPhysiqueMapperImpl implements ClientPhysiqueMapper{
         BeanUtils.copyProperties(clientPhysiqueDTO,user);
         user.setId(UUID.randomUUID().toString());
         user.setPersonneType(EPType.PHYSIQUE);
+        user.setGender(EGender.valueOf(clientPhysiqueDTO.getGender()));
         user.setPassword(passwordEncoder.encode(clientPhysiqueDTO.getPassword()));
         user.setRole(ERole.CLIENT);
         return  user;
