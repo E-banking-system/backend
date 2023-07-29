@@ -1,4 +1,4 @@
-package adria.sid.ebanckingbackend.dtos;
+package adria.sid.ebanckingbackend.dtos.compte;
 
 import adria.sid.ebanckingbackend.ennumerations.EtatCompte;
 import lombok.AllArgsConstructor;

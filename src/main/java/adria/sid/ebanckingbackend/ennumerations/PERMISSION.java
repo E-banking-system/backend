@@ -7,7 +7,10 @@ import lombok.RequiredArgsConstructor;
 public enum PERMISSION {
 
     BANQUIER_SUITE_REGISTRATION_CLIENT("banquier:banquier_suite_registration_client"),
-    GET_ACCOUNTS("banquier:get_accounts");
+    GET_ACCOUNTS("banquier:get_accounts"),
+    BLOCK_ACCOUNT("banquier:blocker_compte"),
+    ACTIVER_ACCOUNT("banquier:activer_compte"),
+    SUSPENDER_ACCOUNT("banquier:suspender_compte");
 
     @Getter
     private final String permission;

@@ -1,5 +1,6 @@
 package adria.sid.ebanckingbackend.dtos;
 
+import adria.sid.ebanckingbackend.dtos.compte.CompteReqDTO;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;

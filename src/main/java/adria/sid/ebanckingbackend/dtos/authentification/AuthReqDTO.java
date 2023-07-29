@@ -1,4 +1,4 @@
-package adria.sid.ebanckingbackend.dtos;
+package adria.sid.ebanckingbackend.dtos.authentification;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

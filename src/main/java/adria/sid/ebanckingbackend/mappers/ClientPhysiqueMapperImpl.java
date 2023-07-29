@@ -1,6 +1,6 @@
 package adria.sid.ebanckingbackend.mappers;
 
-import adria.sid.ebanckingbackend.dtos.ClientPhysiqueDTO;
+import adria.sid.ebanckingbackend.dtos.client.ClientPhysiqueDTO;
 import adria.sid.ebanckingbackend.ennumerations.EGender;
 import adria.sid.ebanckingbackend.ennumerations.EPType;
 import adria.sid.ebanckingbackend.ennumerations.ERole;

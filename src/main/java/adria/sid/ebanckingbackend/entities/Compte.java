@@ -31,7 +31,9 @@ public class Compte {
 
     private Date derniereDateBloquage;
 
-    private EtatCompte etatCompte=EtatCompte.BLOCKE;
+    @Enumerated(EnumType.STRING)
+    private EtatCompte etatCompte;
+
     private String CodePIN;
 
     @ManyToOne(fetch = FetchType.LAZY)

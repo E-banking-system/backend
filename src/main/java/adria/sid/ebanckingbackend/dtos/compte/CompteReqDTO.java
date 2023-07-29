@@ -1,4 +1,4 @@
-package adria.sid.ebanckingbackend.dtos;
+package adria.sid.ebanckingbackend.dtos.compte;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;

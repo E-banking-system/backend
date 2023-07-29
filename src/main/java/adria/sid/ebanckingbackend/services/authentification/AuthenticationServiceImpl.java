@@ -1,6 +1,9 @@
 package adria.sid.ebanckingbackend.services.authentification;
 
-import adria.sid.ebanckingbackend.dtos.*;
+import adria.sid.ebanckingbackend.dtos.authentification.AuthReqDTO;
+import adria.sid.ebanckingbackend.dtos.authentification.AuthResDTO;
+import adria.sid.ebanckingbackend.dtos.client.ClientMoraleDTO;
+import adria.sid.ebanckingbackend.dtos.client.ClientPhysiqueDTO;
 import adria.sid.ebanckingbackend.ennumerations.ERole;
 import adria.sid.ebanckingbackend.exceptions.UserAlreadyExists;
 import adria.sid.ebanckingbackend.exceptions.UserHasNotAnyCompte;
@@ -57,6 +60,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     UserEntity user = clientPhysiqueMapper.fromClientPhysiqueToUser(clientPhysiqueDTO);
+    String encodedPassword = passwordEncoder.encode(clientPhysiqueDTO.getPassword());
+    user.setPassword(encodedPassword); // Make sure the password is properly encoded before saving
 
     return getUserEntity(url, user);
   }
@@ -70,6 +75,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     UserEntity user = clientMoraleMapper.fromClientMoraleToUser(clientMoraleDTO);
+    String encodedPassword = passwordEncoder.encode(clientMoraleDTO.getPassword());
+    user.setPassword(encodedPassword); // Make sure the password is properly encoded before saving
 
     return getUserEntity(url, user);
   }

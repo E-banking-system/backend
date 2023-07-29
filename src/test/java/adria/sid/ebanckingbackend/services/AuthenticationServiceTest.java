@@ -1,10 +1,11 @@
 package adria.sid.ebanckingbackend.services;
 
-import adria.sid.ebanckingbackend.dtos.*;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 
+import adria.sid.ebanckingbackend.dtos.authentification.AuthReqDTO;
+import adria.sid.ebanckingbackend.dtos.client.ClientMoraleDTO;
+import adria.sid.ebanckingbackend.dtos.client.ClientPhysiqueDTO;
 import adria.sid.ebanckingbackend.ennumerations.ERole;
 import adria.sid.ebanckingbackend.ennumerations.TokenType;
 import adria.sid.ebanckingbackend.entities.UserEntity;

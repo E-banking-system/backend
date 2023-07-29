@@ -18,7 +18,10 @@ public enum ERole {
     BANQUIER(
             Set.of(
                     BANQUIER_SUITE_REGISTRATION_CLIENT,
-                    GET_ACCOUNTS
+                    GET_ACCOUNTS,
+                    BLOCK_ACCOUNT,
+                    ACTIVER_ACCOUNT,
+                    SUSPENDER_ACCOUNT
             )
     ),
     CLIENT(

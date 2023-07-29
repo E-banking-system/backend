@@ -1,6 +1,6 @@
 package adria.sid.ebanckingbackend.mappers;
 
-import adria.sid.ebanckingbackend.dtos.ClientMoraleDTO;
+import adria.sid.ebanckingbackend.dtos.client.ClientMoraleDTO;
 import adria.sid.ebanckingbackend.entities.UserEntity;
 
 import java.util.List;

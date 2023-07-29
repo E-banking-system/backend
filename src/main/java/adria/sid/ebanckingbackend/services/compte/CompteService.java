@@ -1,16 +1,16 @@
 package adria.sid.ebanckingbackend.services.compte;
 
-import adria.sid.ebanckingbackend.dtos.CompteReqDTO;
-import adria.sid.ebanckingbackend.dtos.CompteResDTO;
-import adria.sid.ebanckingbackend.entities.Compte;
+import adria.sid.ebanckingbackend.dtos.compte.CompteReqDTO;
+import adria.sid.ebanckingbackend.dtos.compte.CompteResDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public interface CompteService {
-    void createAccountForExistingUserAndSendEmail(CompteReqDTO accountDTO);
+    void ajouterCompte(CompteReqDTO accountDTO);
     Page<CompteResDTO> getAccounts(Pageable pageable);
+    void activerCompte(String compteId);
+    void blockCompte(String compteId);
+    void suspendCompte(String compteId);
 }

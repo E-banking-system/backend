@@ -52,9 +52,13 @@ public class SecurityConfiguration {
         )
         .permitAll()
         .requestMatchers("/api/v1/client/**").hasRole(CLIENT.name())
+
         .requestMatchers("/api/v1/compte/**").hasRole(BANQUIER.name())
           .requestMatchers(POST, "/api/v1/compte/**").hasAuthority(BANQUIER_SUITE_REGISTRATION_CLIENT.name())
-          .requestMatchers(GET, "/api/v1/compte/**").hasAuthority(GET_ACCOUNTS.name())
+            .requestMatchers(GET, "/api/v1/compte/**").hasAuthority(GET_ACCOUNTS.name())
+            .requestMatchers(POST, "/api/v1/compte/blocker/**").hasAuthority(BLOCK_ACCOUNT.name())
+            .requestMatchers(POST, "/api/v1/compte/activer/**").hasAuthority(ACTIVER_ACCOUNT.name())
+            .requestMatchers(POST, "/api/v1/compte/suspender/**").hasAuthority(SUSPENDER_ACCOUNT.name())
 
 
         .anyRequest()

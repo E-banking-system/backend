@@ -1,8 +1,8 @@
 package adria.sid.ebanckingbackend.controllers;
 
-import adria.sid.ebanckingbackend.dtos.ForgetPasswordDTO;
-import adria.sid.ebanckingbackend.dtos.ClientMoraleDTO;
-import adria.sid.ebanckingbackend.dtos.ClientPhysiqueDTO;
+import adria.sid.ebanckingbackend.dtos.password.ForgetPasswordDTO;
+import adria.sid.ebanckingbackend.dtos.client.ClientMoraleDTO;
+import adria.sid.ebanckingbackend.dtos.client.ClientPhysiqueDTO;
 import adria.sid.ebanckingbackend.entities.UserEntity;
 import adria.sid.ebanckingbackend.exceptions.UserAlreadyExists;
 import adria.sid.ebanckingbackend.security.emailToken.VerificationToken;

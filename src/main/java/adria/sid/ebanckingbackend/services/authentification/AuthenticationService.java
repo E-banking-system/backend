@@ -1,9 +1,9 @@
 package adria.sid.ebanckingbackend.services.authentification;
 
-import adria.sid.ebanckingbackend.dtos.AuthReqDTO;
-import adria.sid.ebanckingbackend.dtos.AuthResDTO;
-import adria.sid.ebanckingbackend.dtos.ClientMoraleDTO;
-import adria.sid.ebanckingbackend.dtos.ClientPhysiqueDTO;
+import adria.sid.ebanckingbackend.dtos.authentification.AuthReqDTO;
+import adria.sid.ebanckingbackend.dtos.authentification.AuthResDTO;
+import adria.sid.ebanckingbackend.dtos.client.ClientMoraleDTO;
+import adria.sid.ebanckingbackend.dtos.client.ClientPhysiqueDTO;
 import adria.sid.ebanckingbackend.entities.UserEntity;
 import adria.sid.ebanckingbackend.exceptions.UserHasNotAnyCompte;
 import jakarta.servlet.http.HttpServletRequest;

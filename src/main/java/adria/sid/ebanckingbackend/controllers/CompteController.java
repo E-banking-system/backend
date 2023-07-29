@@ -1,8 +1,7 @@
 package adria.sid.ebanckingbackend.controllers;
 
 
-import adria.sid.ebanckingbackend.dtos.CompteReqDTO;
-import adria.sid.ebanckingbackend.dtos.CompteResDTO;
+import adria.sid.ebanckingbackend.dtos.compte.*;
 import adria.sid.ebanckingbackend.services.compte.CompteService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,8 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -30,7 +27,7 @@ public class CompteController {
     @PreAuthorize("hasAuthority('banquier:banquier_suite_registration_client')")
     public ResponseEntity<String> createAccountForExistingUser(@RequestBody @Valid CompteReqDTO accountDTO) {
         try {
-            compteService.createAccountForExistingUserAndSendEmail(accountDTO);
+            compteService.ajouterCompte(accountDTO);
             return ResponseEntity.ok("Un compte a été créé pour cet utilisateur. Check your e-mail pour voir les informations sur vos compte");
         } catch (InternalError e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage());
@@ -52,4 +49,47 @@ public class CompteController {
 
         return ResponseEntity.ok(comptePage);
     }
+
+    @PostMapping("/activer")
+    @PreAuthorize("hasAuthority('banquier:activer_compte')")
+    public ResponseEntity<String> activerCompte(@RequestBody ActiverCompteReqDTO activerCompteReqDTO) {
+        // Call the correct method in the service to activate the compte
+        try {
+            compteService.activerCompte(activerCompteReqDTO.getId());
+            return ResponseEntity.ok("Compte activé avec succès.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body("Compte non trouvé avec l'ID donné.");
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Une erreur est survenue lors de l'activation du compte.");
+        }
+    }
+
+    @PostMapping("/blocker")
+    @PreAuthorize("hasAuthority('banquier:blocker_compte')")
+    public ResponseEntity<String> blockerCompte(@RequestBody BlockerCompteReqDTO blockCompteReqDTO) {
+        // Call the correct method in the service to block the compte
+        try {
+            compteService.blockCompte(blockCompteReqDTO.getId());
+            return ResponseEntity.ok("Compte bloqué avec succès.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body("Compte non trouvé avec l'ID donné.");
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Une erreur est survenue lors du blocage du compte.");
+        }
+    }
+
+    @PostMapping("/suspender")
+    @PreAuthorize("hasAuthority('banquier:suspender_compte')")
+    public ResponseEntity<String> suspenderCompte(@RequestBody SuspenderCompteReqDTO suspenderCompteReqDTO) {
+        // Call the correct method in the service to suspend the compte
+        try {
+            compteService.suspendCompte(suspenderCompteReqDTO.getId());
+            return ResponseEntity.ok("Compte suspendu avec succès.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body("Compte non trouvé avec l'ID donné.");
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Une erreur est survenue lors de la suspension du compte.");
+        }
+    }
+
 }
