@@ -2,6 +2,7 @@ package adria.sid.ebanckingbackend.controllers;
 
 import adria.sid.ebanckingbackend.dtos.AuthReqDTO;
 import adria.sid.ebanckingbackend.dtos.AuthResDTO;
+import adria.sid.ebanckingbackend.exceptions.UserHasNotAnyCompte;
 import adria.sid.ebanckingbackend.services.authentification.AuthentificationService;
 import adria.sid.ebanckingbackend.exceptions.UserNotEnabledException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,15 +32,23 @@ public class AuthenticationController {
   public ResponseEntity<?> authenticate(@RequestBody @Valid AuthReqDTO request) {
     try {
       AuthResDTO response = authenticationService.authenticate(request);
-      if (response != null) {
-        return ResponseEntity.ok(response);
-      } else {
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-      }
+      return ResponseEntity.ok(response);
     } catch (UserNotEnabledException e) {
-      return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User not verified. Please check your email for verification instructions.");
-    } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+      return ResponseEntity.status(HttpStatus.FORBIDDEN)
+              .body("User not verified. Please check your email for verification instructions.");
+    } catch (UserHasNotAnyCompte e) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+              .body("You must visit your bank to create a banking account.");
+    } catch (BadCredentialsException e) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+              .body("Invalid email or password.");
+    } catch (UsernameNotFoundException e) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND)
+              .body("User not found.");
+    } catch (RuntimeException e) {
+      // This is a catch-all for unexpected runtime exceptions.
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+              .body("An unexpected error occurred.");
     }
   }
 

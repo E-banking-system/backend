@@ -5,6 +5,7 @@ import adria.sid.ebanckingbackend.ennumerations.EGender;
 import adria.sid.ebanckingbackend.ennumerations.EPType;
 import adria.sid.ebanckingbackend.ennumerations.ERole;
 import adria.sid.ebanckingbackend.exceptions.UserAlreadyExists;
+import adria.sid.ebanckingbackend.exceptions.UserHasNotAnyCompte;
 import adria.sid.ebanckingbackend.exceptions.UserNotEnabledException;
 import adria.sid.ebanckingbackend.security.accessToken.Token;
 import adria.sid.ebanckingbackend.security.accessToken.TokenUserRepository;
@@ -77,6 +78,7 @@ public class AuthenticationServiceImpl implements AuthentificationService {
       throw new UserAlreadyExists("Email already exists: " + email);
     }
 
+
     var user = new UserEntity();
     user.setId(UUID.randomUUID().toString());
 
@@ -107,7 +109,7 @@ public class AuthenticationServiceImpl implements AuthentificationService {
   }
 
   @Override
-  public UserEntity registerClientMorale(ReqRegisterClientMoraleDTO reqRegisterClientMoraleDTO, String url) {
+  public UserEntity registerClientMorale(ReqRegisterClientMoraleDTO reqRegisterClientMoraleDTO, String url){
     String email = reqRegisterClientMoraleDTO.getEmail();
     Optional<UserEntity> existingUser = userRepository.findByEmail(email);
     if (existingUser.isPresent()) {
@@ -141,7 +143,7 @@ public class AuthenticationServiceImpl implements AuthentificationService {
   }
 
   @Override
-  public AuthResDTO authenticate(AuthReqDTO request) {
+  public AuthResDTO authenticate(AuthReqDTO request) throws UserHasNotAnyCompte {
     try {
       authenticationManager.authenticate(
               new UsernamePasswordAuthenticationToken(
@@ -156,6 +158,10 @@ public class AuthenticationServiceImpl implements AuthentificationService {
         throw new UserNotEnabledException("User not verified. Please check your email for verification instructions.");
       }
 
+      if (user.getRole().equals(ERole.CLIENT) && user.getComptes().size() == 0) {
+        throw new UserHasNotAnyCompte("You must visit your bank to create a banking account");
+      }
+
       var jwtToken = jwtService.generateToken(user);
       var refreshToken = jwtService.generateRefreshToken(user);
       revokeAllUserTokens(user);
@@ -168,6 +174,8 @@ public class AuthenticationServiceImpl implements AuthentificationService {
               .build();
     } catch (BadCredentialsException e) {
       throw new BadCredentialsException("Invalid email or password");
+    } catch (UserHasNotAnyCompte e) {
+      throw e;
     }
   }
 

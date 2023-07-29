@@ -5,6 +5,7 @@ import adria.sid.ebanckingbackend.dtos.AuthResDTO;
 import adria.sid.ebanckingbackend.dtos.ReqRegisterClientMoraleDTO;
 import adria.sid.ebanckingbackend.dtos.ReqRegisterClientPhysiqueDTO;
 import adria.sid.ebanckingbackend.entities.UserEntity;
+import adria.sid.ebanckingbackend.exceptions.UserHasNotAnyCompte;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -17,7 +18,7 @@ public interface AuthentificationService {
     String validateToken(String theToken);
     UserEntity registerClientPhysique(ReqRegisterClientPhysiqueDTO request, String url);
     UserEntity registerClientMorale(ReqRegisterClientMoraleDTO request, String url);
-    AuthResDTO authenticate(AuthReqDTO request);
+    AuthResDTO authenticate(AuthReqDTO request) throws UserHasNotAnyCompte;
     void saveUserToken(UserEntity user, String jwtToken);
     void revokeAllUserTokens(UserEntity user);
     void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException;
