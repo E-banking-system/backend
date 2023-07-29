@@ -61,7 +61,7 @@ class AuthenticationServiceTest {
 
     @Test
     void testRegisterClientMorale() {
-        ReqRegisterClientMoraleDTO request = new ReqRegisterClientMoraleDTO();
+        ClientMoraleDTO request = new ClientMoraleDTO();
         request.setEmail("test@example.com");
         request.setTelephone("1234567890");
         request.setOperateur("Operator");
@@ -89,7 +89,7 @@ class AuthenticationServiceTest {
 
     @Test
     void testRegisterClientPhysique() {
-        ReqRegisterClientPhysiqueDTO request = new ReqRegisterClientPhysiqueDTO();
+        ClientPhysiqueDTO request = new ClientPhysiqueDTO();
         request.setEmail("test@example.com");
         request.setTelephone("1234567890");
         request.setOperateur("Operator");

@@ -1,6 +1,5 @@
 package adria.sid.ebanckingbackend.dtos;
 
-import adria.sid.ebanckingbackend.dtos.ReqRegisterClientPhysiqueDTO;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -8,7 +7,7 @@ public class ReqRegisterClientPhysiqueDTOTest {
 
     @Test
     public void testValidDTO() {
-        ReqRegisterClientPhysiqueDTO dto = ReqRegisterClientPhysiqueDTO.builder()
+        ClientPhysiqueDTO dto = ClientPhysiqueDTO.builder()
                 .nom("John")
                 .prenom("Doe")
                 .email("john.doe@example.com")
@@ -25,7 +24,7 @@ public class ReqRegisterClientPhysiqueDTOTest {
 
     @Test
     public void testInvalidEmail() {
-        ReqRegisterClientPhysiqueDTO dto = ReqRegisterClientPhysiqueDTO.builder()
+        ClientPhysiqueDTO dto = ClientPhysiqueDTO.builder()
                 .nom("John")
                 .prenom("Doe")
                 .email("invalid.email")
@@ -42,7 +41,7 @@ public class ReqRegisterClientPhysiqueDTOTest {
 
     @Test
     public void testInvalidCIN() {
-        ReqRegisterClientPhysiqueDTO dto = ReqRegisterClientPhysiqueDTO.builder()
+        ClientPhysiqueDTO dto = ClientPhysiqueDTO.builder()
                 .nom("John")
                 .prenom("Doe")
                 .email("john.doe@example.com")
@@ -59,7 +58,7 @@ public class ReqRegisterClientPhysiqueDTOTest {
 
     @Test
     public void testInvalidTelephone() {
-        ReqRegisterClientPhysiqueDTO dto = ReqRegisterClientPhysiqueDTO.builder()
+        ClientPhysiqueDTO dto = ClientPhysiqueDTO.builder()
                 .nom("John")
                 .prenom("Doe")
                 .email("john.doe@example.com")
@@ -76,7 +75,7 @@ public class ReqRegisterClientPhysiqueDTOTest {
 
     // Add more test cases to cover other validation constraints...
 
-    private boolean validateDTO(ReqRegisterClientPhysiqueDTO dto) {
+    private boolean validateDTO(ClientPhysiqueDTO dto) {
         // Use a validation library like Hibernate Validator to validate the DTO
         // For example:
         // ValidatorFactory factory = Validation.buildDefaultValidatorFactory();

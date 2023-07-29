@@ -1,6 +1,6 @@
 package adria.sid.ebanckingbackend.dto;
 
-import adria.sid.ebanckingbackend.dtos.ReqRegisterClientPhysiqueDTO;
+import adria.sid.ebanckingbackend.dtos.ClientPhysiqueDTO;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -17,7 +17,7 @@ public class ReqRegisterClientDTOvalidationTest {
 
     @Test
     void testValidDto() {
-        ReqRegisterClientPhysiqueDTO dto = ReqRegisterClientPhysiqueDTO.builder()
+        ClientPhysiqueDTO dto = ClientPhysiqueDTO.builder()
                 .nom("taffah")
                 .prenom("achraf")
                 .email("test@example.com")
@@ -34,7 +34,7 @@ public class ReqRegisterClientDTOvalidationTest {
 
     @Test
     void testInvalidDto() {
-        ReqRegisterClientPhysiqueDTO dto = ReqRegisterClientPhysiqueDTO.builder()
+        ClientPhysiqueDTO dto = ClientPhysiqueDTO.builder()
                 .nom("")
                 .prenom("kaoutar")
                 .email("kaoutar@gmail.com")

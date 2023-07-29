@@ -12,17 +12,17 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReqRegisterClientMoraleDTO {
+public class ClientMoraleDTO {
 
   @NotBlank(message = "Email is required")
   @Email(message = "Invalid email format")
   private String email;
 
   @NotBlank(message = "Adresse is required")
-  private String adresse;
+  private String address;
 
   @Pattern(regexp = "\\d{10}", message = "Telephone must be 10 digits")
-  private String telephone;
+  private String tel;
 
   @NotBlank(message = "Operateur is required")
   private String operateur;

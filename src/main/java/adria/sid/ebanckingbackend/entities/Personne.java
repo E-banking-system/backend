@@ -20,9 +20,8 @@ public class Personne {
     private EGender gender;
     private String operateur;
     private String address;
-    private String RIB;
     private String tel;
-    private String CIN;
+    private String cin;
 
     private String raisonSociale;
     private String registerNumber;

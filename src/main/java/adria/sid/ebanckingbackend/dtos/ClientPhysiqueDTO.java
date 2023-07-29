@@ -1,5 +1,6 @@
 package adria.sid.ebanckingbackend.dtos;
 
+import adria.sid.ebanckingbackend.ennumerations.EGender;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -12,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReqRegisterClientPhysiqueDTO {
+public class ClientPhysiqueDTO {
 
   @NotBlank(message = "Nom is required")
   private String nom;
@@ -25,16 +26,16 @@ public class ReqRegisterClientPhysiqueDTO {
   private String email;
 
   @NotBlank(message = "Gender is required")
-  private String gender;
+  private EGender gender;
 
   @NotBlank(message = "Adresse is required")
-  private String adresse;
+  private String address;
 
   @Pattern(regexp = "[A-Za-z]{2}\\d{6}", message = "CIN must be 2 letters followed by 6 digits")
   private String cin;
 
   @Pattern(regexp = "\\d{10}", message = "Telephone must be 10 digits")
-  private String telephone;
+  private String tel;
 
   @NotBlank(message = "Operateur is required")
   private String operateur;

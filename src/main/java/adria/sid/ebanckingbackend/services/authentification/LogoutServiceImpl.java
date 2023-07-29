@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class LogoutServiceImpl implements LogoutHandler {
+public class LogoutServiceImpl implements LogoutHandler, LogoutService{
 
   private final TokenUserRepository tokenRepository;
 

@@ -1,12 +1,13 @@
 package adria.sid.ebanckingbackend.services.authentification;
 
 import adria.sid.ebanckingbackend.dtos.*;
-import adria.sid.ebanckingbackend.ennumerations.EGender;
 import adria.sid.ebanckingbackend.ennumerations.EPType;
 import adria.sid.ebanckingbackend.ennumerations.ERole;
 import adria.sid.ebanckingbackend.exceptions.UserAlreadyExists;
 import adria.sid.ebanckingbackend.exceptions.UserHasNotAnyCompte;
 import adria.sid.ebanckingbackend.exceptions.UserNotEnabledException;
+import adria.sid.ebanckingbackend.mappers.ClientMoraleMapper;
+import adria.sid.ebanckingbackend.mappers.ClientPhysiqueMapper;
 import adria.sid.ebanckingbackend.security.accessToken.Token;
 import adria.sid.ebanckingbackend.security.accessToken.TokenUserRepository;
 import adria.sid.ebanckingbackend.security.JwtService;
@@ -17,7 +18,6 @@ import adria.sid.ebanckingbackend.security.emailToken.VerificationTokenRepositor
 import adria.sid.ebanckingbackend.security.emailToken.VerificationToken;
 import adria.sid.ebanckingbackend.services.email.EmailSender;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
@@ -30,7 +30,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.Calendar;
 import java.util.Optional;
 import java.util.UUID;
@@ -45,7 +44,9 @@ public class AuthenticationServiceImpl implements AuthentificationService {
   private final JwtService jwtService;
   private final AuthenticationManager authenticationManager;
   private final EmailSender emailSender;
-  private final MotdepasseTokenService passwordResetTokenService;
+  private final MotdepasseTokenServiceImpl passwordResetTokenService;
+  private final ClientPhysiqueMapper clientPhysiqueMapper;
+  private final ClientMoraleMapper clientMoraleMapper;
 
   @Override
   public void saveUserVerificationToken(UserEntity theUser, String token) {
@@ -71,34 +72,18 @@ public class AuthenticationServiceImpl implements AuthentificationService {
   }
 
   @Override
-  public UserEntity registerClientPhysique(ReqRegisterClientPhysiqueDTO reqRegisterClientPhysiqueDTO, String url) {
-    String email = reqRegisterClientPhysiqueDTO.getEmail();
+  public UserEntity registerClientPhysique(ClientPhysiqueDTO clientPhysiqueDTO, String url) {
+    String email = clientPhysiqueDTO.getEmail();
     Optional<UserEntity> existingUser = userRepository.findByEmail(email);
     if (existingUser.isPresent()) {
       throw new UserAlreadyExists("Email already exists: " + email);
     }
 
-
-    var user = new UserEntity();
-    user.setId(UUID.randomUUID().toString());
-
-    user.setNom(reqRegisterClientPhysiqueDTO.getNom());
-    user.setPrenom(reqRegisterClientPhysiqueDTO.getPrenom());
-    user.setEmail(reqRegisterClientPhysiqueDTO.getEmail());
-    user.setTel(reqRegisterClientPhysiqueDTO.getTelephone());
-    user.setOperateur(reqRegisterClientPhysiqueDTO.getOperateur());
-    user.setCIN(reqRegisterClientPhysiqueDTO.getCin());
-    user.setAddress(reqRegisterClientPhysiqueDTO.getAdresse());
-    user.setGender(EGender.valueOf(reqRegisterClientPhysiqueDTO.getGender()));
-
-    user.setPersonneType(EPType.PHYSIQUE);
-    user.setPassword(passwordEncoder.encode(reqRegisterClientPhysiqueDTO.getPassword()));
-    user.setRole(ERole.CLIENT);
+    UserEntity user = clientPhysiqueMapper.fromClientPhysiqueToUser(clientPhysiqueDTO);
 
     var savedUser = userRepository.save(user);
 
     var jwtToken = jwtService.generateToken(user);
-    var refreshToken = jwtService.generateRefreshToken(user);
     saveUserToken(savedUser, jwtToken);
 
     String verificationToken = UUID.randomUUID().toString();
@@ -109,30 +94,18 @@ public class AuthenticationServiceImpl implements AuthentificationService {
   }
 
   @Override
-  public UserEntity registerClientMorale(ReqRegisterClientMoraleDTO reqRegisterClientMoraleDTO, String url){
-    String email = reqRegisterClientMoraleDTO.getEmail();
+  public UserEntity registerClientMorale(ClientMoraleDTO clientMoraleDTO, String url) {
+    String email = clientMoraleDTO.getEmail();
     Optional<UserEntity> existingUser = userRepository.findByEmail(email);
     if (existingUser.isPresent()) {
       throw new UserAlreadyExists("Email already exists: " + email);
     }
 
-    var user = new UserEntity();
-    user.setId(UUID.randomUUID().toString());
-
-    user.setEmail(reqRegisterClientMoraleDTO.getEmail());
-    user.setTel(reqRegisterClientMoraleDTO.getTelephone());
-    user.setOperateur(reqRegisterClientMoraleDTO.getOperateur());
-    user.setAddress(reqRegisterClientMoraleDTO.getAdresse());
-    user.setRaisonSociale(reqRegisterClientMoraleDTO.getRaisonSociale());
-    user.setRegisterNumber(reqRegisterClientMoraleDTO.getRegisterNumber());
-    user.setPersonneType(EPType.MORALE);
-    user.setPassword(passwordEncoder.encode(reqRegisterClientMoraleDTO.getPassword()));
-    user.setRole(ERole.CLIENT);
+    UserEntity user = clientMoraleMapper.fromClientMoraleToUser(clientMoraleDTO);
 
     var savedUser = userRepository.save(user);
 
     var jwtToken = jwtService.generateToken(user);
-    var refreshToken = jwtService.generateRefreshToken(user);
     saveUserToken(savedUser, jwtToken);
 
     String verificationToken = UUID.randomUUID().toString();
