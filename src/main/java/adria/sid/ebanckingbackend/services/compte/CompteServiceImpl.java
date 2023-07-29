@@ -11,6 +11,8 @@ import adria.sid.ebanckingbackend.services.email.EmailSender;
 import adria.sid.ebanckingbackend.utils.codeGenerators.CodeGenerator;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -54,8 +56,8 @@ public class CompteServiceImpl implements CompteService {
     }
 
     @Override
-    public List<CompteResDTO> getAccounts() {
-        List<Compte> comptes =  compteRepository.findAll();
-        return compteMapper.toComptesResDTOs(comptes);
+    public Page<CompteResDTO> getAccounts(Pageable pageable) {
+        Page<Compte> comptePage = compteRepository.findAll(pageable);
+        return comptePage.map(compteMapper::fromCompteToCompteResDTO);
     }
 }

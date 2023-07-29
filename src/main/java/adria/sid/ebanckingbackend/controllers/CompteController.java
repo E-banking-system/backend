@@ -7,6 +7,10 @@ import adria.sid.ebanckingbackend.services.compte.CompteService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -35,8 +39,17 @@ public class CompteController {
 
     @GetMapping
     @PreAuthorize("hasAuthority('banquier:get_accounts')")
-    public ResponseEntity<List<CompteResDTO>> getAccounts() {
-        List<CompteResDTO> comptes = compteService.getAccounts();
-        return ResponseEntity.ok(comptes);
+    public ResponseEntity<Page<CompteResDTO>> getAccounts(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy
+    ) {
+        // Create a Pageable object to represent the pagination information
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+
+        // Retrieve the paginated accounts data from the service
+        Page<CompteResDTO> comptePage = compteService.getAccounts(pageable);
+
+        return ResponseEntity.ok(comptePage);
     }
 }
