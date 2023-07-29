@@ -21,7 +21,7 @@ public class ReqCreateAccountDTOTest {
         String validEmail = "test@example.com";
 
         // Create an instance of ReqCreateAccountDTO
-        CompteDTO reqCreateAccountDTO = new CompteDTO();
+        CompteReqDTO reqCreateAccountDTO = new CompteReqDTO();
 
         // Set the properties
         reqCreateAccountDTO.setNature(nature);
@@ -34,13 +34,13 @@ public class ReqCreateAccountDTOTest {
         assertEquals(validEmail, reqCreateAccountDTO.getEmail());
 
         // Test constructor with all arguments
-        CompteDTO reqCreateAccountDTOWithArgs = new CompteDTO(nature, solde, validEmail);
+        CompteReqDTO reqCreateAccountDTOWithArgs = new CompteReqDTO(nature, solde, validEmail);
         assertEquals(nature, reqCreateAccountDTOWithArgs.getNature());
         assertEquals(solde, reqCreateAccountDTOWithArgs.getSolde());
         assertEquals(validEmail, reqCreateAccountDTOWithArgs.getEmail());
 
         // Test no-args constructor
-        CompteDTO emptyReqCreateAccountDTO = new CompteDTO();
+        CompteReqDTO emptyReqCreateAccountDTO = new CompteReqDTO();
         assertTrue(emptyReqCreateAccountDTO.getNature() == null);
         assertTrue(emptyReqCreateAccountDTO.getSolde() == null);
         assertTrue(emptyReqCreateAccountDTO.getEmail() == null);
@@ -48,11 +48,11 @@ public class ReqCreateAccountDTOTest {
         // Test validation with valid data
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
-        Set<ConstraintViolation<CompteDTO>> violations = validator.validate(reqCreateAccountDTO);
+        Set<ConstraintViolation<CompteReqDTO>> violations = validator.validate(reqCreateAccountDTO);
         assertTrue(violations.isEmpty());
 
         // Test validation with blank nature
-        CompteDTO invalidNatureReqCreateAccountDTO = new CompteDTO();
+        CompteReqDTO invalidNatureReqCreateAccountDTO = new CompteReqDTO();
         invalidNatureReqCreateAccountDTO.setSolde(solde);
         invalidNatureReqCreateAccountDTO.setEmail(validEmail);
         violations = validator.validate(invalidNatureReqCreateAccountDTO);
@@ -60,7 +60,7 @@ public class ReqCreateAccountDTOTest {
         assertEquals("nature is required", violations.iterator().next().getMessage());
 
         // Test validation with invalid email
-        CompteDTO invalidEmailReqCreateAccountDTO = new CompteDTO();
+        CompteReqDTO invalidEmailReqCreateAccountDTO = new CompteReqDTO();
         invalidEmailReqCreateAccountDTO.setNature(nature);
         invalidEmailReqCreateAccountDTO.setSolde(solde);
         invalidEmailReqCreateAccountDTO.setEmail("invalid_email");

@@ -101,7 +101,6 @@ public class RegistrationController {
             if (user.isPresent()) {
                 String passwordResetToken = UUID.randomUUID().toString();
                 authenticationService.createPasswordResetTokenForUser(user.get(), passwordResetToken);
-                System.out.println("confirmed password : " + passwordResetRequest.getPassword());
                 passwordResetUrl = passwordResetEmailLink(applicationUrl(request), passwordResetToken, passwordResetRequest.getPassword());
                 authenticationService.sendPasswordResetEmail(user.get(), passwordResetUrl);
             } else {
@@ -119,7 +118,7 @@ public class RegistrationController {
         return url;
     }
 
-    public String applicationUrl(HttpServletRequest request) {
+    private String applicationUrl(HttpServletRequest request) {
         return "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
     }
 }

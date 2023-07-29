@@ -7,13 +7,7 @@ import lombok.RequiredArgsConstructor;
 public enum PERMISSION {
 
     BANQUIER_SUITE_REGISTRATION_CLIENT("banquier:banquier_suite_registration_client"),
-    BANQUIER_READ("banquier:read"),
-    BANQUIER_UPDATE("banquier:update"),
-    BANQUIER_DELETE("banquier:delete"),
-    CLIENT_READ("client:read"),
-    CLIENT_UPDATE("client:update"),
-    CLIENT_CREATE("client:create"),
-    CLIENT_DELETE("client:delete");
+    GET_ACCOUNTS("banquier:get_accounts");
 
     @Getter
     private final String permission;

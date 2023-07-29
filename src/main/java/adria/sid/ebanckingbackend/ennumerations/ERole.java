@@ -18,17 +18,12 @@ public enum ERole {
     BANQUIER(
             Set.of(
                     BANQUIER_SUITE_REGISTRATION_CLIENT,
-                    BANQUIER_READ,
-                    BANQUIER_UPDATE,
-                    BANQUIER_DELETE
+                    GET_ACCOUNTS
             )
     ),
     CLIENT(
             Set.of(
-                    CLIENT_READ,
-                    CLIENT_UPDATE,
-                    CLIENT_DELETE,
-                    CLIENT_CREATE
+
             )
     );
 

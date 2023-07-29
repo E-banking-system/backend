@@ -39,7 +39,6 @@ public class SecurityConfiguration {
         .requestMatchers(
                 "/api/v1/auth/**",
                 "/api/v1/register/**",
-                "/api/v1/banquier/**",
                 "/v2/api-docs",
                 "/v3/api-docs",
                 "/v3/api-docs/**",
@@ -51,20 +50,12 @@ public class SecurityConfiguration {
                 "/webjars/**",
                 "/swagger-ui.html"
         )
-          .permitAll()
-            .requestMatchers("/api/v1/client/**").hasRole(CLIENT.name())
+        .permitAll()
+        .requestMatchers("/api/v1/client/**").hasRole(CLIENT.name())
+        .requestMatchers("/api/v1/compte/**").hasRole(BANQUIER.name())
+          .requestMatchers(POST, "/api/v1/compte/**").hasAuthority(BANQUIER_SUITE_REGISTRATION_CLIENT.name())
+          .requestMatchers(GET, "/api/v1/compte/**").hasAuthority(GET_ACCOUNTS.name())
 
-            .requestMatchers(GET, "/api/v1/client/**").hasAnyAuthority(CLIENT_READ.name())
-        .requestMatchers(POST, "/api/v1/client/**").hasAnyAuthority(CLIENT_CREATE.name())
-        .requestMatchers(PUT, "/api/v1/client/**").hasAnyAuthority(CLIENT_UPDATE.name())
-        .requestMatchers(DELETE, "/api/v1/client/**").hasAnyAuthority(CLIENT_DELETE.name())
-
-        .requestMatchers("/api/v1/banquier/**").hasRole(BANQUIER.name())
-
-        .requestMatchers(POST, "/api/v1/banquier/**").hasAuthority(BANQUIER_SUITE_REGISTRATION_CLIENT.name())
-        .requestMatchers(GET, "/api/v1/banquier/**").hasAuthority(BANQUIER_READ.name())
-        .requestMatchers(PUT, "/api/v1/banquier/**").hasAuthority(BANQUIER_UPDATE.name())
-        .requestMatchers(DELETE, "/api/v1/banquier/**").hasAuthority(BANQUIER_DELETE.name())
 
         .anyRequest()
           .authenticated()

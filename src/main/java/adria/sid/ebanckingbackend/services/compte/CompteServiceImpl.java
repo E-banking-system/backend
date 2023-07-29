@@ -1,7 +1,7 @@
 package adria.sid.ebanckingbackend.services.compte;
 
-import adria.sid.ebanckingbackend.dtos.CompteDTO;
-import adria.sid.ebanckingbackend.ennumerations.EtatCompte;
+import adria.sid.ebanckingbackend.dtos.CompteReqDTO;
+import adria.sid.ebanckingbackend.dtos.CompteResDTO;
 import adria.sid.ebanckingbackend.entities.Compte;
 import adria.sid.ebanckingbackend.entities.UserEntity;
 import adria.sid.ebanckingbackend.mappers.CompteMapper;
@@ -13,10 +13,9 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
-import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 @AllArgsConstructor
@@ -30,7 +29,7 @@ public class CompteServiceImpl implements CompteService {
 
     @Override
     @Transactional
-    public void createAccountForExistingUserAndSendEmail(CompteDTO compteDTO) {
+    public void createAccountForExistingUserAndSendEmail(CompteReqDTO compteDTO) {
         // Input validation
         if (compteDTO == null || compteDTO.getEmail() == null) {
             throw new IllegalArgumentException("Invalid compte");
@@ -52,5 +51,11 @@ public class CompteServiceImpl implements CompteService {
         } else {
             System.out.println("The user is not found.");
         }
+    }
+
+    @Override
+    public List<CompteResDTO> getAccounts() {
+        List<Compte> comptes =  compteRepository.findAll();
+        return compteMapper.toComptesResDTOs(comptes);
     }
 }

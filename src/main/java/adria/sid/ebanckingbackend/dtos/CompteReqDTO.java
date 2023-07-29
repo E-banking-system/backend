@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CompteDTO {
+public class CompteReqDTO {
 
     @NotBlank(message = "nature is required")
     private String nature;

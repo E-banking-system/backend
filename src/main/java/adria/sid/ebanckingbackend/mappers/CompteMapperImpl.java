@@ -1,6 +1,7 @@
 package adria.sid.ebanckingbackend.mappers;
 
-import adria.sid.ebanckingbackend.dtos.CompteDTO;
+import adria.sid.ebanckingbackend.dtos.CompteReqDTO;
+import adria.sid.ebanckingbackend.dtos.CompteResDTO;
 import adria.sid.ebanckingbackend.entities.Compte;
 import adria.sid.ebanckingbackend.utils.codeGenerators.CodeGenerator;
 import lombok.AllArgsConstructor;
@@ -17,14 +18,21 @@ import java.util.stream.Collectors;
 public class CompteMapperImpl implements CompteMapper{
     final private CodeGenerator codeGenerator;
     @Override
-    public CompteDTO fromCompteToCompteDTO(Compte compte) {
-        CompteDTO compteDTO=new CompteDTO();
+    public CompteReqDTO fromCompteToCompteReqDTO(Compte compte) {
+        CompteReqDTO compteDTO=new CompteReqDTO();
         BeanUtils.copyProperties(compte,compteDTO);
         return  compteDTO;
     }
 
     @Override
-    public Compte fromCompteDTOToCompte(CompteDTO compteDTO) {
+    public CompteResDTO fromCompteToCompteResDTO(Compte compte) {
+        CompteResDTO compteResDTO=new CompteResDTO();
+        BeanUtils.copyProperties(compte,compteResDTO);
+        return compteResDTO;
+    }
+
+    @Override
+    public Compte fromCompteDTOToCompte(CompteReqDTO compteDTO) {
         Compte newCompte = new Compte();
         String rib = codeGenerator.generateRIBCode();
         String pin = codeGenerator.generatePinCode();
@@ -46,9 +54,9 @@ public class CompteMapperImpl implements CompteMapper{
 
 
     @Override
-    public List<CompteDTO> toComptesDTOs(List<Compte> comptes) {
+    public List<CompteResDTO> toComptesResDTOs(List<Compte> comptes) {
         return comptes.stream()
-                .map(this::fromCompteToCompteDTO)
+                .map(this::fromCompteToCompteResDTO)
                 .collect(Collectors.toList());
     }
 }
