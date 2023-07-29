@@ -1,9 +1,9 @@
 package adria.sid.ebanckingbackend.services.compte;
 
-import adria.sid.ebanckingbackend.dtos.ReqCreateAccountDTO;
+import adria.sid.ebanckingbackend.dtos.CompteDTO;
 import org.springframework.stereotype.Service;
 
 @Service
 public interface CompteService {
-    void createAccountForExistingUserAndSendEmail(ReqCreateAccountDTO accountDTO);
+    void createAccountForExistingUserAndSendEmail(CompteDTO accountDTO);
 }

@@ -1,18 +1,15 @@
 package adria.sid.ebanckingbackend.dtos;
 
-import adria.sid.ebanckingbackend.ennumerations.EtatCompte;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReqCreateAccountDTO {
+public class CompteDTO {
 
     @NotBlank(message = "nature is required")
     private String nature;

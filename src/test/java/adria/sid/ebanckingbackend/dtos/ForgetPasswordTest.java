@@ -14,7 +14,7 @@ public class ForgetPasswordTest {
         String password = "new_password";
 
         // Create an instance of ForgetPassword
-        ForgetPassword forgetPassword = new ForgetPassword();
+        ForgetPasswordDTO forgetPassword = new ForgetPasswordDTO();
 
         // Set the properties
         forgetPassword.setEmail(email);
@@ -25,12 +25,12 @@ public class ForgetPasswordTest {
         assertEquals(password, forgetPassword.getPassword());
 
         // Test the constructor with all arguments
-        ForgetPassword forgetPasswordWithArgs = new ForgetPassword(email, password);
+        ForgetPasswordDTO forgetPasswordWithArgs = new ForgetPasswordDTO(email, password);
         assertEquals(email, forgetPasswordWithArgs.getEmail());
         assertEquals(password, forgetPasswordWithArgs.getPassword());
 
         // Test the builder
-        ForgetPassword forgetPasswordFromBuilder = ForgetPassword.builder()
+        ForgetPasswordDTO forgetPasswordFromBuilder = ForgetPasswordDTO.builder()
                 .email(email)
                 .password(password)
                 .build();

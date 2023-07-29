@@ -27,11 +27,11 @@ public class ClientMoraleMapperImpl implements ClientMoraleMapper{
     @Override
     public UserEntity fromClientMoraleToUser(ClientMoraleDTO clientMoraleDTO) {
         UserEntity user=new UserEntity();
-        BeanUtils.copyProperties(clientMoraleDTO,user);
         user.setId(UUID.randomUUID().toString());
         user.setPersonneType(EPType.MORALE);
         user.setPassword(passwordEncoder.encode(clientMoraleDTO.getPassword()));
         user.setRole(ERole.CLIENT);
+        BeanUtils.copyProperties(clientMoraleDTO,user);
         return  user;
     }
 

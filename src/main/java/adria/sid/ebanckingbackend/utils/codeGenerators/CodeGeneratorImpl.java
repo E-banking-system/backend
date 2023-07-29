@@ -3,6 +3,7 @@ package adria.sid.ebanckingbackend.utils.codeGenerators;
 import org.springframework.stereotype.Service;
 
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 public class CodeGeneratorImpl implements CodeGenerator{
@@ -22,5 +23,10 @@ public class CodeGeneratorImpl implements CodeGenerator{
             sb.append(digit);
         }
         return sb.toString();
+    }
+
+    @Override
+    public Long numeroCompte() {
+        return ThreadLocalRandom.current().nextLong(Long.MAX_VALUE);
     }
 }

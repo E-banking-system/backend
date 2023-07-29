@@ -1,6 +1,6 @@
 package adria.sid.ebanckingbackend.controllers;
 
-import adria.sid.ebanckingbackend.dtos.ForgetPassword;
+import adria.sid.ebanckingbackend.dtos.ForgetPasswordDTO;
 import adria.sid.ebanckingbackend.dtos.ClientMoraleDTO;
 import adria.sid.ebanckingbackend.dtos.ClientPhysiqueDTO;
 import adria.sid.ebanckingbackend.entities.UserEntity;
@@ -93,7 +93,7 @@ public class RegistrationController {
 
 
     @PostMapping("/motdepasseoublie")
-    public String resetPasswordRequest(@RequestBody @Valid ForgetPassword passwordResetRequest, final HttpServletRequest request) {
+    public String resetPasswordRequest(@RequestBody @Valid ForgetPasswordDTO passwordResetRequest, final HttpServletRequest request) {
         try {
             Optional<UserEntity> user = authenticationService.findByEmail(passwordResetRequest.getEmail());
 

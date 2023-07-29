@@ -27,12 +27,12 @@ public class ClientPhysiqueMapperImpl implements ClientPhysiqueMapper{
 
     public UserEntity fromClientPhysiqueToUser(ClientPhysiqueDTO clientPhysiqueDTO){
         UserEntity user=new UserEntity();
-        BeanUtils.copyProperties(clientPhysiqueDTO,user);
         user.setId(UUID.randomUUID().toString());
         user.setPersonneType(EPType.PHYSIQUE);
         user.setGender(EGender.valueOf(clientPhysiqueDTO.getGender()));
         user.setPassword(passwordEncoder.encode(clientPhysiqueDTO.getPassword()));
         user.setRole(ERole.CLIENT);
+        BeanUtils.copyProperties(clientPhysiqueDTO,user);
         return  user;
     }
 

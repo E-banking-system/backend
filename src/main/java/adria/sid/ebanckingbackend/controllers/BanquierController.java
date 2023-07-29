@@ -1,6 +1,6 @@
 package adria.sid.ebanckingbackend.controllers;
 
-import adria.sid.ebanckingbackend.dtos.ReqCreateAccountDTO;
+import adria.sid.ebanckingbackend.dtos.CompteDTO;
 import adria.sid.ebanckingbackend.services.compte.CompteService;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -44,7 +44,7 @@ public class BanquierController {
 
     @PostMapping
     @PreAuthorize("hasAuthority('banquier:banquier_suite_registration_client')")
-    public ResponseEntity<String> createAccountForExistingUser(@RequestBody ReqCreateAccountDTO accountDTO) {
+    public ResponseEntity<String> createAccountForExistingUser(@RequestBody CompteDTO accountDTO) {
         try {
             compteService.createAccountForExistingUserAndSendEmail(accountDTO);
             return ResponseEntity.ok("Un compte a été créé pour cet utilisateur. Check your e-mail pour voir les informations sur vos compte");

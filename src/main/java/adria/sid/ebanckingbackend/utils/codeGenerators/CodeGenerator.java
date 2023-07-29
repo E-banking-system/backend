@@ -6,4 +6,5 @@ import org.springframework.stereotype.Service;
 public interface CodeGenerator {
     String generatePinCode();
     String generateRIBCode();
+    Long numeroCompte();
 }
