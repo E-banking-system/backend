@@ -3,8 +3,6 @@ package adria.sid.ebanckingbackend.controllers;
 
 import adria.sid.ebanckingbackend.dtos.compte.ChangeSoldeReqDTO;
 import adria.sid.ebanckingbackend.dtos.compte.*;
-import adria.sid.ebanckingbackend.entities.Compte;
-import adria.sid.ebanckingbackend.entities.Notification;
 import adria.sid.ebanckingbackend.exceptions.IdUserIsNotValideException;
 import adria.sid.ebanckingbackend.services.compte.CompteService;
 import jakarta.validation.Valid;
@@ -18,8 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Slf4j
 @RestController

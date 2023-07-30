@@ -1,6 +1,5 @@
 package adria.sid.ebanckingbackend.dtos.compte;
 
-import adria.sid.ebanckingbackend.ennumerations.EtatCompte;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;

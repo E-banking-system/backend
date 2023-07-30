@@ -136,10 +136,10 @@ public class CompteServiceImpl implements CompteService {
         UserEntity user=userRepository.findByRole(ERole.BANQUIER).get(0);
         Notification notification=new Notification();
         notification.setId(UUID.randomUUID().toString());
-        notification.setContenu("Compte : "+demandeSuspendDTO.getCompteId());
+        notification.setContenu("Id compte : "+demandeSuspendDTO.getCompteId());
         notification.setUser(user);
         notification.setDateEnvoie(new Date());
-        notification.setTitre("OUHEUDHEF");
+        notification.setTitre("Demande de suspend d'un compte");
         notificationRepository.save(notification);
         return notification;
     }

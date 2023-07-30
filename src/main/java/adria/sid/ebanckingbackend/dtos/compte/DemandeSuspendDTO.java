@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DemandeSuspendDTO {
-    @NotNull
+    @NotNull(message = "compte id is required")
     private String compteId;
 }

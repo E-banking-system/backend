@@ -75,7 +75,6 @@ public class RegistrationController {
             @RequestParam("token") String passwordResetToken,
             @RequestParam String password) {
         try {
-            System.out.println("after all" + password);
             String tokenValidationResult = authenticationService.validatePasswordResetToken(passwordResetToken);
             if (!tokenValidationResult.equalsIgnoreCase("valid")) {
                 return "Token invalid";
