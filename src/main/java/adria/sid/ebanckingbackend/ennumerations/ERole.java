@@ -23,12 +23,14 @@ public enum ERole {
                     ACTIVER_ACCOUNT,
                     SUSPENDER_ACCOUNT,
                     CHANGE_SOLDE,
-                    GET_CLIENT_COMPTES
+                    GET_CLIENT_COMPTES,
+                    GET_NOTIFICATIONS_BY_USER_ID
             )
     ),
     CLIENT(
             Set.of(
-                    GET_CLIENT_COMPTES
+                    GET_CLIENT_COMPTES,
+                    GET_NOTIFICATIONS_BY_USER_ID
             )
     );
 
