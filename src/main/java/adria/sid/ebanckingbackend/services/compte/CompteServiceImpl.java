@@ -2,19 +2,19 @@ package adria.sid.ebanckingbackend.services.compte;
 
 import adria.sid.ebanckingbackend.dtos.compte.CompteReqDTO;
 import adria.sid.ebanckingbackend.dtos.compte.CompteResDTO;
-import adria.sid.ebanckingbackend.ennumerations.EtatCompte;
 import adria.sid.ebanckingbackend.entities.Compte;
 import adria.sid.ebanckingbackend.entities.UserEntity;
 import adria.sid.ebanckingbackend.mappers.CompteMapper;
 import adria.sid.ebanckingbackend.repositories.CompteRepository;
 import adria.sid.ebanckingbackend.repositories.UserRepository;
 import adria.sid.ebanckingbackend.services.email.EmailSender;
-    import jakarta.transaction.Transactional;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.Optional;
 
 @Service
@@ -62,35 +62,50 @@ public class CompteServiceImpl implements CompteService {
     public void activerCompte(String compteId) {
         Compte compte = compteRepository.getCompteById(compteId);
         if (compte != null) {
-            compte.setEtatCompte(EtatCompte.ACTIVE);
+            compte.activerCompte();
             compteRepository.save(compte);
         } else {
             throw new IllegalArgumentException("Compte not found with the given ID");
         }
     }
-
-
-
 
     @Override
     public void blockCompte(String compteId) {
         Compte compte = compteRepository.getCompteById(compteId);
         if (compte != null) {
-            compte.setEtatCompte(EtatCompte.BLOCKE);
+            compte.setDerniereDateBloquage(new Date());
+            compte.blockerCompte();
             compteRepository.save(compte);
         } else {
             throw new IllegalArgumentException("Compte not found with the given ID");
         }
     }
 
-
-
     @Override
     public void suspendCompte(String compteId) {
         Compte compte = compteRepository.getCompteById(compteId);
         if (compte != null) {
-            compte.setEtatCompte(EtatCompte.SUSPENDU);
+            compte.setDerniereDateSuspention(new Date());
+            compte.suspenduCompte();
             compteRepository.save(compte);
+        } else {
+            throw new IllegalArgumentException("Compte not found with the given ID");
+        }
+    }
+
+    @Override
+    @Transactional
+    public void changeSolde(String compteId, Double montant) {
+        Compte compte = compteRepository.getCompteById(compteId);
+        if (compte != null) {
+            // Check if the new balance will be greater than or equal to zero
+            double newSolde = compte.getSolde() + montant;
+            if (newSolde >= 0) {
+                compte.setSolde(newSolde);
+                compteRepository.save(compte);
+            } else {
+                throw new IllegalArgumentException("Insufficient balance.");
+            }
         } else {
             throw new IllegalArgumentException("Compte not found with the given ID");
         }

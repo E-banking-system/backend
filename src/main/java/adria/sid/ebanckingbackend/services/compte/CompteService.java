@@ -13,4 +13,5 @@ public interface CompteService {
     void activerCompte(String compteId);
     void blockCompte(String compteId);
     void suspendCompte(String compteId);
+    void changeSolde(String compteId, Double montant);
 }

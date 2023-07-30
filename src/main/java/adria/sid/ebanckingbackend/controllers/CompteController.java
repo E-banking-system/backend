@@ -1,6 +1,7 @@
 package adria.sid.ebanckingbackend.controllers;
 
 
+import adria.sid.ebanckingbackend.dtos.compte.ChangeSoldeReqDTO;
 import adria.sid.ebanckingbackend.dtos.compte.*;
 import adria.sid.ebanckingbackend.services.compte.CompteService;
 import jakarta.validation.Valid;
@@ -92,4 +93,17 @@ public class CompteController {
         }
     }
 
+    @PostMapping("/change_solde")
+    @PreAuthorize("hasAuthority('banquier:change_solde')")
+    public ResponseEntity<String> changeSolde(@RequestBody @Valid ChangeSoldeReqDTO changeSoldeReqDTO) {
+        System.out.println("Montant :"+changeSoldeReqDTO.getMontant());
+        try {
+            compteService.changeSolde(changeSoldeReqDTO.getCompteId(), changeSoldeReqDTO.getMontant());
+            return ResponseEntity.ok("Solde modifié avec succès.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Une erreur est survenue lors de la modification du solde.");
+        }
+    }
 }

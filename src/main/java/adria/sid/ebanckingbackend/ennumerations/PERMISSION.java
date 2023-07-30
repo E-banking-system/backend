@@ -10,7 +10,8 @@ public enum PERMISSION {
     GET_ACCOUNTS("banquier:get_accounts"),
     BLOCK_ACCOUNT("banquier:blocker_compte"),
     ACTIVER_ACCOUNT("banquier:activer_compte"),
-    SUSPENDER_ACCOUNT("banquier:suspender_compte");
+    SUSPENDER_ACCOUNT("banquier:suspender_compte"),
+    CHANGE_SOLDE("banquier:change_solde");
 
     @Getter
     private final String permission;

@@ -10,4 +10,7 @@ import org.springframework.stereotype.Repository;
 public interface CompteRepository extends JpaRepository<Compte,String> {
     @Query("SELECT c FROM Compte c WHERE c.id = :compteId")
     Compte getCompteById(@Param("compteId") String compteId);
+
+    @Query("UPDATE Compte c SET c.solde = c.solde + :montant WHERE c.id = :compteId")
+    void changeSolde(@Param("compteId") String compteId, @Param("montant") Double montant);
 }

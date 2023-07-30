@@ -21,7 +21,8 @@ public enum ERole {
                     GET_ACCOUNTS,
                     BLOCK_ACCOUNT,
                     ACTIVER_ACCOUNT,
-                    SUSPENDER_ACCOUNT
+                    SUSPENDER_ACCOUNT,
+                    CHANGE_SOLDE
             )
     ),
     CLIENT(

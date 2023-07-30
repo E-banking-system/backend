@@ -59,7 +59,7 @@ public class SecurityConfiguration {
             .requestMatchers(POST, "/api/v1/compte/blocker/**").hasAuthority(BLOCK_ACCOUNT.name())
             .requestMatchers(POST, "/api/v1/compte/activer/**").hasAuthority(ACTIVER_ACCOUNT.name())
             .requestMatchers(POST, "/api/v1/compte/suspender/**").hasAuthority(SUSPENDER_ACCOUNT.name())
-
+            .requestMatchers(POST, "/api/v1/compte/change_solde/**").hasAuthority(CHANGE_SOLDE.name())
 
         .anyRequest()
           .authenticated()
