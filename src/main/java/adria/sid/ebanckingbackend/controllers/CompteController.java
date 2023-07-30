@@ -3,6 +3,8 @@ package adria.sid.ebanckingbackend.controllers;
 
 import adria.sid.ebanckingbackend.dtos.compte.ChangeSoldeReqDTO;
 import adria.sid.ebanckingbackend.dtos.compte.*;
+import adria.sid.ebanckingbackend.entities.Compte;
+import adria.sid.ebanckingbackend.exceptions.IdUserIsNotValideException;
 import adria.sid.ebanckingbackend.services.compte.CompteService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +17,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -30,6 +34,8 @@ public class CompteController {
         try {
             compteService.ajouterCompte(accountDTO);
             return ResponseEntity.ok("Un compte a été créé pour cet utilisateur. Check your e-mail pour voir les informations sur vos compte");
+        } catch (IdUserIsNotValideException e){
+            return ResponseEntity.badRequest().body("Id user is not valide");
         } catch (InternalError e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage());
         }
@@ -37,7 +43,7 @@ public class CompteController {
 
     @GetMapping
     @PreAuthorize("hasAuthority('banquier:get_accounts')")
-    public ResponseEntity<Page<CompteResDTO>> getAccounts(
+    public ResponseEntity<Page<CompteResDTO>> getAllClientsComptes(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "id") String sortBy
@@ -46,7 +52,7 @@ public class CompteController {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
 
         // Retrieve the paginated accounts data from the service
-        Page<CompteResDTO> comptePage = compteService.getAccounts(pageable);
+        Page<CompteResDTO> comptePage = compteService.getComptes(pageable);
 
         return ResponseEntity.ok(comptePage);
     }

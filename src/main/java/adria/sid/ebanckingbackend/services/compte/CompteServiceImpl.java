@@ -4,6 +4,7 @@ import adria.sid.ebanckingbackend.dtos.compte.CompteReqDTO;
 import adria.sid.ebanckingbackend.dtos.compte.CompteResDTO;
 import adria.sid.ebanckingbackend.entities.Compte;
 import adria.sid.ebanckingbackend.entities.UserEntity;
+import adria.sid.ebanckingbackend.exceptions.IdUserIsNotValideException;
 import adria.sid.ebanckingbackend.mappers.CompteMapper;
 import adria.sid.ebanckingbackend.repositories.CompteRepository;
 import adria.sid.ebanckingbackend.repositories.UserRepository;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -53,7 +55,7 @@ public class CompteServiceImpl implements CompteService {
     }
 
     @Override
-    public Page<CompteResDTO> getAccounts(Pageable pageable) {
+    public Page<CompteResDTO> getComptes(Pageable pageable) {
         Page<Compte> comptePage = compteRepository.findAll(pageable);
         return comptePage.map(compteMapper::fromCompteToCompteResDTO);
     }
@@ -108,6 +110,17 @@ public class CompteServiceImpl implements CompteService {
             }
         } else {
             throw new IllegalArgumentException("Compte not found with the given ID");
+        }
+    }
+
+    @Override
+    public List<CompteResDTO> getClientComptes(String userId) {
+        Optional<UserEntity> userOptional = userRepository.findById(userId);
+        if (userOptional.isPresent()) {
+            List<Compte> compteList = compteRepository.getComptesByUserId(userId);
+            return compteMapper.toComptesResDTOs(compteList);
+        } else {
+            throw new IdUserIsNotValideException("Id user is not valid");
         }
     }
 }
