@@ -22,7 +22,6 @@ import java.util.List;
 public class ClientController {
     private final CompteService compteService;
     @GetMapping("/comptes")
-    @PreAuthorize("hasAuthority('client:get_client_comptes')")
     public ResponseEntity<?> getClientComptes(
             @RequestParam String userId
     ) {

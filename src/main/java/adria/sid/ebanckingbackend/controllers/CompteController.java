@@ -14,7 +14,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -26,7 +25,6 @@ public class CompteController {
     private final CompteService compteService;
 
     @PostMapping
-    @PreAuthorize("hasAuthority('banquier:banquier_suite_registration_client')")
     public ResponseEntity<String> saveCompte(@RequestBody @Valid CompteReqDTO accountDTO) {
         try {
             compteService.ajouterCompte(accountDTO);
@@ -39,7 +37,6 @@ public class CompteController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAuthority('banquier:get_accounts')")
     public ResponseEntity<Page<CompteResDTO>> getComptes(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
@@ -55,7 +52,6 @@ public class CompteController {
     }
 
     @PostMapping("/activer")
-    @PreAuthorize("hasAuthority('banquier:activer_compte')")
     public ResponseEntity<String> activateCompte(@RequestBody ActiverCompteReqDTO activerCompteReqDTO) {
         try {
             compteService.activerCompte(activerCompteReqDTO.getId());
@@ -68,7 +64,6 @@ public class CompteController {
     }
 
     @PostMapping("/blocker")
-    @PreAuthorize("hasAuthority('banquier:blocker_compte')")
     public ResponseEntity<String> blockCompte(@RequestBody BlockerCompteReqDTO blockCompteReqDTO) {
         try {
             compteService.blockCompte(blockCompteReqDTO.getId());
@@ -81,7 +76,6 @@ public class CompteController {
     }
 
     @PostMapping("/suspender")
-    @PreAuthorize("hasAuthority('banquier:suspender_compte')")
     public ResponseEntity<String> suspendCompte(@RequestBody SuspenderCompteReqDTO suspenderCompteReqDTO) {
         try {
             compteService.suspendCompte(suspenderCompteReqDTO.getId());
@@ -94,7 +88,6 @@ public class CompteController {
     }
 
     @PostMapping("/change_solde")
-    @PreAuthorize("hasAuthority('banquier:change_solde')")
     public ResponseEntity<String> changeSolde(@RequestBody @Valid ChangeSoldeReqDTO changeSoldeReqDTO) {
         try {
             compteService.changeSolde(changeSoldeReqDTO.getCompteId(), changeSoldeReqDTO.getMontant());
@@ -107,11 +100,30 @@ public class CompteController {
     }
 
     @PostMapping("/demande_suspend")
-    @PreAuthorize("hasAuthority('client:demande_suspend_compte')")
     public ResponseEntity<String> demandeSuspend(@RequestBody @Valid DemandeSuspendDTO demandeSuspendDTO){
         try {
             compteService.demandeSuspendCompte(demandeSuspendDTO);
             return ResponseEntity.ok("Demande de suspend du compte a été envoyé avec succès.");
+        } catch (Exception e){
+            return ResponseEntity.internalServerError().body("Une erreur est survenue lors de la modification du solde.");
+        }
+    }
+
+    @PostMapping("/demande_block")
+    public ResponseEntity<String> demandeBlock(@RequestBody @Valid DemandeBlockDTO demandeBlockDTO){
+        try {
+            compteService.demandeBlockCompte(demandeBlockDTO);
+            return ResponseEntity.ok("Demande de block du compte a été envoyé avec succès.");
+        } catch (Exception e){
+            return ResponseEntity.internalServerError().body("Une erreur est survenue lors de la modification du solde.");
+        }
+    }
+
+    @PostMapping("/demande_activer")
+    public ResponseEntity<String> demandeActiver(@RequestBody @Valid DemandeActivateDTO demandeActivateDTO){
+        try {
+            compteService.demandeActivateCompte(demandeActivateDTO);
+            return ResponseEntity.ok("Demande d'activer du compte a été envoyé avec succès.");
         } catch (Exception e){
             return ResponseEntity.internalServerError().body("Une erreur est survenue lors de la modification du solde.");
         }

@@ -16,7 +16,6 @@ import org.springframework.security.web.authentication.logout.LogoutHandler;
 
 import static adria.sid.ebanckingbackend.ennumerations.ERole.BANQUIER;
 import static adria.sid.ebanckingbackend.ennumerations.ERole.CLIENT;
-import static adria.sid.ebanckingbackend.ennumerations.PERMISSION.*;
 import static org.springframework.http.HttpMethod.*;
 
 @Configuration
@@ -52,18 +51,19 @@ public class SecurityConfiguration {
         )
         .permitAll()
         .requestMatchers(GET,"/api/v1/notification/**").hasAnyRole(BANQUIER.name(),CLIENT.name())
-        .requestMatchers("/api/v1/client/**").hasRole(CLIENT.name())
-        .requestMatchers(GET, "/api/v1/client/comptes/**").hasAuthority(GET_CLIENT_COMPTES.name())
-        .requestMatchers(POST, "/api/v1/compte/demande_suspend/**").hasRole(CLIENT.name())
 
-        .requestMatchers("/api/v1/compte/**").hasRole(BANQUIER.name())
-        .requestMatchers(POST, "/api/v1/compte/**").hasAuthority(BANQUIER_SUITE_REGISTRATION_CLIENT.name())
-        .requestMatchers(GET, "/api/v1/compte/**").hasAuthority(GET_ACCOUNTS.name())
-        .requestMatchers(POST, "/api/v1/compte/blocker/**").hasAuthority(BLOCK_ACCOUNT.name())
-        .requestMatchers(POST, "/api/v1/compte/activer/**").hasAuthority(ACTIVER_ACCOUNT.name())
-        .requestMatchers(POST, "/api/v1/compte/suspender/**").hasAuthority(SUSPENDER_ACCOUNT.name())
-        .requestMatchers(POST, "/api/v1/compte/change_solde/**").hasAuthority(CHANGE_SOLDE.name())
-        .requestMatchers(GET, "/api/v1/client/comptes/**").hasAuthority(GET_CLIENT_COMPTES.name())
+        .requestMatchers(GET, "/api/v1/client/comptes/**").hasRole(CLIENT.name())
+        .requestMatchers(POST, "/api/v1/compte/demande_suspend/**").hasRole(CLIENT.name())
+        .requestMatchers(POST, "/api/v1/compte/demande_activer/**").hasRole(CLIENT.name())
+        .requestMatchers(POST, "/api/v1/compte/demande_block/**").hasRole(CLIENT.name())
+
+        .requestMatchers(POST, "/api/v1/compte/**").hasRole(BANQUIER.name())
+        .requestMatchers(GET, "/api/v1/compte/**").hasRole(BANQUIER.name())
+        .requestMatchers(POST, "/api/v1/compte/blocker/**").hasRole(BANQUIER.name())
+        .requestMatchers(POST, "/api/v1/compte/activer/**").hasRole(BANQUIER.name())
+        .requestMatchers(POST, "/api/v1/compte/suspender/**").hasRole(BANQUIER.name())
+        .requestMatchers(POST, "/api/v1/compte/change_solde/**").hasRole(BANQUIER.name())
+        .requestMatchers(GET, "/api/v1/client/comptes/**").hasRole(BANQUIER.name())
 
         .anyRequest()
           .authenticated()

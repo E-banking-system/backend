@@ -1,8 +1,6 @@
 package adria.sid.ebanckingbackend.services.compte;
 
-import adria.sid.ebanckingbackend.dtos.compte.CompteReqDTO;
-import adria.sid.ebanckingbackend.dtos.compte.CompteResDTO;
-import adria.sid.ebanckingbackend.dtos.compte.DemandeSuspendDTO;
+import adria.sid.ebanckingbackend.dtos.compte.*;
 import adria.sid.ebanckingbackend.ennumerations.ERole;
 import adria.sid.ebanckingbackend.entities.Compte;
 import adria.sid.ebanckingbackend.entities.Notification;
@@ -140,6 +138,32 @@ public class CompteServiceImpl implements CompteService {
         notification.setUser(user);
         notification.setDateEnvoie(new Date());
         notification.setTitre("Demande de suspend d'un compte");
+        notificationRepository.save(notification);
+        return notification;
+    }
+
+    @Override
+    public Notification demandeBlockCompte(DemandeBlockDTO demandeBlockDTO){
+        UserEntity user=userRepository.findByRole(ERole.BANQUIER).get(0);
+        Notification notification=new Notification();
+        notification.setId(UUID.randomUUID().toString());
+        notification.setContenu("Id compte : "+demandeBlockDTO.getCompteId());
+        notification.setUser(user);
+        notification.setDateEnvoie(new Date());
+        notification.setTitre("Demande de block d'un compte");
+        notificationRepository.save(notification);
+        return notification;
+    }
+
+    @Override
+    public Notification demandeActivateCompte(DemandeActivateDTO demandeActivateDTO){
+        UserEntity user=userRepository.findByRole(ERole.BANQUIER).get(0);
+        Notification notification=new Notification();
+        notification.setId(UUID.randomUUID().toString());
+        notification.setContenu("Id compte : "+demandeActivateDTO.getCompteId());
+        notification.setUser(user);
+        notification.setDateEnvoie(new Date());
+        notification.setTitre("Demande d'activer d'un compte");
         notificationRepository.save(notification);
         return notification;
     }

@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DemandeBlockDTO {
+public class DemandeActivateDTO {
     @NotNull(message = "compte id is required")
     private String compteId;
 }

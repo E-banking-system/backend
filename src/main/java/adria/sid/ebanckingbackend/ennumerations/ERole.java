@@ -31,7 +31,9 @@ public enum ERole {
             Set.of(
                     GET_CLIENT_COMPTES,
                     GET_NOTIFICATIONS_BY_USER_ID,
-                    DEMANDE_SUSPEND_COMPTE
+                    DEMANDE_SUSPEND_COMPTE,
+                    DEMANDE_ACTIVATE_COMPTE,
+                    DEMANDE_BLOCK_COMPTE
             )
     );
 
