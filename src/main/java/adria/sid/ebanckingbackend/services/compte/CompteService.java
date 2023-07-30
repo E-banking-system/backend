@@ -2,7 +2,9 @@ package adria.sid.ebanckingbackend.services.compte;
 
 import adria.sid.ebanckingbackend.dtos.compte.CompteReqDTO;
 import adria.sid.ebanckingbackend.dtos.compte.CompteResDTO;
+import adria.sid.ebanckingbackend.dtos.compte.DemandeSuspendDTO;
 import adria.sid.ebanckingbackend.entities.Compte;
+import adria.sid.ebanckingbackend.entities.Notification;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -18,4 +20,5 @@ public interface CompteService {
     void suspendCompte(String compteId);
     void changeSolde(String compteId, Double montant);
     List<CompteResDTO> getClientComptes(String userId);
+    Notification demandeSuspendCompte(DemandeSuspendDTO demandeSuspendDTO);
 }

@@ -4,6 +4,7 @@ package adria.sid.ebanckingbackend.controllers;
 import adria.sid.ebanckingbackend.dtos.compte.ChangeSoldeReqDTO;
 import adria.sid.ebanckingbackend.dtos.compte.*;
 import adria.sid.ebanckingbackend.entities.Compte;
+import adria.sid.ebanckingbackend.entities.Notification;
 import adria.sid.ebanckingbackend.exceptions.IdUserIsNotValideException;
 import adria.sid.ebanckingbackend.services.compte.CompteService;
 import jakarta.validation.Valid;
@@ -30,7 +31,7 @@ public class CompteController {
 
     @PostMapping
     @PreAuthorize("hasAuthority('banquier:banquier_suite_registration_client')")
-    public ResponseEntity<String> createAccountForExistingUser(@RequestBody @Valid CompteReqDTO accountDTO) {
+    public ResponseEntity<String> saveCompte(@RequestBody @Valid CompteReqDTO accountDTO) {
         try {
             compteService.ajouterCompte(accountDTO);
             return ResponseEntity.ok("Un compte a été créé pour cet utilisateur. Check your e-mail pour voir les informations sur vos compte");
@@ -43,7 +44,7 @@ public class CompteController {
 
     @GetMapping
     @PreAuthorize("hasAuthority('banquier:get_accounts')")
-    public ResponseEntity<Page<CompteResDTO>> getAllClientsComptes(
+    public ResponseEntity<Page<CompteResDTO>> getComptes(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "id") String sortBy
@@ -59,8 +60,7 @@ public class CompteController {
 
     @PostMapping("/activer")
     @PreAuthorize("hasAuthority('banquier:activer_compte')")
-    public ResponseEntity<String> activerCompte(@RequestBody ActiverCompteReqDTO activerCompteReqDTO) {
-        // Call the correct method in the service to activate the compte
+    public ResponseEntity<String> activateCompte(@RequestBody ActiverCompteReqDTO activerCompteReqDTO) {
         try {
             compteService.activerCompte(activerCompteReqDTO.getId());
             return ResponseEntity.ok("Compte activé avec succès.");
@@ -73,8 +73,7 @@ public class CompteController {
 
     @PostMapping("/blocker")
     @PreAuthorize("hasAuthority('banquier:blocker_compte')")
-    public ResponseEntity<String> blockerCompte(@RequestBody BlockerCompteReqDTO blockCompteReqDTO) {
-        // Call the correct method in the service to block the compte
+    public ResponseEntity<String> blockCompte(@RequestBody BlockerCompteReqDTO blockCompteReqDTO) {
         try {
             compteService.blockCompte(blockCompteReqDTO.getId());
             return ResponseEntity.ok("Compte bloqué avec succès.");
@@ -87,8 +86,7 @@ public class CompteController {
 
     @PostMapping("/suspender")
     @PreAuthorize("hasAuthority('banquier:suspender_compte')")
-    public ResponseEntity<String> suspenderCompte(@RequestBody SuspenderCompteReqDTO suspenderCompteReqDTO) {
-        // Call the correct method in the service to suspend the compte
+    public ResponseEntity<String> suspendCompte(@RequestBody SuspenderCompteReqDTO suspenderCompteReqDTO) {
         try {
             compteService.suspendCompte(suspenderCompteReqDTO.getId());
             return ResponseEntity.ok("Compte suspendu avec succès.");
@@ -102,13 +100,23 @@ public class CompteController {
     @PostMapping("/change_solde")
     @PreAuthorize("hasAuthority('banquier:change_solde')")
     public ResponseEntity<String> changeSolde(@RequestBody @Valid ChangeSoldeReqDTO changeSoldeReqDTO) {
-        System.out.println("Montant :"+changeSoldeReqDTO.getMontant());
         try {
             compteService.changeSolde(changeSoldeReqDTO.getCompteId(), changeSoldeReqDTO.getMontant());
             return ResponseEntity.ok("Solde modifié avec succès.");
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Une erreur est survenue lors de la modification du solde.");
+        }
+    }
+
+    @PostMapping("/demande_suspend")
+    @PreAuthorize("hasAuthority('client:demande_suspend_compte')")
+    public ResponseEntity<String> demandeSuspend(@RequestBody @Valid DemandeSuspendDTO demandeSuspendDTO){
+        try {
+            compteService.demandeSuspendCompte(demandeSuspendDTO);
+            return ResponseEntity.ok("Demande de suspend du compte a été envoyé avec succès.");
+        } catch (Exception e){
             return ResponseEntity.internalServerError().body("Une erreur est survenue lors de la modification du solde.");
         }
     }

@@ -4,6 +4,7 @@ import adria.sid.ebanckingbackend.dtos.compte.CompteResDTO;
 import adria.sid.ebanckingbackend.dtos.notification.NotificationResDTO;
 import adria.sid.ebanckingbackend.entities.Notification;
 import adria.sid.ebanckingbackend.services.notification.NotificationService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -23,7 +24,7 @@ public class NotificationController {
     final private NotificationService notificationService;
 
     @GetMapping
-    public ResponseEntity<Page<NotificationResDTO>> getNotificationByUserId(
+    public ResponseEntity<Page<NotificationResDTO>> getNotificationByUser(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "id") String sortBy,

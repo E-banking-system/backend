@@ -7,10 +7,12 @@ import adria.sid.ebanckingbackend.mappers.NotificationMapper;
 import adria.sid.ebanckingbackend.repositories.NotificationRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -35,8 +37,11 @@ public class NotificationServiceImpl implements NotificationService{
 
     @Override
     public Page<NotificationResDTO> getNotificationsByUserId(Pageable pageable, String userId) {
-        Page<Notification> notificationPage = notificationRepository.findAll(pageable);
-        return notificationPage.map(notificationMapper::fromNotificationToNotificationResDTO);
+        List<Notification> notifications = notificationRepository.getNotificationsByUserId(userId);
+        List<NotificationResDTO> notificationResDTOList = notifications.stream()
+                .map(notificationMapper::fromNotificationToNotificationResDTO)
+                .collect(Collectors.toList());
 
+        return new PageImpl<>(notificationResDTOList, pageable, notifications.size());
     }
 }

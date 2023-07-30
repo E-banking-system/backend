@@ -13,7 +13,8 @@ public enum PERMISSION {
     SUSPENDER_ACCOUNT("banquier:suspender_compte"),
     CHANGE_SOLDE("banquier:change_solde"),
     GET_CLIENT_COMPTES("client:get_client_comptes"),
-    GET_NOTIFICATIONS_BY_USER_ID("banquier:get_notification");
+    GET_NOTIFICATIONS_BY_USER_ID("banquier:get_notification"),
+    DEMANDE_SUSPEND_COMPTE("client:demande_suspend_compte");
 
     @Getter
     private final String permission;

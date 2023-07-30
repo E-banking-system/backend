@@ -30,7 +30,8 @@ public enum ERole {
     CLIENT(
             Set.of(
                     GET_CLIENT_COMPTES,
-                    GET_NOTIFICATIONS_BY_USER_ID
+                    GET_NOTIFICATIONS_BY_USER_ID,
+                    DEMANDE_SUSPEND_COMPTE
             )
     );
 

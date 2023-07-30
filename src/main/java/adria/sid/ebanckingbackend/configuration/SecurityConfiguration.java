@@ -55,6 +55,7 @@ public class SecurityConfiguration {
         .requestMatchers("/api/v1/client/**").hasRole(CLIENT.name())
         //.requestMatchers(GET, "/api/v1/notification/**").hasAuthority(GET_NOTIFICATIONS_BY_USER_ID.name())
         .requestMatchers(GET, "/api/v1/client/comptes/**").hasAuthority(GET_CLIENT_COMPTES.name())
+        .requestMatchers(POST, "/api/v1/compte/demande_suspend/**").hasRole(CLIENT.name())
 
         .requestMatchers("/api/v1/compte/**").hasRole(BANQUIER.name())
         //.requestMatchers(GET, "/api/v1/notification/**").hasAuthority(GET_NOTIFICATIONS_BY_USER_ID.name())

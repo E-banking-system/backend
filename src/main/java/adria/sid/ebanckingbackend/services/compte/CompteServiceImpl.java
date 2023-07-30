@@ -2,13 +2,18 @@ package adria.sid.ebanckingbackend.services.compte;
 
 import adria.sid.ebanckingbackend.dtos.compte.CompteReqDTO;
 import adria.sid.ebanckingbackend.dtos.compte.CompteResDTO;
+import adria.sid.ebanckingbackend.dtos.compte.DemandeSuspendDTO;
+import adria.sid.ebanckingbackend.ennumerations.ERole;
 import adria.sid.ebanckingbackend.entities.Compte;
+import adria.sid.ebanckingbackend.entities.Notification;
 import adria.sid.ebanckingbackend.entities.UserEntity;
 import adria.sid.ebanckingbackend.exceptions.IdUserIsNotValideException;
 import adria.sid.ebanckingbackend.mappers.CompteMapper;
 import adria.sid.ebanckingbackend.repositories.CompteRepository;
+import adria.sid.ebanckingbackend.repositories.NotificationRepository;
 import adria.sid.ebanckingbackend.repositories.UserRepository;
 import adria.sid.ebanckingbackend.services.email.EmailSender;
+import adria.sid.ebanckingbackend.services.notification.NotificationService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,6 +23,7 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -25,6 +31,7 @@ public class CompteServiceImpl implements CompteService {
 
     final private CompteRepository compteRepository;
     final private UserRepository userRepository;
+    final private NotificationRepository notificationRepository;
     final private EmailSender emailSender;
     final private CompteMapper compteMapper;
 
@@ -122,5 +129,18 @@ public class CompteServiceImpl implements CompteService {
         } else {
             throw new IdUserIsNotValideException("Id user is not valid");
         }
+    }
+
+    @Override
+    public Notification demandeSuspendCompte(DemandeSuspendDTO demandeSuspendDTO){
+        UserEntity user=userRepository.findByRole(ERole.BANQUIER).get(0);
+        Notification notification=new Notification();
+        notification.setId(UUID.randomUUID().toString());
+        notification.setContenu("Compte : "+demandeSuspendDTO.getCompteId());
+        notification.setUser(user);
+        notification.setDateEnvoie(new Date());
+        notification.setTitre("OUHEUDHEF");
+        notificationRepository.save(notification);
+        return notification;
     }
 }
