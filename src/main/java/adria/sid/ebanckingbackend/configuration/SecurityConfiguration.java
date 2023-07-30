@@ -37,7 +37,6 @@ public class SecurityConfiguration {
         .disable()
         .authorizeHttpRequests()
         .requestMatchers(
-                "/api/v1/notification/user/**",
                 "/api/v1/auth/**",
                 "/api/v1/register/**",
                 "/v2/api-docs",
@@ -52,20 +51,20 @@ public class SecurityConfiguration {
                 "/swagger-ui.html"
         )
         .permitAll()
+        .requestMatchers(GET,"/api/v1/notification/**").hasAnyRole(BANQUIER.name(),CLIENT.name())
         .requestMatchers("/api/v1/client/**").hasRole(CLIENT.name())
-          .requestMatchers(GET, "/api/v1/client/comptes/**").hasAuthority(GET_CLIENT_COMPTES.name())
-          .requestMatchers(GET, "/api/v1/notification/user/**").hasAuthority(GET_NOTIFICATIONS_BY_USER_ID.name())
-
+        //.requestMatchers(GET, "/api/v1/notification/**").hasAuthority(GET_NOTIFICATIONS_BY_USER_ID.name())
+        .requestMatchers(GET, "/api/v1/client/comptes/**").hasAuthority(GET_CLIENT_COMPTES.name())
 
         .requestMatchers("/api/v1/compte/**").hasRole(BANQUIER.name())
-          .requestMatchers(POST, "/api/v1/compte/**").hasAuthority(BANQUIER_SUITE_REGISTRATION_CLIENT.name())
-          .requestMatchers(GET, "/api/v1/compte/**").hasAuthority(GET_ACCOUNTS.name())
-          .requestMatchers(POST, "/api/v1/compte/blocker/**").hasAuthority(BLOCK_ACCOUNT.name())
-          .requestMatchers(POST, "/api/v1/compte/activer/**").hasAuthority(ACTIVER_ACCOUNT.name())
-          .requestMatchers(POST, "/api/v1/compte/suspender/**").hasAuthority(SUSPENDER_ACCOUNT.name())
-          .requestMatchers(POST, "/api/v1/compte/change_solde/**").hasAuthority(CHANGE_SOLDE.name())
-          .requestMatchers(GET, "/api/v1/client/comptes/**").hasAuthority(GET_CLIENT_COMPTES.name())
-          .requestMatchers(GET, "/api/v1/notification/**").hasAuthority(GET_NOTIFICATIONS_BY_USER_ID.name())
+        //.requestMatchers(GET, "/api/v1/notification/**").hasAuthority(GET_NOTIFICATIONS_BY_USER_ID.name())
+        .requestMatchers(POST, "/api/v1/compte/**").hasAuthority(BANQUIER_SUITE_REGISTRATION_CLIENT.name())
+        .requestMatchers(GET, "/api/v1/compte/**").hasAuthority(GET_ACCOUNTS.name())
+        .requestMatchers(POST, "/api/v1/compte/blocker/**").hasAuthority(BLOCK_ACCOUNT.name())
+        .requestMatchers(POST, "/api/v1/compte/activer/**").hasAuthority(ACTIVER_ACCOUNT.name())
+        .requestMatchers(POST, "/api/v1/compte/suspender/**").hasAuthority(SUSPENDER_ACCOUNT.name())
+        .requestMatchers(POST, "/api/v1/compte/change_solde/**").hasAuthority(CHANGE_SOLDE.name())
+        .requestMatchers(GET, "/api/v1/client/comptes/**").hasAuthority(GET_CLIENT_COMPTES.name())
 
         .anyRequest()
           .authenticated()

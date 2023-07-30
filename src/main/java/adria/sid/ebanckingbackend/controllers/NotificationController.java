@@ -1,5 +1,6 @@
 package adria.sid.ebanckingbackend.controllers;
 
+import adria.sid.ebanckingbackend.dtos.compte.CompteResDTO;
 import adria.sid.ebanckingbackend.dtos.notification.NotificationResDTO;
 import adria.sid.ebanckingbackend.entities.Notification;
 import adria.sid.ebanckingbackend.services.notification.NotificationService;
@@ -21,8 +22,7 @@ import org.springframework.web.bind.annotation.*;
 public class NotificationController {
     final private NotificationService notificationService;
 
-    @GetMapping("/user")
-    @PreAuthorize("hasAuthority('banquier_client:get_notifications_by_user_id')")
+    @GetMapping
     public ResponseEntity<Page<NotificationResDTO>> getNotificationByUserId(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
