@@ -42,10 +42,8 @@ public class CompteController {
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "id") String sortBy
     ) {
-        // Create a Pageable object to represent the pagination information
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
 
-        // Retrieve the paginated accounts data from the service
         Page<CompteResDTO> comptePage = compteService.getComptes(pageable);
 
         return ResponseEntity.ok(comptePage);
@@ -54,7 +52,7 @@ public class CompteController {
     @PostMapping("/activer")
     public ResponseEntity<String> activateCompte(@RequestBody ActiverCompteReqDTO activerCompteReqDTO) {
         try {
-            compteService.activerCompte(activerCompteReqDTO.getId());
+            compteService.activerCompte(activerCompteReqDTO.getCompteId());
             return ResponseEntity.ok("Compte activé avec succès.");
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body("Compte non trouvé avec l'ID donné.");
@@ -66,7 +64,7 @@ public class CompteController {
     @PostMapping("/blocker")
     public ResponseEntity<String> blockCompte(@RequestBody BlockerCompteReqDTO blockCompteReqDTO) {
         try {
-            compteService.blockCompte(blockCompteReqDTO.getId());
+            compteService.blockCompte(blockCompteReqDTO.getCompteId());
             return ResponseEntity.ok("Compte bloqué avec succès.");
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body("Compte non trouvé avec l'ID donné.");
@@ -78,7 +76,7 @@ public class CompteController {
     @PostMapping("/suspender")
     public ResponseEntity<String> suspendCompte(@RequestBody SuspenderCompteReqDTO suspenderCompteReqDTO) {
         try {
-            compteService.suspendCompte(suspenderCompteReqDTO.getId());
+            compteService.suspendCompte(suspenderCompteReqDTO.getCompteId());
             return ResponseEntity.ok("Compte suspendu avec succès.");
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body("Compte non trouvé avec l'ID donné.");

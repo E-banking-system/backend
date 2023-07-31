@@ -8,12 +8,12 @@ import adria.sid.ebanckingbackend.entities.UserEntity;
 import adria.sid.ebanckingbackend.exceptions.IdUserIsNotValideException;
 import adria.sid.ebanckingbackend.mappers.CompteMapper;
 import adria.sid.ebanckingbackend.repositories.CompteRepository;
-import adria.sid.ebanckingbackend.repositories.NotificationRepository;
 import adria.sid.ebanckingbackend.repositories.UserRepository;
 import adria.sid.ebanckingbackend.services.email.EmailSender;
 import adria.sid.ebanckingbackend.services.notification.NotificationService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -25,25 +25,24 @@ import java.util.UUID;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class CompteServiceImpl implements CompteService {
 
     final private CompteRepository compteRepository;
     final private UserRepository userRepository;
-    final private NotificationRepository notificationRepository;
+    final private NotificationService notificationService;
     final private EmailSender emailSender;
     final private CompteMapper compteMapper;
 
     @Override
     @Transactional
     public void ajouterCompte(CompteReqDTO compteDTO) {
-        // Input validation
         if (compteDTO == null || compteDTO.getEmail() == null) {
             throw new IllegalArgumentException("Invalid compte");
         }
 
         Compte newCompte = compteMapper.fromCompteDTOToCompte(compteDTO);
 
-        // Get the existing user if present
         Optional<UserEntity> existingUserOptional = userRepository.findByEmail(compteDTO.getEmail());
 
         if (existingUserOptional.isPresent()) {
@@ -54,8 +53,10 @@ public class CompteServiceImpl implements CompteService {
 
             // Send account info email to existing user
             emailSender.sendAccountInfosByEmail(existingUser, newCompte.getCodePIN());
+
+            log.info("Added compte for user with email: {}", compteDTO.getEmail());
         } else {
-            System.out.println("The user is not found.");
+            log.warn("User with email {} not found.", compteDTO.getEmail());
         }
     }
 
@@ -71,6 +72,8 @@ public class CompteServiceImpl implements CompteService {
         if (compte != null) {
             compte.activerCompte();
             compteRepository.save(compte);
+
+            log.info("Activated compte with ID: {}", compteId);
         } else {
             throw new IllegalArgumentException("Compte not found with the given ID");
         }
@@ -83,6 +86,8 @@ public class CompteServiceImpl implements CompteService {
             compte.setDerniereDateBloquage(new Date());
             compte.blockerCompte();
             compteRepository.save(compte);
+
+            log.info("Blocked compte with ID: {}", compteId);
         } else {
             throw new IllegalArgumentException("Compte not found with the given ID");
         }
@@ -95,6 +100,8 @@ public class CompteServiceImpl implements CompteService {
             compte.setDerniereDateSuspention(new Date());
             compte.suspenduCompte();
             compteRepository.save(compte);
+
+            log.info("Suspended compte with ID: {}", compteId);
         } else {
             throw new IllegalArgumentException("Compte not found with the given ID");
         }
@@ -105,11 +112,12 @@ public class CompteServiceImpl implements CompteService {
     public void changeSolde(String compteId, Double montant) {
         Compte compte = compteRepository.getCompteById(compteId);
         if (compte != null) {
-            // Check if the new balance will be greater than or equal to zero
             double newSolde = compte.getSolde() + montant;
             if (newSolde >= 0) {
                 compte.setSolde(newSolde);
                 compteRepository.save(compte);
+
+                log.info("Changed solde for compte with ID: {} by amount: {}", compteId, montant);
             } else {
                 throw new IllegalArgumentException("Insufficient balance.");
             }
@@ -138,7 +146,9 @@ public class CompteServiceImpl implements CompteService {
         notification.setUser(user);
         notification.setDateEnvoie(new Date());
         notification.setTitre("Demande de suspend d'un compte");
-        notificationRepository.save(notification);
+        notificationService.saveNotification(notification);
+
+        log.info("Sent demande de suspend d'un compte notification with ID: {}", notification.getId());
         return notification;
     }
 
@@ -151,7 +161,9 @@ public class CompteServiceImpl implements CompteService {
         notification.setUser(user);
         notification.setDateEnvoie(new Date());
         notification.setTitre("Demande de block d'un compte");
-        notificationRepository.save(notification);
+        notificationService.saveNotification(notification);
+
+        log.info("Sent demande de block d'un compte notification with ID: {}", notification.getId());
         return notification;
     }
 
@@ -164,7 +176,9 @@ public class CompteServiceImpl implements CompteService {
         notification.setUser(user);
         notification.setDateEnvoie(new Date());
         notification.setTitre("Demande d'activer d'un compte");
-        notificationRepository.save(notification);
+        notificationService.saveNotification(notification);
+
+        log.info("Sent demande d'activer d'un compte notification with ID: {}", notification.getId());
         return notification;
     }
 }

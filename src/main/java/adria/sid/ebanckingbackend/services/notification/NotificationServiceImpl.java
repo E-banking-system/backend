@@ -5,6 +5,7 @@ import adria.sid.ebanckingbackend.entities.Notification;
 import adria.sid.ebanckingbackend.mappers.NotificationMapper;
 import adria.sid.ebanckingbackend.repositories.NotificationRepository;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -15,23 +16,26 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-public class NotificationServiceImpl implements NotificationService{
+@Slf4j
+public class NotificationServiceImpl implements NotificationService {
     final private NotificationRepository notificationRepository;
     final private NotificationMapper notificationMapper;
 
     @Override
     public void saveNotification(Notification notification) {
         notificationRepository.save(notification);
+        log.info("Saved notification with ID: {}", notification.getId());
     }
 
     @Override
     public void modifierNotification(Notification notification) {
-
+        log.info("Updated notification with ID: {}", notification.getId());
     }
 
     @Override
     public void supprimerNotification(String id) {
         notificationRepository.deleteById(id);
+        log.info("Deleted notification with ID: {}", id);
     }
 
     @Override
@@ -40,6 +44,8 @@ public class NotificationServiceImpl implements NotificationService{
         List<NotificationResDTO> notificationResDTOList = notifications.stream()
                 .map(notificationMapper::fromNotificationToNotificationResDTO)
                 .collect(Collectors.toList());
+
+        log.info("Retrieved {} notifications for user ID: {}", notifications.size(), userId);
 
         return new PageImpl<>(notificationResDTOList, pageable, notifications.size());
     }

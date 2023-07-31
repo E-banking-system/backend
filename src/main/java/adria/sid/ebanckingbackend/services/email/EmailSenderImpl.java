@@ -33,8 +33,6 @@ public class EmailSenderImpl implements EmailSender {
         emailCorps.setToEmail(userEntity.getEmail());
         emailCorps.setBody(emailBody);
 
-
-
         emailCorps.setSenderName(senderName);
         emailCorps.setSubject("vérification email");
 
@@ -84,8 +82,6 @@ public class EmailSenderImpl implements EmailSender {
         emailCorps.setBody(htmlCodeGenerator.generateActivatedAccountInfoEmail(pin, senderName));
         emailCorps.setFromEmail("etafweb2021@gmail.com");
         emailCorps.setToEmail(userEntity.getEmail());
-
-
 
         emailCorps.setSenderName(senderName);
         emailCorps.setSubject("account infos");

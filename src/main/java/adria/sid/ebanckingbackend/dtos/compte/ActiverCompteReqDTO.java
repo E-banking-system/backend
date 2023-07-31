@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ActiverCompteReqDTO {
     @NotNull(message = "id is required")
-    private String id;
+    private String compteId;
 }

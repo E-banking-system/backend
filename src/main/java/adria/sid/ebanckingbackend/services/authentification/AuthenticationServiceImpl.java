@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -38,6 +39,7 @@ import java.util.UUID;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class AuthenticationServiceImpl implements AuthenticationService {
   private final UserRepository userRepository;
   private final TokenUserRepository tokenUserRepository;
@@ -62,7 +64,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     UserEntity user = clientPhysiqueMapper.fromClientPhysiqueToUser(clientPhysiqueDTO);
     String encodedPassword = passwordEncoder.encode(clientPhysiqueDTO.getPassword());
     user.setPassword(encodedPassword); // Make sure the password is properly encoded before saving
-
+    log.info("Registered new client physique with email: {}", email);
     return getUserEntity(url, user);
   }
 
@@ -77,7 +79,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     UserEntity user = clientMoraleMapper.fromClientMoraleToUser(clientMoraleDTO);
     String encodedPassword = passwordEncoder.encode(clientMoraleDTO.getPassword());
     user.setPassword(encodedPassword); // Make sure the password is properly encoded before saving
-
+    log.info("Registered new client morale with email: {}", email);
     return getUserEntity(url, user);
   }
 
@@ -105,13 +107,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
       var refreshToken = jwtService.generateRefreshToken(user);
       revokeAllUserTokens(user);
       saveUserToken(user, jwtToken);
-
+      log.info("User authenticated successfully: {}", request.getEmail());
       return AuthResDTO.builder()
               .accessToken(jwtToken)
               .refreshToken(refreshToken)
               .role(user.getRole().toString())
               .build();
     } catch (BadCredentialsException e) {
+      log.warn("Invalid email or password for authentication request: {}", request.getEmail());
       throw new BadCredentialsException("Invalid email or password");
     } catch (UserHasNotAnyCompte e) {
       throw e;
@@ -201,6 +204,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .refreshToken(refreshToken)
                 .build();
         new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
+        log.info("Refreshed tokens for user with email: {}", user.getEmail());
       }
     }
   }
@@ -224,6 +228,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
   public void resetUserPassword(UserEntity user, String newPassword) {
     user.setPassword(passwordEncoder.encode(newPassword));
     userRepository.save(user);
+    log.info("Reset password for user with email: {}", user.getEmail());
   }
 
   @Override
