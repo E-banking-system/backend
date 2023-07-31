@@ -37,16 +37,21 @@ public class CompteController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<CompteResDTO>> getComptes(
+    public ResponseEntity<?> getComptes(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "id") String sortBy
     ) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        try {
+            Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
 
-        Page<CompteResDTO> comptePage = compteService.getComptes(pageable);
+            Page<CompteResDTO> comptePage = compteService.getComptes(pageable);
 
-        return ResponseEntity.ok(comptePage);
+            return ResponseEntity.ok(comptePage);
+        } catch (Exception e){
+            return ResponseEntity.internalServerError().body("INTERNAL SERVER ERROR");
+        }
+
     }
 
     @PostMapping("/activer")
