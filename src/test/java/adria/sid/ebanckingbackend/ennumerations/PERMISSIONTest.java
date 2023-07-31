@@ -8,6 +8,7 @@ class PERMISSIONTest {
 
     @Test
     void testEnumValues() {
+
         PERMISSION banquierRead = PERMISSION.BANQUIER_READ;
         PERMISSION banquierUpdate = PERMISSION.BANQUIER_UPDATE;
         PERMISSION banquierCreate = PERMISSION.BANQUIER_SUITE_REGISTRATION_CLIENT;
