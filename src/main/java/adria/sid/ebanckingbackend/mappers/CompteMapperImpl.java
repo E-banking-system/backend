@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -44,7 +45,16 @@ public class CompteMapperImpl implements CompteMapper{
         newCompte.setRIB(rib);
         newCompte.setNumCompte(numeroCompte);
         newCompte.setDateCreation(new Date());
-        //newCompte.setDatePeremption(new Date()+4 ans);
+
+        Date currentDate = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(currentDate);
+        // Add 4 years
+        calendar.add(Calendar.YEAR, 4);
+        // Get the new date after 4 years
+        Date dateperemption = calendar.getTime();
+        newCompte.setDatePeremption(dateperemption);
+
         newCompte.activerCompte();
         newCompte.setCodePIN(pin);
 

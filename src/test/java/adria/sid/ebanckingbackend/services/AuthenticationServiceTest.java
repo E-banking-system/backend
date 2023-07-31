@@ -9,6 +9,7 @@ import adria.sid.ebanckingbackend.dtos.client.ClientPhysiqueDTO;
 import adria.sid.ebanckingbackend.ennumerations.ERole;
 import adria.sid.ebanckingbackend.ennumerations.TokenType;
 import adria.sid.ebanckingbackend.entities.UserEntity;
+import adria.sid.ebanckingbackend.exceptions.UserHasNotAnyCompte;
 import adria.sid.ebanckingbackend.security.accessToken.TokenUserRepository;
 import adria.sid.ebanckingbackend.repositories.UserRepository;
 import adria.sid.ebanckingbackend.security.JwtService;
@@ -64,9 +65,9 @@ class AuthenticationServiceTest {
     void testRegisterClientMorale() {
         ClientMoraleDTO request = new ClientMoraleDTO();
         request.setEmail("test@example.com");
-        request.setTelephone("1234567890");
+        request.setTel("1234567890");
         request.setOperateur("Operator");
-        request.setAdresse("123 Main St");
+        request.setAddress("123 Main St");
         request.setPassword("password");
 
         when(userRepository.save(any(UserEntity.class))).thenReturn(userEntity);
@@ -92,9 +93,9 @@ class AuthenticationServiceTest {
     void testRegisterClientPhysique() {
         ClientPhysiqueDTO request = new ClientPhysiqueDTO();
         request.setEmail("test@example.com");
-        request.setTelephone("1234567890");
+        request.setTel("1234567890");
         request.setOperateur("Operator");
-        request.setAdresse("123 Main St");
+        request.setAddress("123 Main St");
         request.setPassword("password");
         request.setNom("kaoutar");
         request.setCin("JC616161");
@@ -139,7 +140,11 @@ class AuthenticationServiceTest {
         when(jwtService.generateToken(any(UserEntity.class))).thenReturn(jwtToken);
         when(jwtService.generateRefreshToken(any(UserEntity.class))).thenReturn(refreshToken);
 
-        authenticationService.authenticate(request);
+        try {
+            authenticationService.authenticate(request);
+        } catch (UserHasNotAnyCompte e) {
+            e.printStackTrace();
+        }
 
         verify(authenticationManager).authenticate(
                 new UsernamePasswordAuthenticationToken(

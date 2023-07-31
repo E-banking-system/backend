@@ -22,9 +22,9 @@ public class ReqRegisterClientDTOvalidationTest {
                 .prenom("achraf")
                 .email("test@example.com")
                 .gender("MALE")
-                .adresse("123 Main St")
+                .address("123 Main St")
                 .cin("AB123456")
-                .telephone("1234567890")
+                .tel("1234567890")
                 .operateur("Operator")
                 .password("password")
                 .build();
@@ -39,9 +39,9 @@ public class ReqRegisterClientDTOvalidationTest {
                 .prenom("kaoutar")
                 .email("kaoutar@gmail.com")
                 .gender("")
-                .adresse("")
+                .address("")
                 .cin("AB12")
-                .telephone("123456")
+                .tel("123456")
                 .operateur("")
                 .password("")
                 .build();
