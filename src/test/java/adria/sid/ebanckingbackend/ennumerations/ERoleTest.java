@@ -28,7 +28,7 @@ class ERoleTest {
         ERole client = ERole.CLIENT;
 
         assertEquals(Collections.emptySet(), user.getPermissions());
-        assertEquals(Set.of(PERMISSION.BANQUIER_SUITE_REGISTRATION_CLIENT, PERMISSION.CHANGE_SOLDE, PERMISSION.GET_ACCOUNTS, PERMISSION.ACTIVER_ACCOUNT, PERMISSION.BLOCK_ACCOUNT, PERMISSION.SUSPENDER_ACCOUNT), banquier.getPermissions());
+        assertEquals(Set.of(PERMISSION.GET_NOTIFICATIONS_BY_USER_ID,PERMISSION.BANQUIER_SUITE_REGISTRATION_CLIENT, PERMISSION.CHANGE_SOLDE, PERMISSION.GET_ACCOUNTS, PERMISSION.ACTIVER_ACCOUNT, PERMISSION.BLOCK_ACCOUNT, PERMISSION.SUSPENDER_ACCOUNT), banquier.getPermissions());
         assertEquals(Set.of(PERMISSION.DEMANDE_ACTIVATE_COMPTE, PERMISSION.GET_CLIENT_COMPTES, PERMISSION.DEMANDE_BLOCK_COMPTE, PERMISSION.DEMANDE_SUSPEND_COMPTE), client.getPermissions());
     }
 
@@ -41,19 +41,20 @@ class ERoleTest {
         assertEquals(1, user.getAuthorities().size());
         assertTrue(user.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_USER")));
 
-        assertEquals(5, banquier.getAuthorities().size());
-        assertTrue(banquier.getAuthorities().contains(new SimpleGrantedAuthority("banquier:read")));
-        assertTrue(banquier.getAuthorities().contains(new SimpleGrantedAuthority("banquier:update")));
-        assertTrue(banquier.getAuthorities().contains(new SimpleGrantedAuthority("banquier:delete")));
-        assertTrue(banquier.getAuthorities().contains(new SimpleGrantedAuthority("banquier:create")));
-        assertTrue(banquier.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_BANQUIER")));
+        assertEquals(8, banquier.getAuthorities().size());
+        assertTrue(banquier.getAuthorities().contains(new SimpleGrantedAuthority("banquier:banquier_suite_registration_client")));
+        assertTrue(banquier.getAuthorities().contains(new SimpleGrantedAuthority("banquier:get_accounts")));
+        assertTrue(banquier.getAuthorities().contains(new SimpleGrantedAuthority("banquier:blocker_compte")));
+        assertTrue(banquier.getAuthorities().contains(new SimpleGrantedAuthority("banquier:activer_compte")));
+        assertTrue(banquier.getAuthorities().contains(new SimpleGrantedAuthority("banquier:suspender_compte")));
+        assertTrue(banquier.getAuthorities().contains(new SimpleGrantedAuthority("banquier:change_solde")));
+        assertTrue(banquier.getAuthorities().contains(new SimpleGrantedAuthority("banquier:get_notification")));
 
         assertEquals(5, client.getAuthorities().size());
-        assertTrue(client.getAuthorities().contains(new SimpleGrantedAuthority("client:read")));
-        assertTrue(client.getAuthorities().contains(new SimpleGrantedAuthority("client:update")));
-        assertTrue(client.getAuthorities().contains(new SimpleGrantedAuthority("client:delete")));
-        assertTrue(client.getAuthorities().contains(new SimpleGrantedAuthority("client:create")));
-        assertTrue(client.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_CLIENT")));
+        assertTrue(client.getAuthorities().contains(new SimpleGrantedAuthority("client:get_client_comptes")));
+        assertTrue(client.getAuthorities().contains(new SimpleGrantedAuthority("client:demande_suspend_compte")));
+        assertTrue(client.getAuthorities().contains(new SimpleGrantedAuthority("client:demande_block_compte")));
+        assertTrue(client.getAuthorities().contains(new SimpleGrantedAuthority("client:demande_activer_compte")));
     }
 
 }
