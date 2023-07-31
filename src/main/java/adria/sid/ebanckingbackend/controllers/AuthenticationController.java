@@ -21,7 +21,6 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/api/v1/auth")
-@CrossOrigin("*")
 @Validated
 @RequiredArgsConstructor
 @Slf4j

@@ -11,17 +11,32 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @PrimaryKeyJoinColumn(name = "beneficier_id")
-public class Beneficier extends Personne{
+public class Beneficier extends Personne {
+
     private String RIB;
+
+    @ManyToOne
+    @JoinColumn(name = "gerant_id")
+    private Personne gerant;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "beneficier")
     private List<Virement> virements;
 
-    public void addVirement(Virement vrmnt) {
+    public void addVirement(Virement virement) {
         if (virements == null) {
             virements = new ArrayList<>();
         }
-        virements.add(vrmnt);
-        vrmnt.setBeneficier(this); // Set the user reference in the notification
+        virements.add(virement);
+        virement.setBeneficier(this);
+    }
+
+    @Override
+    public String toString() {
+        return "Beneficier{" +
+                "id='" + getId() + '\'' +
+                ", nom='" + getNom() + '\'' +
+                ", prenom='" + getPrenom() + '\'' +
+                ", RIB='" + RIB + '\'' +
+                '}';
     }
 }

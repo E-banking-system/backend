@@ -5,7 +5,9 @@ import adria.sid.ebanckingbackend.dtos.compte.ChangeSoldeReqDTO;
 import adria.sid.ebanckingbackend.dtos.compte.*;
 import adria.sid.ebanckingbackend.exceptions.IdUserIsNotValideException;
 import adria.sid.ebanckingbackend.services.compte.CompteService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -14,26 +16,29 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-@Slf4j
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/v1/compte")
-@CrossOrigin("*")
+@Validated
+@RequiredArgsConstructor
+@Slf4j
 public class CompteController {
     private final CompteService compteService;
 
+    @PreAuthorize("hasAuthority('banquier:creer_compte')")
     @PostMapping
     public ResponseEntity<String> saveCompte(@RequestBody @Valid CompteReqDTO accountDTO) {
-        try {
+        //try {
             compteService.ajouterCompte(accountDTO);
             return ResponseEntity.ok("Un compte a été créé pour cet utilisateur. Check your e-mail pour voir les informations sur vos compte");
-        } catch (IdUserIsNotValideException e){
+        /*} catch (IdUserIsNotValideException e){
             return ResponseEntity.badRequest().body("Id user is not valide");
         } catch (InternalError e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage());
-        }
+        }*/
     }
 
     @GetMapping

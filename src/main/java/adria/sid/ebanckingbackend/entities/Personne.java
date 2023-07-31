@@ -4,12 +4,14 @@ import adria.sid.ebanckingbackend.ennumerations.*;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Builder
-@Inheritance(strategy = InheritanceType.JOINED) // Use appropriate inheritance strategy
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Personne {
 
     @Id
@@ -34,4 +36,7 @@ public class Personne {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "related_personne_id")
     private Personne relatedPersonne;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "gerant") // Change to FetchType.EAGER
+    private List<Beneficier> beneficiers;
 }

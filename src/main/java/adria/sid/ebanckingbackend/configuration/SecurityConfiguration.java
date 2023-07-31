@@ -1,5 +1,6 @@
 package adria.sid.ebanckingbackend.configuration;
 
+import adria.sid.ebanckingbackend.ennumerations.PERMISSION;
 import adria.sid.ebanckingbackend.security.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -36,6 +37,7 @@ public class SecurityConfiguration {
         .disable()
         .authorizeHttpRequests()
         .requestMatchers(
+                "/api/v1/compte/**",
                 "/api/v1/auth/**",
                 "/api/v1/register/**",
                 "/v2/api-docs",
@@ -52,12 +54,12 @@ public class SecurityConfiguration {
         .permitAll()
         .requestMatchers(GET,"/api/v1/notification/**").hasAnyRole(BANQUIER.name(),CLIENT.name())
 
-        .requestMatchers(GET, "/api/v1/client/comptes/**").hasRole(CLIENT.name())
+        .requestMatchers(GET, "/api/v1/client/comptes").hasRole(CLIENT.name())
         .requestMatchers(POST, "/api/v1/compte/demande_suspend/**").hasRole(CLIENT.name())
         .requestMatchers(POST, "/api/v1/compte/demande_activer/**").hasRole(CLIENT.name())
         .requestMatchers(POST, "/api/v1/compte/demande_block/**").hasRole(CLIENT.name())
 
-        .requestMatchers(POST, "/api/v1/compte/**").hasRole(BANQUIER.name())
+        .requestMatchers(POST, "/api/v1/compte/**").hasAuthority(PERMISSION.ACTIVER_ACCOUNT.name())
         .requestMatchers(GET, "/api/v1/compte/**").hasRole(BANQUIER.name())
         .requestMatchers(POST, "/api/v1/compte/blocker/**").hasRole(BANQUIER.name())
         .requestMatchers(POST, "/api/v1/compte/activer/**").hasRole(BANQUIER.name())
