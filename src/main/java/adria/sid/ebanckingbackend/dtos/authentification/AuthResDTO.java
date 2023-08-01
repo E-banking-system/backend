@@ -17,4 +17,6 @@ public class AuthResDTO {
   private String refreshToken;
   @JsonProperty("role")
   private String role;
+  @JsonProperty("user_id")
+  private String user_id;
 }

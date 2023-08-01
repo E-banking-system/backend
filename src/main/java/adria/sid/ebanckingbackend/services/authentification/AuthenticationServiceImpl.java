@@ -112,6 +112,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
               .accessToken(jwtToken)
               .refreshToken(refreshToken)
               .role(user.getRole().toString())
+              .user_id(user.getId())
               .build();
     } catch (BadCredentialsException e) {
       log.warn("Invalid email or password for authentication request: {}", request.getEmail());
