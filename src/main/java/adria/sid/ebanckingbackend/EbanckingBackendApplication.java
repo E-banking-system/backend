@@ -1,7 +1,10 @@
 package adria.sid.ebanckingbackend;
 
 import adria.sid.ebanckingbackend.entities.Beneficier;
+import adria.sid.ebanckingbackend.entities.UserEntity;
 import adria.sid.ebanckingbackend.repositories.BeneficierRepository;
+import adria.sid.ebanckingbackend.services.beneficiaire.BeneficierService;
+import adria.sid.ebanckingbackend.utils.codeGenerators.CodeGenerator;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @SpringBootApplication
 //@EnableScheduling
@@ -27,36 +31,20 @@ public class EbanckingBackendApplication {
     }*/
 
     @Bean
-    CommandLineRunner commandLineRunner(BeneficierRepository beneficierRepository) {
+    CommandLineRunner commandLineRunner(BeneficierService beneficierService,CodeGenerator codeGenerator) {
         return args -> {
-            // Test BeneficierRepository methods here
-            // For example:
-            Beneficier beneficier = new Beneficier();
-            beneficier.setId("BEN001");
-            beneficier.setNom("John");
-            beneficier.setPrenom("Doe");
-            beneficier.setRIB("123456789");
-            // Save the beneficier to the database
-            beneficierRepository.save(beneficier);
-
-            // Retrieve the beneficier from the database
-            Beneficier retrievedBeneficier = beneficierRepository.findById("BEN001").orElse(null);
-            if (retrievedBeneficier != null) {
-                System.out.println("Retrieved beneficier: " + retrievedBeneficier);
-            } else {
-                System.out.println("Beneficier not found!");
-            }
-
-            // Test getBeneficiersByClientId method
-            List<Beneficier> beneficiers = beneficierRepository.findByGerantId("CLIENT_ID_HERE");
-            if (!beneficiers.isEmpty()) {
-                System.out.println("Beneficiers for client with ID CLIENT_ID_HERE:");
-                for (Beneficier b : beneficiers) {
-                    System.out.println(b);
-                }
-            } else {
-                System.out.println("No beneficiers found for client with ID CLIENT_ID_HERE");
-            }
+            Beneficier beneficier=new Beneficier();
+            UserEntity user=new UserEntity();
+            user.setId("8cb789a2-0b82-422c-b17a-f086f4454a91");
+            beneficier.setId(UUID.randomUUID().toString());
+            beneficier.setPrenom("TAFFAH");
+            beneficier.setNom("ACHRAF");
+            beneficier.setCin("UU745888");
+            beneficier.setAddress("RABAT");
+            beneficier.setOperateur("ORANGE");
+            beneficier.setRIB(codeGenerator.generateRIBCode());
+            beneficier.setClient(user);
+            beneficierService.ajouterBeneficiair(beneficier);
         };
     }
 }

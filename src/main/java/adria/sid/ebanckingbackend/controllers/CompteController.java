@@ -31,14 +31,14 @@ public class CompteController {
     @PreAuthorize("hasAuthority('banquier:creer_compte')")
     @PostMapping
     public ResponseEntity<String> saveCompte(@RequestBody @Valid CompteReqDTO accountDTO) {
-        //try {
-            compteService.ajouterCompte(accountDTO);
-            return ResponseEntity.ok("Un compte a été créé pour cet utilisateur. Check your e-mail pour voir les informations sur vos compte");
-        /*} catch (IdUserIsNotValideException e){
+        try {
+        compteService.ajouterCompte(accountDTO);
+        return ResponseEntity.ok("Un compte a été créé pour cet utilisateur. Check your e-mail pour voir les informations sur vos compte");
+        } catch (IdUserIsNotValideException e){
             return ResponseEntity.badRequest().body("Id user is not valide");
         } catch (InternalError e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage());
-        }*/
+        }
     }
 
     @GetMapping
@@ -56,7 +56,6 @@ public class CompteController {
         } catch (Exception e){
             return ResponseEntity.internalServerError().body("INTERNAL SERVER ERROR");
         }
-
     }
 
     @PostMapping("/activer")

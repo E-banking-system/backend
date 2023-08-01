@@ -37,6 +37,6 @@ public class Personne {
     @JoinColumn(name = "related_personne_id")
     private Personne relatedPersonne;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "gerant") // Change to FetchType.EAGER
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "client") // Change to FetchType.EAGER
     private List<Beneficier> beneficiers;
 }

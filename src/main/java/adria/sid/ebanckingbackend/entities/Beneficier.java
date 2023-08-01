@@ -16,8 +16,8 @@ public class Beneficier extends Personne {
     private String RIB;
 
     @ManyToOne
-    @JoinColumn(name = "gerant_id")
-    private Personne gerant;
+    @JoinColumn(name = "client_id")
+    private Personne client;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "beneficier")
     private List<Virement> virements;
