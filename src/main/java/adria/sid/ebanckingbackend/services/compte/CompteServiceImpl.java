@@ -73,6 +73,13 @@ public class CompteServiceImpl implements CompteService {
             compte.activerCompte();
             compteRepository.save(compte);
 
+            Notification notification=new Notification();
+            notification.setId(UUID.randomUUID().toString());
+            notification.setContenu("Id compte : "+compte.getId());
+            notification.setUser(compte.getUser());
+            notification.setDateEnvoie(new Date());
+            notification.setTitre("Compte activer avec success");
+            notificationService.saveNotification(notification);
             log.info("Activated compte with ID: {}", compteId);
         } else {
             throw new IllegalArgumentException("Compte not found with the given ID");
@@ -87,6 +94,13 @@ public class CompteServiceImpl implements CompteService {
             compte.blockerCompte();
             compteRepository.save(compte);
 
+            Notification notification=new Notification();
+            notification.setId(UUID.randomUUID().toString());
+            notification.setContenu("Id compte : "+compte.getId());
+            notification.setUser(compte.getUser());
+            notification.setDateEnvoie(new Date());
+            notification.setTitre("Compte blocké avec success");
+            notificationService.saveNotification(notification);
             log.info("Blocked compte with ID: {}", compteId);
         } else {
             throw new IllegalArgumentException("Compte not found with the given ID");
@@ -101,6 +115,13 @@ public class CompteServiceImpl implements CompteService {
             compte.suspenduCompte();
             compteRepository.save(compte);
 
+            Notification notification=new Notification();
+            notification.setId(UUID.randomUUID().toString());
+            notification.setContenu("Id compte : "+compte.getId());
+            notification.setUser(compte.getUser());
+            notification.setDateEnvoie(new Date());
+            notification.setTitre("Compte suspendé avec success");
+            notificationService.saveNotification(notification);
             log.info("Suspended compte with ID: {}", compteId);
         } else {
             throw new IllegalArgumentException("Compte not found with the given ID");
