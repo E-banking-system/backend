@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ChangeSoldeReqDTO {
     @NotNull(message = "id is required")
-    private String compteId;
+    private Long numCompte;
 
     @NotNull(message = "montant is required")
     private double montant;

@@ -136,25 +136,6 @@ public class CompteServiceImpl implements CompteService {
     }
 
     @Override
-    @Transactional
-    public void changeSolde(String compteId, Double montant) {
-        Compte compte = compteRepository.getCompteById(compteId);
-        if (compte != null) {
-            double newSolde = compte.getSolde() + montant;
-            if (newSolde >= 0) {
-                compte.setSolde(newSolde);
-                compteRepository.save(compte);
-
-                log.info("Changed solde for compte with ID: {} by amount: {}", compteId, montant);
-            } else {
-                throw new IllegalArgumentException("Insufficient balance.");
-            }
-        } else {
-            throw new IllegalArgumentException("Compte not found with the given ID");
-        }
-    }
-
-    @Override
     public Page<CompteResDTO> getClientComptes(String userId, Pageable pageable, String keyword) {
         if (keyword == null) {
             keyword = "";
@@ -206,5 +187,53 @@ public class CompteServiceImpl implements CompteService {
 
         log.info("Sent demande d'activer d'un compte notification with ID: {}", notification.getId());
         return notification;
+    }
+
+    private Boolean credit(Long numCompte,Double montant){
+        Compte compte = compteRepository.getCompteByNumCompte(numCompte);
+        if (compte != null) {
+            double newSolde = compte.getSolde() - montant;
+            if (newSolde >= 0) {
+                compte.setSolde(newSolde);
+                compteRepository.save(compte);
+
+                log.info("Changed solde for compte  NumCompte: {} by amount: {}", numCompte, montant);
+                return true;
+            } else {
+                throw new IllegalArgumentException("Insufficient balance.");
+            }
+        } else {
+            throw new IllegalArgumentException("Compte not found with the given ID");
+        }
+    }
+
+    private Boolean debit(Long numCompte,Double montant){
+        Compte compte = compteRepository.getCompteByNumCompte(numCompte);
+        if (compte != null) {
+            double newSolde = compte.getSolde() + montant;
+            compte.setSolde(newSolde);
+            compteRepository.save(compte);
+
+            log.info("Changed solde for compte  NumCompte: {} by amount: {}", numCompte, montant);
+            return true;
+        } else {
+            throw new IllegalArgumentException("Compte not found with the given ID");
+        }
+    }
+
+    @Override
+    @Transactional
+    public void changeSolde(Long numCompte, Double montant) {
+        if (montant > 0) {
+            Boolean success = debit(numCompte, montant);
+            if (success) {
+                log.info("Debit effectué avec succès : {}", montant);
+            }
+        } else {
+            Boolean success = credit(numCompte, -montant);
+            if (success) {
+                log.info("Credit effectué avec succès : {}", -montant);
+            }
+        }
     }
 }
