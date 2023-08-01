@@ -28,11 +28,6 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public void modifierNotification(Notification notification) {
-        log.info("Updated notification with ID: {}", notification.getId());
-    }
-
-    @Override
     public void supprimerNotification(String id) {
         notificationRepository.deleteById(id);
         log.info("Deleted notification with ID: {}", id);

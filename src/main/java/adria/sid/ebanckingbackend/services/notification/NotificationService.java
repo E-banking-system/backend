@@ -9,7 +9,6 @@ import java.util.List;
 
 public interface NotificationService {
     void saveNotification(Notification notification);
-    void modifierNotification(Notification notification);
     void supprimerNotification(String id);
     Page<NotificationResDTO> getNotificationsByUserId(Pageable pageable, String userId);
 }
