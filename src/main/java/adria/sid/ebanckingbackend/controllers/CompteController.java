@@ -36,9 +36,9 @@ public class CompteController {
         compteService.ajouterCompte(accountDTO);
         return ResponseEntity.ok("Un compte a été créé pour cet utilisateur. Check your e-mail pour voir les informations sur vos compte");
         } catch (IdUserIsNotValideException e){
-            return ResponseEntity.badRequest().body("Id user is not valide");
+            return ResponseEntity.badRequest().body(e.getMessage());
         } catch (InternalError e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 
@@ -112,7 +112,7 @@ public class CompteController {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e.getMessage());
-        } 
+        }
     }
 
     @PostMapping("/demande_suspend")

@@ -1,5 +1,6 @@
 package adria.sid.ebanckingbackend.mappers;
 
+import adria.sid.ebanckingbackend.dtos.beneficier.BeneficierReqDTO;
 import adria.sid.ebanckingbackend.dtos.beneficier.BeneficierResDTO;
 import adria.sid.ebanckingbackend.dtos.client.ClientMoraleDTO;
 import adria.sid.ebanckingbackend.ennumerations.EPType;
@@ -25,6 +26,15 @@ public class BeneficierMapperImpl implements BeneficierMapper{
         BeanUtils.copyProperties(beneficier,beneficierResDTO);
         return  beneficierResDTO;
     }
+
+    @Override
+    public Beneficier fromBeneficierReqDTOToBeneficier(BeneficierReqDTO beneficierReqDTO) {
+        Beneficier beneficier=new Beneficier();
+        beneficier.setId(UUID.randomUUID().toString());
+        BeanUtils.copyProperties(beneficierReqDTO,beneficier);
+        return beneficier;
+    }
+
 
     @Override
     public List<BeneficierResDTO> toBeneficierResDTOs(List<Beneficier> beneficiers) {

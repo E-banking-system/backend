@@ -1,5 +1,6 @@
 package adria.sid.ebanckingbackend.services.beneficiaire;
 
+import adria.sid.ebanckingbackend.dtos.beneficier.BeneficierReqDTO;
 import adria.sid.ebanckingbackend.dtos.beneficier.BeneficierResDTO;
 import adria.sid.ebanckingbackend.dtos.notification.NotificationResDTO;
 import adria.sid.ebanckingbackend.entities.Beneficier;
@@ -30,7 +31,8 @@ public class BeneficierServiceImpl implements BeneficierService {
     final private UserRepository userRepository;
 
     @Override
-    public void ajouterBeneficiair(Beneficier beneficier) {
+    public void ajouterBeneficiair(BeneficierReqDTO beneficierReqDTO) {
+        Beneficier beneficier=beneficierMapper.fromBeneficierReqDTOToBeneficier(beneficierReqDTO);
         beneficiaireRepository.save(beneficier);
     }
 
