@@ -4,6 +4,7 @@ import adria.sid.ebanckingbackend.dtos.beneficier.BeneficierResDTO;
 import adria.sid.ebanckingbackend.dtos.compte.CompteResDTO;
 import adria.sid.ebanckingbackend.dtos.notification.NotificationResDTO;
 import adria.sid.ebanckingbackend.entities.Beneficier;
+import adria.sid.ebanckingbackend.exceptions.IdUserIsNotValideException;
 import adria.sid.ebanckingbackend.services.beneficiaire.BeneficierService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,11 +35,15 @@ public class BeneficierController {
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "id") String sortBy,
             @RequestParam String clientId){
+        try {
+            Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+            Page<BeneficierResDTO> beneficierResDTOS = beneficierService.getBeneficiersByClientId(pageable,clientId);
 
-        Page<BeneficierResDTO> beneficierResDTOS = beneficierService.getBeneficiersByClientId(pageable,clientId);
+            return ResponseEntity.ok(beneficierResDTOS);
+        } catch (IdUserIsNotValideException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
 
-        return ResponseEntity.ok(beneficierResDTOS);
     }
 }

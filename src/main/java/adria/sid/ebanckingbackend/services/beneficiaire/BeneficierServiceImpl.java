@@ -4,8 +4,12 @@ import adria.sid.ebanckingbackend.dtos.beneficier.BeneficierResDTO;
 import adria.sid.ebanckingbackend.dtos.notification.NotificationResDTO;
 import adria.sid.ebanckingbackend.entities.Beneficier;
 import adria.sid.ebanckingbackend.entities.Notification;
+import adria.sid.ebanckingbackend.entities.UserEntity;
+import adria.sid.ebanckingbackend.exceptions.IdUserIsNotValideException;
+import adria.sid.ebanckingbackend.exceptions.UserAlreadyExists;
 import adria.sid.ebanckingbackend.mappers.BeneficierMapper;
 import adria.sid.ebanckingbackend.repositories.BeneficierRepository;
+import adria.sid.ebanckingbackend.repositories.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -14,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,6 +27,7 @@ import java.util.stream.Collectors;
 public class BeneficierServiceImpl implements BeneficierService {
     final private BeneficierRepository beneficiaireRepository;
     final private BeneficierMapper beneficierMapper;
+    final private UserRepository userRepository;
 
     @Override
     public void ajouterBeneficiair(Beneficier beneficier) {
@@ -45,6 +51,11 @@ public class BeneficierServiceImpl implements BeneficierService {
 
     @Override
     public Page<BeneficierResDTO> getBeneficiersByClientId(Pageable pageable, String clientId) {
+        Optional<UserEntity> existingUser = userRepository.findById(clientId);
+        if (existingUser.isEmpty()) {
+            throw new IdUserIsNotValideException("Client is not exists: " + clientId);
+        }
+
         List<Beneficier> beneficiers = beneficiaireRepository.findByClientId(clientId);
         List<BeneficierResDTO> beneficierResDTOList = beneficiers.stream()
                 .map(beneficierMapper::fromBeneficierToBeneficierResDTO)
