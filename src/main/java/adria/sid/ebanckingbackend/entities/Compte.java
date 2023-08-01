@@ -21,7 +21,7 @@ public class Compte {
 
     private String RIB;
 
-    private Long numCompte;
+    private String numCompte;
 
     private Date dateCreation;
 

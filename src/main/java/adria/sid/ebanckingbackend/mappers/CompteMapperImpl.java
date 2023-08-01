@@ -43,7 +43,7 @@ public class CompteMapperImpl implements CompteMapper{
         newCompte.setId(UUID.randomUUID().toString());
 
         newCompte.setRIB(rib);
-        newCompte.setNumCompte(numeroCompte);
+        newCompte.setNumCompte(String.valueOf(numeroCompte));
         newCompte.setDateCreation(new Date());
 
         Date currentDate = new Date();

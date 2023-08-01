@@ -192,7 +192,7 @@ public class CompteServiceImpl implements CompteService {
     }
 
     @Transactional
-    public Boolean credit(Long numCompte,Double montant){
+    public Boolean credit(String numCompte,Double montant){
         Compte compte = compteRepository.getCompteByNumCompte(numCompte);
         if (compte != null) {
             if(!compte.getEtatCompte().equals(EtatCompte.ACTIVE)){
@@ -225,7 +225,7 @@ public class CompteServiceImpl implements CompteService {
     }
 
     @Transactional
-    public Boolean debit(Long numCompte,Double montant){
+    public Boolean debit(String numCompte,Double montant){
         Compte compte = compteRepository.getCompteByNumCompte(numCompte);
         if (compte != null) {
             if(!compte.getEtatCompte().equals(EtatCompte.ACTIVE)){
@@ -255,7 +255,7 @@ public class CompteServiceImpl implements CompteService {
 
     @Override
     @Transactional
-    public void changeSolde(Long numCompte, Double montant) {
+    public void changeSolde(String numCompte, Double montant) {
         if (montant > 0) {
             Boolean success = debit(numCompte, montant);
             if (success) {

@@ -106,6 +106,7 @@ public class CompteController {
     @PostMapping("/change_solde")
     public ResponseEntity<?> changeSolde(@RequestBody @Valid ChangeSoldeReqDTO changeSoldeReqDTO) {
         try {
+            System.out.println(changeSoldeReqDTO.toString());
             compteService.changeSolde(changeSoldeReqDTO.getNumCompte(), changeSoldeReqDTO.getMontant());
             return ResponseEntity.ok("Solde modifié avec succès : "+changeSoldeReqDTO.getMontant());
         } catch (IllegalArgumentException e) {

@@ -14,7 +14,7 @@ public interface CompteRepository extends JpaRepository<Compte, String> {
     Compte getCompteById(@Param("compteId") String compteId);
 
     @Query("SELECT c FROM Compte c WHERE c.numCompte = :numCompte")
-    Compte getCompteByNumCompte(@Param("numCompte") Long numCompte);
+    Compte getCompteByNumCompte(@Param("numCompte") String numCompte);
 
     @Query("UPDATE Compte c SET c.solde = c.solde + :montant WHERE c.id = :compteId")
     void changeSolde(@Param("compteId") String compteId, @Param("montant") Double montant);

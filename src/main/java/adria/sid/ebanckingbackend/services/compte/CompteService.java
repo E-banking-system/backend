@@ -16,7 +16,7 @@ public interface CompteService {
     void activerCompte(String compteId);
     void blockCompte(String compteId);
     void suspendCompte(String compteId);
-    void changeSolde(Long numCompte, Double montant);
+    void changeSolde(String numCompte, Double montant);
     Notification demandeSuspendCompte(DemandeSuspendDTO demandeSuspendDTO);
     Notification demandeActivateCompte(DemandeActivateDTO demandeActivateDTO);
     Notification demandeBlockCompte(DemandeBlockDTO demandeBlockDTO);
