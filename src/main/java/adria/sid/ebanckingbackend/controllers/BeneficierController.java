@@ -44,6 +44,5 @@ public class BeneficierController {
         } catch (IdUserIsNotValideException e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
-
     }
 }

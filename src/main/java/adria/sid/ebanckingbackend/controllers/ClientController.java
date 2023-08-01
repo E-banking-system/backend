@@ -27,9 +27,9 @@ public class ClientController {
             List<CompteResDTO> comptes = compteService.getClientComptes(userId);
             return ResponseEntity.ok(comptes);
         } catch (IdUserIsNotValideException e) {
-            return ResponseEntity.badRequest().body("Invalid user ID: " + userId);
+            return ResponseEntity.badRequest().body(e.getMessage());
         } catch (InternalError e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 }
