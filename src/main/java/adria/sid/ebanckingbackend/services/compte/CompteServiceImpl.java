@@ -2,9 +2,11 @@ package adria.sid.ebanckingbackend.services.compte;
 
 import adria.sid.ebanckingbackend.dtos.compte.*;
 import adria.sid.ebanckingbackend.ennumerations.ERole;
+import adria.sid.ebanckingbackend.ennumerations.EtatCompte;
 import adria.sid.ebanckingbackend.entities.Compte;
 import adria.sid.ebanckingbackend.entities.Notification;
 import adria.sid.ebanckingbackend.entities.UserEntity;
+import adria.sid.ebanckingbackend.exceptions.CompteNotActiveException;
 import adria.sid.ebanckingbackend.exceptions.IdUserIsNotValideException;
 import adria.sid.ebanckingbackend.mappers.CompteMapper;
 import adria.sid.ebanckingbackend.repositories.CompteRepository;
@@ -189,15 +191,30 @@ public class CompteServiceImpl implements CompteService {
         return notification;
     }
 
-    private Boolean credit(Long numCompte,Double montant){
+    @Transactional
+    public Boolean credit(Long numCompte,Double montant){
         Compte compte = compteRepository.getCompteByNumCompte(numCompte);
         if (compte != null) {
+            if(!compte.getEtatCompte().equals(EtatCompte.ACTIVE)){
+                throw new CompteNotActiveException("Ce compte n'est pas active.");
+            }
+
             double newSolde = compte.getSolde() - montant;
             if (newSolde >= 0) {
                 compte.setSolde(newSolde);
                 compteRepository.save(compte);
 
                 log.info("Changed solde for compte  NumCompte: {} by amount: {}", numCompte, montant);
+
+                Notification notification=new Notification();
+                notification.setId(UUID.randomUUID().toString());
+                notification.setContenu("Numéro du compte : "+numCompte);
+                notification.setUser(compte.getUser());
+                notification.setDateEnvoie(new Date());
+                notification.setTitre("Crédit de "+montant+" DH effectué avec success, le solde actuel est : "+newSolde+" DH");
+                notificationService.saveNotification(notification);
+
+                log.info("Sent crédit du compte notification with ID: {}", notification.getId());
                 return true;
             } else {
                 throw new IllegalArgumentException("Insufficient balance.");
@@ -207,14 +224,29 @@ public class CompteServiceImpl implements CompteService {
         }
     }
 
-    private Boolean debit(Long numCompte,Double montant){
+    @Transactional
+    public Boolean debit(Long numCompte,Double montant){
         Compte compte = compteRepository.getCompteByNumCompte(numCompte);
         if (compte != null) {
+            if(!compte.getEtatCompte().equals(EtatCompte.ACTIVE)){
+                throw new CompteNotActiveException("Ce compte n'est pas active.");
+            }
+
             double newSolde = compte.getSolde() + montant;
             compte.setSolde(newSolde);
             compteRepository.save(compte);
 
             log.info("Changed solde for compte  NumCompte: {} by amount: {}", numCompte, montant);
+
+            Notification notification=new Notification();
+            notification.setId(UUID.randomUUID().toString());
+            notification.setContenu("Numéro du compte : "+numCompte);
+            notification.setUser(compte.getUser());
+            notification.setDateEnvoie(new Date());
+            notification.setTitre("Débit de "+montant+" DH effectué avec success, le solde actuel est : "+newSolde+" DH");
+            notificationService.saveNotification(notification);
+
+            log.info("Sent débit du compte notification with ID: {}", notification.getId());
             return true;
         } else {
             throw new IllegalArgumentException("Compte not found with the given ID");

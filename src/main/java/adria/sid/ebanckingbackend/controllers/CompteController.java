@@ -3,6 +3,7 @@ package adria.sid.ebanckingbackend.controllers;
 
 import adria.sid.ebanckingbackend.dtos.compte.ChangeSoldeReqDTO;
 import adria.sid.ebanckingbackend.dtos.compte.*;
+import adria.sid.ebanckingbackend.exceptions.CompteNotActiveException;
 import adria.sid.ebanckingbackend.exceptions.IdUserIsNotValideException;
 import adria.sid.ebanckingbackend.services.compte.CompteService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -103,7 +104,7 @@ public class CompteController {
     }
 
     @PostMapping("/change_solde")
-    public ResponseEntity<String> changeSolde(@RequestBody @Valid ChangeSoldeReqDTO changeSoldeReqDTO) {
+    public ResponseEntity<?> changeSolde(@RequestBody @Valid ChangeSoldeReqDTO changeSoldeReqDTO) {
         try {
             compteService.changeSolde(changeSoldeReqDTO.getNumCompte(), changeSoldeReqDTO.getMontant());
             return ResponseEntity.ok("Solde modifié avec succès : "+changeSoldeReqDTO.getMontant());
@@ -111,7 +112,7 @@ public class CompteController {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e.getMessage());
-        }
+        } 
     }
 
     @PostMapping("/demande_suspend")
