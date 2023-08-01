@@ -17,8 +17,10 @@ public interface CompteService {
     void blockCompte(String compteId);
     void suspendCompte(String compteId);
     void changeSolde(String compteId, Double montant);
-    List<CompteResDTO> getClientComptes(String userId);
+    //List<CompteResDTO> getClientComptes(String userId);
     Notification demandeSuspendCompte(DemandeSuspendDTO demandeSuspendDTO);
     Notification demandeActivateCompte(DemandeActivateDTO demandeActivateDTO);
     Notification demandeBlockCompte(DemandeBlockDTO demandeBlockDTO);
+    Page<CompteResDTO> searchComptes(Pageable pageable, String keyword);
+    Page<CompteResDTO> getClientComptes(String userId, Pageable pageable, String keyword);
 }

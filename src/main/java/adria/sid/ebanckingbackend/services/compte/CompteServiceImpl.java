@@ -35,6 +35,13 @@ public class CompteServiceImpl implements CompteService {
     final private CompteMapper compteMapper;
 
     @Override
+    public Page<CompteResDTO> searchComptes(Pageable pageable, String keyword) {
+        Page<Compte> comptePage = compteRepository.searchComptes(pageable, keyword);
+        return comptePage.map(compteMapper::fromCompteToCompteResDTO);
+    }
+
+
+    @Override
     @Transactional
     public void ajouterCompte(CompteReqDTO compteDTO) {
         if (compteDTO == null || compteDTO.getEmail() == null) {
@@ -148,14 +155,12 @@ public class CompteServiceImpl implements CompteService {
     }
 
     @Override
-    public List<CompteResDTO> getClientComptes(String userId) {
-        Optional<UserEntity> userOptional = userRepository.findById(userId);
-        if (userOptional.isPresent()) {
-            List<Compte> compteList = compteRepository.getComptesByUserId(userId);
-            return compteMapper.toComptesResDTOs(compteList);
-        } else {
-            throw new IdUserIsNotValideException("Id user is not valid");
+    public Page<CompteResDTO> getClientComptes(String userId, Pageable pageable, String keyword) {
+        if (keyword == null) {
+            keyword = "";
         }
+        Page<Compte> comptePage = compteRepository.searchComptesByUserIdAndKeyword(userId, keyword, pageable);
+        return comptePage.map(compteMapper::fromCompteToCompteResDTO);
     }
 
     @Override

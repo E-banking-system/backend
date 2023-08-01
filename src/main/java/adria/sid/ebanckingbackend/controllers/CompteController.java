@@ -45,18 +45,26 @@ public class CompteController {
     public ResponseEntity<?> getComptes(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "id") String sortBy
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(required = false) String keyword
     ) {
         try {
             Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
 
-            Page<CompteResDTO> comptePage = compteService.getComptes(pageable);
+            Page<CompteResDTO> comptePage;
+
+            if (keyword != null && !keyword.isEmpty()) {
+                comptePage = compteService.searchComptes(pageable, keyword);
+            } else {
+                comptePage = compteService.getComptes(pageable);
+            }
 
             return ResponseEntity.ok(comptePage);
-        } catch (Exception e){
-            return ResponseEntity.internalServerError().body("INTERNAL SERVER ERROR");
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
+
 
     @PostMapping("/activer")
     public ResponseEntity<String> activateCompte(@RequestBody ActiverCompteReqDTO activerCompteReqDTO) {
@@ -64,9 +72,9 @@ public class CompteController {
             compteService.activerCompte(activerCompteReqDTO.getCompteId());
             return ResponseEntity.ok("Compte activé avec succès.");
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body("Compte non trouvé avec l'ID donné.");
+            return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().body("Une erreur est survenue lors de l'activation du compte.");
+            return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
 
@@ -76,9 +84,9 @@ public class CompteController {
             compteService.blockCompte(blockCompteReqDTO.getCompteId());
             return ResponseEntity.ok("Compte bloqué avec succès.");
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body("Compte non trouvé avec l'ID donné.");
+            return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().body("Une erreur est survenue lors du blocage du compte.");
+            return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
 
@@ -88,9 +96,9 @@ public class CompteController {
             compteService.suspendCompte(suspenderCompteReqDTO.getCompteId());
             return ResponseEntity.ok("Compte suspendu avec succès.");
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body("Compte non trouvé avec l'ID donné.");
+            return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().body("Une erreur est survenue lors de la suspension du compte.");
+            return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
 
@@ -102,7 +110,7 @@ public class CompteController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().body("Une erreur est survenue lors de la modification du solde.");
+            return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
 
@@ -112,7 +120,7 @@ public class CompteController {
             compteService.demandeSuspendCompte(demandeSuspendDTO);
             return ResponseEntity.ok("Demande de suspend du compte a été envoyé avec succès.");
         } catch (Exception e){
-            return ResponseEntity.internalServerError().body("Une erreur est survenue lors de la modification du solde.");
+            return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
 
@@ -122,7 +130,7 @@ public class CompteController {
             compteService.demandeBlockCompte(demandeBlockDTO);
             return ResponseEntity.ok("Demande de block du compte a été envoyé avec succès.");
         } catch (Exception e){
-            return ResponseEntity.internalServerError().body("Une erreur est survenue lors de la modification du solde.");
+            return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
 
@@ -132,7 +140,7 @@ public class CompteController {
             compteService.demandeActivateCompte(demandeActivateDTO);
             return ResponseEntity.ok("Demande d'activer du compte a été envoyé avec succès.");
         } catch (Exception e){
-            return ResponseEntity.internalServerError().body("Une erreur est survenue lors de la modification du solde.");
+            return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
 }
