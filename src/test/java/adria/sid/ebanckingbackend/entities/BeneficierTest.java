@@ -24,7 +24,6 @@ public class BeneficierTest {
         beneficier.setRegisterNumber("1234");
         beneficier.setGender(EGender.FEMALE);
         beneficier.setPersonneType(EPType.PHYSIQUE);
-        beneficier.setRIB("1234567890");
 
         assertEquals(beneficierID, beneficier.getId());
         assertEquals("kaoutar", beneficier.getNom());
@@ -32,7 +31,6 @@ public class BeneficierTest {
         assertEquals("jcjkc", beneficier.getRaisonSociale());
         assertEquals("FEMALE", beneficier.getGender().toString());
         assertEquals("PHYSIQUE", beneficier.getPersonneType().toString());
-        assertEquals("1234567890", beneficier.getRIB());
     }
 
     @Test
