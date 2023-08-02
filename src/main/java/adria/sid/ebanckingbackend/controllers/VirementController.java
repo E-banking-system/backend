@@ -1,6 +1,7 @@
 package adria.sid.ebanckingbackend.controllers;
 
 import adria.sid.ebanckingbackend.dtos.compte.ChangeSoldeReqDTO;
+import adria.sid.ebanckingbackend.dtos.virement.VirementPermanentReqDTO;
 import adria.sid.ebanckingbackend.dtos.virement.VirementUnitReqDTO;
 import adria.sid.ebanckingbackend.exceptions.BeneficierIsNotExistException;
 import adria.sid.ebanckingbackend.exceptions.ClientIsNotExistException;
@@ -23,7 +24,21 @@ public class VirementController {
     public ResponseEntity<String> effectuerVirementUnitaire(@RequestBody @Valid VirementUnitReqDTO virementUnitReqDTO) {
         try {
             virementService.effectuerVirementUnitaire(virementUnitReqDTO);
-            return ResponseEntity.ok("Viremnt effectué avec success : "+virementUnitReqDTO.getMontant());
+            return ResponseEntity.ok("Virement effectué avec success : "+virementUnitReqDTO.getMontant());
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        } catch (ClientIsNotExistException | BeneficierIsNotExistException | CompteNotExistException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @PostMapping("/permanent")
+    public ResponseEntity<String> effectuerVirementPermanent(@RequestBody @Valid VirementPermanentReqDTO virementPermanentReqDTO) {
+        try {
+            virementService.effectuerVirementPermanent(virementPermanentReqDTO);
+            return ResponseEntity.ok("Virement effectué avec success : "+virementPermanentReqDTO.getMontant());
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {

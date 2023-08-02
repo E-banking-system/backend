@@ -1,9 +1,11 @@
 package adria.sid.ebanckingbackend.services.virement;
 
+import adria.sid.ebanckingbackend.dtos.virement.VirementPermanentReqDTO;
 import adria.sid.ebanckingbackend.dtos.virement.VirementUnitReqDTO;
 import adria.sid.ebanckingbackend.entities.Beneficier;
 import adria.sid.ebanckingbackend.entities.Compte;
 import adria.sid.ebanckingbackend.entities.UserEntity;
+import adria.sid.ebanckingbackend.entities.VirementPermanant;
 import adria.sid.ebanckingbackend.exceptions.BeneficierIsNotExistException;
 import adria.sid.ebanckingbackend.exceptions.ClientIsNotExistException;
 import adria.sid.ebanckingbackend.exceptions.CompteNotExistException;
@@ -16,6 +18,8 @@ import adria.sid.ebanckingbackend.services.compte.CompteServiceImpl;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -53,5 +57,22 @@ public class VirementServiceImpl implements VirementService{
         compteService.changeSolde(beneficierCompte.getNumCompte(), viremenentReqDTO.getMontant());
 
         System.out.println("Virement effectuer avec succes");
+    }
+
+    @Override
+    public void effectuerVirementPermanent(VirementPermanentReqDTO virementPermanentReqDTO) throws BeneficierIsNotExistException, ClientIsNotExistException, CompteNotExistException{
+        /* 1) inserer dans la bases de données la liste des dates pour effectuer le virement programme
+           2) envoyer une notification au client pour le informer que le virement programmé avec success
+         */
+    }
+
+    @Bean
+    @Scheduled(fixedRate = 5000) // Run every 5000 milliseconds (5 seconds)
+    public void showHelloWorld(){
+        System.out.println("Hello world");
+        /* 1) verifier a chaque foix si la date courant egale a la date de virement programme (avec un decalage de 5 minute)
+           2) si c'est le cas effectuer un virement unitaire
+           3) supprimer le virement programmé de la base de données
+         */
     }
 }
