@@ -13,7 +13,7 @@ import java.util.List;
 @PrimaryKeyJoinColumn(name = "beneficier_id")
 public class Beneficier extends Personne {
 
-    private String RIB;
+    private String numCompte;
 
     @ManyToOne
     @JoinColumn(name = "client_id")
@@ -36,7 +36,7 @@ public class Beneficier extends Personne {
                 "id='" + getId() + '\'' +
                 ", nom='" + getNom() + '\'' +
                 ", prenom='" + getPrenom() + '\'' +
-                ", RIB='" + RIB + '\'' +
+                ", RIB='" + numCompte + '\'' +
                 '}';
     }
 }

@@ -9,5 +9,5 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class VirementUnitaire extends Virement{
-    private Boolean estUnitaire;
+    private Boolean estUnitaire=true;
 }
