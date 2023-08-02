@@ -19,7 +19,7 @@ class CompteTest {
         compte.setNature("Savings");
         compte.setSolde(1500.0);
         compte.setRIB("123456789");
-        compte.setNumCompte(987654321L);
+        compte.setNumCompte(String.valueOf(987654321L));
         compte.setDateCreation(new Date());
         compte.setDatePeremption(new Date());
         compte.setDerniereDateSuspention(new Date());
