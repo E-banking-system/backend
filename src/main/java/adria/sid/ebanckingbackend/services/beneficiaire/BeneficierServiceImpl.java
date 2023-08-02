@@ -4,12 +4,15 @@ import adria.sid.ebanckingbackend.dtos.beneficier.BeneficierReqDTO;
 import adria.sid.ebanckingbackend.dtos.beneficier.BeneficierResDTO;
 import adria.sid.ebanckingbackend.dtos.notification.NotificationResDTO;
 import adria.sid.ebanckingbackend.entities.Beneficier;
+import adria.sid.ebanckingbackend.entities.Compte;
 import adria.sid.ebanckingbackend.entities.Notification;
 import adria.sid.ebanckingbackend.entities.UserEntity;
+import adria.sid.ebanckingbackend.exceptions.CompteNotExistException;
 import adria.sid.ebanckingbackend.exceptions.IdUserIsNotValideException;
 import adria.sid.ebanckingbackend.exceptions.UserAlreadyExists;
 import adria.sid.ebanckingbackend.mappers.BeneficierMapper;
 import adria.sid.ebanckingbackend.repositories.BeneficierRepository;
+import adria.sid.ebanckingbackend.repositories.CompteRepository;
 import adria.sid.ebanckingbackend.repositories.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,10 +32,16 @@ public class BeneficierServiceImpl implements BeneficierService {
     final private BeneficierRepository beneficiaireRepository;
     final private BeneficierMapper beneficierMapper;
     final private UserRepository userRepository;
+    final private CompteRepository compteRepository;
 
     @Override
-    public void ajouterBeneficiair(BeneficierReqDTO beneficierReqDTO) {
+    public void ajouterBeneficiair(BeneficierReqDTO beneficierReqDTO) throws CompteNotExistException {
         Beneficier beneficier=beneficierMapper.fromBeneficierReqDTOToBeneficier(beneficierReqDTO);
+        Compte compte=compteRepository.getCompteByNumCompte(beneficier.getNumCompte());
+        if(compte == null){
+            throw new CompteNotExistException("Ce compte nexiste pas pour ce beneficier");
+        }
+
         beneficiaireRepository.save(beneficier);
     }
 

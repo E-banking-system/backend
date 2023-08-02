@@ -19,11 +19,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class BeneficierResDTO {
     private String id;
-    private String RIB;
+    private String numCompte;
     private String nom;
     private String prenom;
-    private String operateur;
-    private String address;
-    private String tel;
-    private String cin;
+    private String email;
 }

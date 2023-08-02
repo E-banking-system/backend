@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 @Service
 @AllArgsConstructor
 public class BeneficierMapperImpl implements BeneficierMapper{
-    final private PasswordEncoder passwordEncoder;
     @Override
     public BeneficierResDTO fromBeneficierToBeneficierResDTO(Beneficier beneficier) {
         BeneficierResDTO beneficierResDTO=new BeneficierResDTO();
@@ -34,7 +33,6 @@ public class BeneficierMapperImpl implements BeneficierMapper{
         BeanUtils.copyProperties(beneficierReqDTO,beneficier);
         return beneficier;
     }
-
 
     @Override
     public List<BeneficierResDTO> toBeneficierResDTOs(List<Beneficier> beneficiers) {

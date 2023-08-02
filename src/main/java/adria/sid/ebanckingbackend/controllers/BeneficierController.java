@@ -6,6 +6,7 @@ import adria.sid.ebanckingbackend.dtos.compte.CompteReqDTO;
 import adria.sid.ebanckingbackend.dtos.compte.CompteResDTO;
 import adria.sid.ebanckingbackend.dtos.notification.NotificationResDTO;
 import adria.sid.ebanckingbackend.entities.Beneficier;
+import adria.sid.ebanckingbackend.exceptions.CompteNotExistException;
 import adria.sid.ebanckingbackend.exceptions.IdUserIsNotValideException;
 import adria.sid.ebanckingbackend.services.beneficiaire.BeneficierService;
 import jakarta.validation.Valid;
@@ -49,7 +50,7 @@ public class BeneficierController {
     }
 
     @PostMapping
-    public ResponseEntity<String> saveCompte(@RequestBody @Valid BeneficierReqDTO beneficierReqDTO) {
+    public ResponseEntity<String> saveBeneficier(@RequestBody @Valid BeneficierReqDTO beneficierReqDTO) {
         try {
             beneficierService.ajouterBeneficiair(beneficierReqDTO);
             return ResponseEntity.ok("Un beneficier a été créé.");
@@ -57,6 +58,26 @@ public class BeneficierController {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (InternalError e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        } catch (CompteNotExistException e) {
+            throw new RuntimeException(e);
         }
+    }
+
+    // Exception handler to handle IdUserIsNotValideException
+    @ExceptionHandler(IdUserIsNotValideException.class)
+    public ResponseEntity<String> handleIdUserIsNotValideException(IdUserIsNotValideException e) {
+        return ResponseEntity.badRequest().body(e.getMessage());
+    }
+
+    // Exception handler to handle InternalError
+    @ExceptionHandler(InternalError.class)
+    public ResponseEntity<String> handleInternalError(InternalError e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+    }
+
+    // Exception handler to handle CompteNotExistException
+    @ExceptionHandler(CompteNotExistException.class)
+    public ResponseEntity<String> handleCompteNotExistException(CompteNotExistException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }
 }

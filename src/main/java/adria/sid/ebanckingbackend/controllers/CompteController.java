@@ -4,6 +4,7 @@ package adria.sid.ebanckingbackend.controllers;
 import adria.sid.ebanckingbackend.dtos.compte.ChangeSoldeReqDTO;
 import adria.sid.ebanckingbackend.dtos.compte.*;
 import adria.sid.ebanckingbackend.exceptions.CompteNotActiveException;
+import adria.sid.ebanckingbackend.exceptions.CompteNotExistException;
 import adria.sid.ebanckingbackend.exceptions.IdUserIsNotValideException;
 import adria.sid.ebanckingbackend.services.compte.CompteService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,12 +30,11 @@ import org.springframework.web.bind.annotation.*;
 public class CompteController {
     private final CompteService compteService;
 
-    @PreAuthorize("hasAuthority('banquier:creer_compte')")
     @PostMapping
     public ResponseEntity<String> saveCompte(@RequestBody @Valid CompteReqDTO accountDTO) {
         try {
-        compteService.ajouterCompte(accountDTO);
-        return ResponseEntity.ok("Un compte a été créé pour cet utilisateur. Check your e-mail pour voir les informations sur vos compte");
+            compteService.ajouterCompte(accountDTO);
+            return ResponseEntity.ok("Un compte a été créé pour cet utilisateur. Check your e-mail pour voir les informations sur vos compte");
         } catch (IdUserIsNotValideException e){
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (InternalError e) {
@@ -145,4 +145,5 @@ public class CompteController {
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
+
 }
