@@ -13,6 +13,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -70,11 +71,21 @@ public class BeneficierController {
             @RequestBody @Valid BeneficierReqDTO beneficierReqDTO) {
         try {
             beneficierService.modifierBeneficier(beneficierReqDTO, beneficierId);
-            return ResponseEntity.ok("Beneficier updated successfully.");
+            return ResponseEntity.ok("Beneficier a été modifié");
         } catch (EntityNotFoundException e) {
             return ResponseEntity.notFound().build();
         } catch (IdUserIsNotValideException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{beneficierId}")
+    public ResponseEntity<String> deleteBeneficier(@PathVariable String beneficierId) {
+        try {
+            beneficierService.supprimerBeneficier(beneficierId);
+            return ResponseEntity.ok("Beneficier à été supprimer");
+        } catch (EmptyResultDataAccessException e) {
+            return ResponseEntity.notFound().build();
         }
     }
 
