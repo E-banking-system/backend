@@ -40,4 +40,10 @@ public class ClientController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+
+    // Exception handler to handle InternalError
+    @ExceptionHandler(InternalError.class)
+    public ResponseEntity<String> handleInternalError(InternalError e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+    }
 }

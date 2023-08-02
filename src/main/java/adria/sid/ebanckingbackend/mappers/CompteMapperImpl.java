@@ -63,7 +63,6 @@ public class CompteMapperImpl implements CompteMapper{
         return newCompte;
     }
 
-
     @Override
     public List<CompteResDTO> toComptesResDTOs(List<Compte> comptes) {
         return comptes.stream()
