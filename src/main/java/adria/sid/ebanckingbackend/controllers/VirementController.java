@@ -1,6 +1,5 @@
 package adria.sid.ebanckingbackend.controllers;
 
-import adria.sid.ebanckingbackend.dtos.compte.ChangeSoldeReqDTO;
 import adria.sid.ebanckingbackend.dtos.virement.VirementPermanentReqDTO;
 import adria.sid.ebanckingbackend.dtos.virement.VirementUnitReqDTO;
 import adria.sid.ebanckingbackend.exceptions.BeneficierIsNotExistException;

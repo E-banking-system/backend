@@ -2,10 +2,6 @@ package adria.sid.ebanckingbackend.controllers;
 
 import adria.sid.ebanckingbackend.dtos.beneficier.BeneficierReqDTO;
 import adria.sid.ebanckingbackend.dtos.beneficier.BeneficierResDTO;
-import adria.sid.ebanckingbackend.dtos.compte.CompteReqDTO;
-import adria.sid.ebanckingbackend.dtos.compte.CompteResDTO;
-import adria.sid.ebanckingbackend.dtos.notification.NotificationResDTO;
-import adria.sid.ebanckingbackend.entities.Beneficier;
 import adria.sid.ebanckingbackend.exceptions.CompteNotExistException;
 import adria.sid.ebanckingbackend.exceptions.IdUserIsNotValideException;
 import adria.sid.ebanckingbackend.services.beneficiaire.BeneficierService;
@@ -20,11 +16,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/beneficier")

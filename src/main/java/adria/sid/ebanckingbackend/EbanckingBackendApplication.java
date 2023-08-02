@@ -24,18 +24,5 @@ public class EbanckingBackendApplication implements CommandLineRunner {
 
     private void testGenererDatesExecution() {
         // Créez une instance de VirementPermanant avec les détails nécessaires
-        VirementPermanant virementPermanant = new VirementPermanant();
-        virementPermanant.setPrememierDateExecution(new Date()); // Remplacez par la date de début souhaitée
-        virementPermanant.setDateFinExecution(new Date()); // Remplacez par la date de fin souhaitée
-        virementPermanant.setFrequence(EVType.MENSUELLE); // Remplacez par la fréquence souhaitée
-
-        // Générez la liste des dates d'exécution
-        List<Date> datesExecution = virementPermanant.genererDatesExecution();
-
-        // Affichez les dates générées
-        System.out.println("Dates d'exécution générées :");
-        for (Date date : datesExecution) {
-            System.out.println(date);
-        }
     }
 }
