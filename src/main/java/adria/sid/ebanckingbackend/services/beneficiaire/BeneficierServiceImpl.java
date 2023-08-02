@@ -14,6 +14,7 @@ import adria.sid.ebanckingbackend.mappers.BeneficierMapper;
 import adria.sid.ebanckingbackend.repositories.BeneficierRepository;
 import adria.sid.ebanckingbackend.repositories.CompteRepository;
 import adria.sid.ebanckingbackend.repositories.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -46,8 +47,13 @@ public class BeneficierServiceImpl implements BeneficierService {
     }
 
     @Override
-    public void modifierBeneficier(Beneficier beneficier) {
-        log.info("Updated beneficier with ID: {}", beneficier.getId());
+    public void modifierBeneficier(BeneficierReqDTO beneficierReqDTO, String beneficierId) {
+        Beneficier existingBeneficier = beneficiaireRepository.findById(beneficierId)
+                .orElseThrow(() -> new EntityNotFoundException("Beneficier not found with ID: " + beneficierId));
+
+        Beneficier updatedBeneficier = beneficierMapper.fromBeneficierReqDTOToBeneficier(beneficierReqDTO);
+        updatedBeneficier.setId(existingBeneficier.getId());
+        beneficiaireRepository.save(updatedBeneficier);
     }
 
     @Override

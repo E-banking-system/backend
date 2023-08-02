@@ -9,9 +9,11 @@ import adria.sid.ebanckingbackend.entities.Beneficier;
 import adria.sid.ebanckingbackend.exceptions.CompteNotExistException;
 import adria.sid.ebanckingbackend.exceptions.IdUserIsNotValideException;
 import adria.sid.ebanckingbackend.services.beneficiaire.BeneficierService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -60,6 +62,30 @@ public class BeneficierController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         } catch (CompteNotExistException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    @PutMapping("/{beneficierId}")
+    public ResponseEntity<String> updateBeneficier(
+            @PathVariable String beneficierId,
+            @RequestBody @Valid BeneficierReqDTO beneficierReqDTO) {
+        try {
+            beneficierService.modifierBeneficier(beneficierReqDTO, beneficierId);
+            return ResponseEntity.ok("Beneficier a été modifié");
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (IdUserIsNotValideException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{beneficierId}")
+    public ResponseEntity<String> deleteBeneficier(@PathVariable String beneficierId) {
+        try {
+            beneficierService.supprimerBeneficier(beneficierId);
+            return ResponseEntity.ok("Beneficier à été supprimer");
+        } catch (EmptyResultDataAccessException e) {
+            return ResponseEntity.notFound().build();
         }
     }
 
