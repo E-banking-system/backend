@@ -29,7 +29,7 @@ public class AuthResDTOTest {
         assertEquals(role, authResDTO.getRole());
 
         // Test the constructor with all arguments
-        AuthResDTO authResDTOWithArgs = new AuthResDTO(accessToken, refreshToken, role);
+        AuthResDTO authResDTOWithArgs = new AuthResDTO(accessToken, refreshToken, role, "user_id");
         assertEquals(accessToken, authResDTOWithArgs.getAccessToken());
         assertEquals(refreshToken, authResDTOWithArgs.getRefreshToken());
         assertEquals(role, authResDTOWithArgs.getRole());
