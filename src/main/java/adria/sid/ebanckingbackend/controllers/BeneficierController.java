@@ -9,6 +9,7 @@ import adria.sid.ebanckingbackend.entities.Beneficier;
 import adria.sid.ebanckingbackend.exceptions.CompteNotExistException;
 import adria.sid.ebanckingbackend.exceptions.IdUserIsNotValideException;
 import adria.sid.ebanckingbackend.services.beneficiaire.BeneficierService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -60,6 +61,20 @@ public class BeneficierController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         } catch (CompteNotExistException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    @PutMapping("/{beneficierId}")
+    public ResponseEntity<String> updateBeneficier(
+            @PathVariable String beneficierId,
+            @RequestBody @Valid BeneficierReqDTO beneficierReqDTO) {
+        try {
+            beneficierService.modifierBeneficier(beneficierReqDTO, beneficierId);
+            return ResponseEntity.ok("Beneficier updated successfully.");
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (IdUserIsNotValideException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
