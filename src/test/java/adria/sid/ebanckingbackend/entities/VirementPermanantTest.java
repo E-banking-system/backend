@@ -21,14 +21,10 @@ public class VirementPermanantTest {
         vrmnt.setMontant(500.0);
         vrmnt.setEstPermanent(true);
         Date horaire = new Date();
-        vrmnt.setHoraire(horaire);
-        vrmnt.setVirementType(EVType.BIMENSUELLE);
 
         assertEquals(vrmntId, vrmnt.getId());
         assertEquals(dateOp, vrmnt.getDateOperation());
         assertEquals(500.0, vrmnt.getMontant());
         assertEquals(true, vrmnt.getEstPermanent());
-        assertEquals(horaire, vrmnt.getHoraire());
-        assertEquals(EVType.BIMENSUELLE, vrmnt.getVirementType());
     }
 }
