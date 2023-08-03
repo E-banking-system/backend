@@ -20,7 +20,7 @@ public class VirementMapperImpl implements VirementMapper{
     public VirementResDTO fromVirementToVirementResDTO(Virement virement){
         VirementResDTO virementResDTO=new VirementResDTO();
         BeanUtils.copyProperties(virement,virementResDTO);
-        return  virementResDTO;
+        return virementResDTO;
     }
 
     @Override
@@ -28,19 +28,9 @@ public class VirementMapperImpl implements VirementMapper{
         VirementUnitaire virementUnitaire=new VirementUnitaire();
         virementUnitaire.setId(UUID.randomUUID().toString());
         virementUnitaire.setDateOperation(new Date());
-
-        UserEntity user=new UserEntity();
-        user.setId(virementUnitReqDTO.getClientId());
-        virementUnitaire.setUser(user);
-
-        Beneficier beneficier=new Beneficier();
-        beneficier.setId(virementUnitReqDTO.getBeneficierId());
-        virementUnitaire.setBeneficier(beneficier);
-
         virementUnitaire.setEstUnitaire(true);
-
         BeanUtils.copyProperties(virementUnitReqDTO,virementUnitaire);
-        return  virementUnitaire;
+        return virementUnitaire;
     }
 
     @Override
@@ -48,7 +38,7 @@ public class VirementMapperImpl implements VirementMapper{
         VirementPermanant virementPermanant=new VirementPermanant();
         virementPermanant.setId(UUID.randomUUID().toString());
         BeanUtils.copyProperties(virementUnitReqDTO,virementPermanant);
-        return  virementPermanant;
+        return virementPermanant;
     }
 
     @Override
@@ -56,7 +46,7 @@ public class VirementMapperImpl implements VirementMapper{
         VirementPermanant virementPermanant=new VirementPermanant();
         virementPermanant.setId(UUID.randomUUID().toString());
         BeanUtils.copyProperties(virementProgramme,virementPermanant);
-        return  virementPermanant;
+        return virementPermanant;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package adria.sid.ebanckingbackend.repositories;
 
+import adria.sid.ebanckingbackend.entities.UserEntity;
 import adria.sid.ebanckingbackend.entities.VirementUnitaire;
 import org.springframework.data.jpa.repository.JpaRepository;
 

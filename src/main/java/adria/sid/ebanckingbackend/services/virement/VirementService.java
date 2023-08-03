@@ -2,17 +2,14 @@ package adria.sid.ebanckingbackend.services.virement;
 
 import adria.sid.ebanckingbackend.dtos.virement.VirementPermanentReqDTO;
 import adria.sid.ebanckingbackend.dtos.virement.VirementUnitReqDTO;
-import adria.sid.ebanckingbackend.exceptions.BeneficierIsNotExistException;
-import adria.sid.ebanckingbackend.exceptions.ClientIsNotExistException;
-import adria.sid.ebanckingbackend.exceptions.CompteNotExistException;
-import adria.sid.ebanckingbackend.exceptions.DatesVirementPermanentAreNotValide;
+import adria.sid.ebanckingbackend.exceptions.*;
 import jakarta.transaction.Transactional;
 
 
 public interface VirementService {
-    void effectuerVirementUnitaire(VirementUnitReqDTO viremenentReqDTO) throws BeneficierIsNotExistException, ClientIsNotExistException, CompteNotExistException;
+    void effectuerVirementUnitaire(VirementUnitReqDTO viremenentReqDTO) throws BeneficierIsNotExistException, ClientIsNotExistException, CompteNotExistException, MontantNotValide;
 
-    void effectuerVirementPermanentNow(VirementUnitReqDTO viremenentReqDTO);
+    //void effectuerVirementPermanentNow(VirementUnitReqDTO viremenentReqDTO);
 
-    void effectuerVirementPermanent(VirementPermanentReqDTO virementPermanentReqDTO) throws DatesVirementPermanentAreNotValide;
+    //void effectuerVirementPermanent(VirementPermanentReqDTO virementPermanentReqDTO) throws DatesVirementPermanentAreNotValide;
 }

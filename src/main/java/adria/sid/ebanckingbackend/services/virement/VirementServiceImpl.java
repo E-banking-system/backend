@@ -5,10 +5,7 @@ import adria.sid.ebanckingbackend.dtos.virement.VirementUnitReqDTO;
 import adria.sid.ebanckingbackend.ennumerations.EVType;
 import adria.sid.ebanckingbackend.ennumerations.EtatCompte;
 import adria.sid.ebanckingbackend.entities.*;
-import adria.sid.ebanckingbackend.exceptions.BeneficierIsNotExistException;
-import adria.sid.ebanckingbackend.exceptions.ClientIsNotExistException;
-import adria.sid.ebanckingbackend.exceptions.CompteNotExistException;
-import adria.sid.ebanckingbackend.exceptions.DatesVirementPermanentAreNotValide;
+import adria.sid.ebanckingbackend.exceptions.*;
 import adria.sid.ebanckingbackend.mappers.VirementMapper;
 import adria.sid.ebanckingbackend.repositories.*;
 import adria.sid.ebanckingbackend.services.compte.CompteService;
@@ -38,25 +35,19 @@ public class VirementServiceImpl implements VirementService{
 
     @Transactional
     @Override
-    public void effectuerVirementUnitaire(VirementUnitReqDTO viremenentReqDTO) throws BeneficierIsNotExistException, ClientIsNotExistException, CompteNotExistException {
-        UserEntity client=userRepository.findById(viremenentReqDTO.getClientId()).orElse(null);
-        if(client == null){
-            throw new ClientIsNotExistException("Client is not valide");
+    public void effectuerVirementUnitaire(VirementUnitReqDTO viremenentReqDTO) throws  CompteNotExistException, MontantNotValide {
+        if(viremenentReqDTO.getMontant()<100){
+            throw new MontantNotValide("Ce montant n'est pas valide");
         }
 
-        Beneficier beneficier=beneficierRepository.findById(viremenentReqDTO.getBeneficierId()).orElse(null);
-        if(beneficier == null){
-            throw new BeneficierIsNotExistException("Beneficier is not valide");
-        }
-
-        Compte clientCompte = compteRepository.getCompteByNumCompte(viremenentReqDTO.getNumCompteClient());
+        Compte clientCompte=compteRepository.getCompteByNumCompte(viremenentReqDTO.getNumCompteClient());
         if(clientCompte == null){
-            throw new CompteNotExistException("Ce numéro de compte n'existe pas : "+viremenentReqDTO.getNumCompteClient());
+            throw new CompteNotExistException("Le compte client n'est pas valide");
         }
 
-        Compte beneficierCompte = compteRepository.getCompteByNumCompte(viremenentReqDTO.getNumCompteBeneficier());
+        Compte beneficierCompte=compteRepository.getCompteByNumCompte(viremenentReqDTO.getNumCompteBeneficier());
         if(beneficierCompte == null){
-            throw new CompteNotExistException("Ce numéro de compte n'existe pas : "+viremenentReqDTO.getNumCompteBeneficier());
+            throw new CompteNotExistException("Le compte beneficier n'est pas valide");
         }
 
         compteService.changeSolde(clientCompte.getNumCompte(),-viremenentReqDTO.getMontant());
@@ -67,7 +58,7 @@ public class VirementServiceImpl implements VirementService{
         System.out.println("Virement effectuer avec succes");
     }
 
-    @Override
+    /*@Override
     public void effectuerVirementPermanent(VirementPermanentReqDTO virementPermanentReqDTO) throws DatesVirementPermanentAreNotValide {
         if (virementPermanentReqDTO.getPrememierDateExecution().compareTo(virementPermanentReqDTO.getDateFinExecution()) > 0) {
             throw new DatesVirementPermanentAreNotValide("Les dates pour programmé ce virement ne sont pas valide");
@@ -107,9 +98,9 @@ public class VirementServiceImpl implements VirementService{
         }
 
         System.out.println("Virement programmé avec succès");
-    }
+    }*/
 
-    @Transactional
+    /*@Transactional
     @Override
     public void effectuerVirementPermanentNow(VirementUnitReqDTO viremenentReqDTO)  {
         UserEntity client=userRepository.findById(viremenentReqDTO.getClientId()).orElse(null);
@@ -159,15 +150,15 @@ public class VirementServiceImpl implements VirementService{
         VirementPermanant virementPermanant=virementMapper.fromVirementReqDTOToVirementPermanent(viremenentReqDTO);
         virementPermanantRepository.save(virementPermanant);
         System.out.println("Virement effectuer avec succes");
-    }
+    }*/
 
-    @Bean
+    /*@Bean
     @Scheduled(fixedRate = 5000) // Run every 5000 milliseconds (5 seconds)
-    public void effectuerVirementProgramme() throws CompteNotExistException, ClientIsNotExistException, BeneficierIsNotExistException {
+    public void effectuerVirementProgramme() throws CompteNotExistException, ClientIsNotExistException, BeneficierIsNotExistException {*/
         /* 1) verifier a chaque foix si la date courant egale a la date de virement programme (avec un decalage de 5 minute)
            2) si c'est le cas effectuer un virement unitaire
          */
-        List<VirementProgramme> virementsProgramme=viremenProgrammeRepository.findPendingVirements(new Date());
+        /*List<VirementProgramme> virementsProgramme=viremenProgrammeRepository.findPendingVirements(new Date());
         System.out.println("Les virement programme sont : "+virementsProgramme.size()+" virements");
         if(virementsProgramme.size()>0){
             for (VirementProgramme virementProgramme : virementsProgramme) {
@@ -186,5 +177,5 @@ public class VirementServiceImpl implements VirementService{
             }
         }
         System.out.println("Aucun virement programme a été effectuée");
-    }
+    }*/
 }

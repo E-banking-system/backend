@@ -1,11 +1,7 @@
 package adria.sid.ebanckingbackend.controllers;
 
-import adria.sid.ebanckingbackend.dtos.virement.VirementPermanentReqDTO;
 import adria.sid.ebanckingbackend.dtos.virement.VirementUnitReqDTO;
-import adria.sid.ebanckingbackend.exceptions.BeneficierIsNotExistException;
-import adria.sid.ebanckingbackend.exceptions.ClientIsNotExistException;
-import adria.sid.ebanckingbackend.exceptions.CompteNotExistException;
-import adria.sid.ebanckingbackend.exceptions.DatesVirementPermanentAreNotValide;
+import adria.sid.ebanckingbackend.exceptions.*;
 import adria.sid.ebanckingbackend.services.virement.VirementService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,16 +21,15 @@ public class VirementController {
         try {
             virementService.effectuerVirementUnitaire(virementUnitReqDTO);
             return ResponseEntity.ok("Virement effectué avec success : "+virementUnitReqDTO.getMontant());
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | BeneficierIsNotExistException | ClientIsNotExistException |
+                 CompteNotExistException | MontantNotValide e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e.getMessage());
-        } catch (ClientIsNotExistException | BeneficierIsNotExistException | CompteNotExistException e) {
-            throw new RuntimeException(e);
         }
     }
 
-    @PostMapping("/permanent")
+    /*@PostMapping("/permanent")
     public ResponseEntity<String> effectuerVirementPermanent(@RequestBody @Valid VirementPermanentReqDTO virementPermanentReqDTO) {
         try {
             virementService.effectuerVirementPermanent(virementPermanentReqDTO);
@@ -46,7 +41,7 @@ public class VirementController {
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body("Une erreur est survenue lors de l'opération : " + e.getMessage());
         }
-    }
+    }*/
 
     // Exception handler to handle DatesVirementPermanentAreNotValide
     @ExceptionHandler(DatesVirementPermanentAreNotValide.class)

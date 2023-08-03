@@ -16,8 +16,4 @@ public class VirementUnitReqDTO {
     private String numCompteClient;
     @NotNull
     private String numCompteBeneficier;
-    @NotNull
-    private String clientId;
-    @NotNull
-    private String beneficierId;
 }
