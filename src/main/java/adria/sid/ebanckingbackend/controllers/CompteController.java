@@ -114,7 +114,7 @@ public class CompteController {
     public ResponseEntity<?> changeSolde(@RequestBody @Valid ChangeSoldeReqDTO changeSoldeReqDTO) {
         try {
             System.out.println(changeSoldeReqDTO.toString());
-            compteService.changeSolde(changeSoldeReqDTO.getNumCompte(), changeSoldeReqDTO.getMontant());
+            compteService.changeSolde(changeSoldeReqDTO.getNumCompte(), changeSoldeReqDTO.getMontant(),false);
             return ResponseEntity.ok("Solde modifié avec succès : "+changeSoldeReqDTO.getMontant());
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

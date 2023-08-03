@@ -9,7 +9,7 @@ import jakarta.transaction.Transactional;
 public interface VirementService {
     void effectuerVirementUnitaire(VirementUnitReqDTO viremenentReqDTO) throws BeneficierIsNotExistException, ClientIsNotExistException, CompteNotExistException, MontantNotValide;
 
-    //void effectuerVirementPermanentNow(VirementUnitReqDTO viremenentReqDTO);
+    void effectuerVirementPermanentNow(VirementUnitReqDTO viremenentReqDTO);
 
-    //void effectuerVirementPermanent(VirementPermanentReqDTO virementPermanentReqDTO) throws DatesVirementPermanentAreNotValide;
+    void effectuerVirementPermanent(VirementPermanentReqDTO virementPermanentReqDTO) throws DatesVirementPermanentAreNotValide;
 }

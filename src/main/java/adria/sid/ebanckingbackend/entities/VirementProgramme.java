@@ -28,9 +28,7 @@ public class VirementProgramme {
     private Double montant;
     private String numCompteClient;
     private String numCompteBeneficier;
-    private String clientId;
-    private String beneficierId;
-    private Date prememierDateExecution;
+    private Date premierDateExecution;
     private Date dateFinExecution;
 
     @Enumerated(EnumType.STRING)
@@ -38,7 +36,7 @@ public class VirementProgramme {
 
     private boolean effectuer=false;
 
-
+    //Prod version
     /*public List<Date> genererDatesExecution() {
         List<Date> datesExecution = new ArrayList<>();
 
@@ -62,10 +60,12 @@ public class VirementProgramme {
 
         return datesExecution;
     }*/
+
+    //test version
     public List<Date> genererDatesExecution() {
         List<Date> datesExecution = new ArrayList<>();
 
-        LocalDateTime dateTimeDebut = prememierDateExecution.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+        LocalDateTime dateTimeDebut = premierDateExecution.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
         LocalDateTime dateTimeFin = dateFinExecution.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
 
         LocalDateTime currentDateTime = dateTimeDebut;

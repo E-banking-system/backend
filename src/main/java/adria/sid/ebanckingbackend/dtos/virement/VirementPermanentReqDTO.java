@@ -22,13 +22,9 @@ public class VirementPermanentReqDTO {
     @NotNull
     private String numCompteBeneficier;
     @NotNull
-    private String clientId;
-    @NotNull
-    private String beneficierId;
-    @NotNull
-    private Date prememierDateExecution;
+    private Date premierDateExecution;
     @NotNull
     private Date dateFinExecution;
     @NotNull
-    private String frequence;
+    private EVType frequence;
 }

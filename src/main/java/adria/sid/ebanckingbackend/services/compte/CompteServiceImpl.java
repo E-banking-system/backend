@@ -192,7 +192,7 @@ public class CompteServiceImpl implements CompteService {
     }
 
     @Transactional
-    public Boolean credit(String numCompte,Double montant){
+    public Boolean credit(String numCompte,Double montant,Boolean isVirement){
         Compte compte = compteRepository.getCompteByNumCompte(numCompte);
         if (compte != null) {
             if(!compte.getEtatCompte().equals(EtatCompte.ACTIVE)){
@@ -206,15 +206,17 @@ public class CompteServiceImpl implements CompteService {
 
                 log.info("Changed solde for compte  NumCompte: {} by amount: {}", numCompte, montant);
 
-                Notification notification=new Notification();
-                notification.setId(UUID.randomUUID().toString());
-                notification.setContenu("Numéro du compte : "+numCompte);
-                notification.setUser(compte.getUser());
-                notification.setDateEnvoie(new Date());
-                notification.setTitre("Crédit de "+montant+" DH effectué avec success, le solde actuel est : "+newSolde+" DH");
-                notificationService.saveNotification(notification);
+                if(!isVirement) {
+                    Notification notification = new Notification();
+                    notification.setId(UUID.randomUUID().toString());
+                    notification.setContenu("Numéro du compte : " + numCompte);
+                    notification.setUser(compte.getUser());
+                    notification.setDateEnvoie(new Date());
+                    notification.setTitre("Crédit de " + montant + " DH effectué avec success, le solde actuel est : " + newSolde + " DH");
+                    notificationService.saveNotification(notification);
 
-                log.info("Sent crédit du compte notification with ID: {}", notification.getId());
+                    log.info("Sent crédit du compte notification with ID: {}", notification.getId());
+                }
                 return true;
             } else {
                 throw new IllegalArgumentException("Insufficient balance.");
@@ -225,7 +227,7 @@ public class CompteServiceImpl implements CompteService {
     }
 
     @Transactional
-    public Boolean debit(String numCompte,Double montant){
+    public Boolean debit(String numCompte,Double montant,Boolean isVirement){
         Compte compte = compteRepository.getCompteByNumCompte(numCompte);
         if (compte != null) {
             if(!compte.getEtatCompte().equals(EtatCompte.ACTIVE)){
@@ -237,16 +239,17 @@ public class CompteServiceImpl implements CompteService {
             compteRepository.save(compte);
 
             log.info("Changed solde for compte  NumCompte: {} by amount: {}", numCompte, montant);
+            if(!isVirement) {
+                Notification notification = new Notification();
+                notification.setId(UUID.randomUUID().toString());
+                notification.setContenu("Numéro du compte : " + numCompte);
+                notification.setUser(compte.getUser());
+                notification.setDateEnvoie(new Date());
+                notification.setTitre("Débit de " + montant + " DH effectué avec success, le solde actuel est : " + newSolde + " DH");
+                notificationService.saveNotification(notification);
 
-            Notification notification=new Notification();
-            notification.setId(UUID.randomUUID().toString());
-            notification.setContenu("Numéro du compte : "+numCompte);
-            notification.setUser(compte.getUser());
-            notification.setDateEnvoie(new Date());
-            notification.setTitre("Débit de "+montant+" DH effectué avec success, le solde actuel est : "+newSolde+" DH");
-            notificationService.saveNotification(notification);
-
-            log.info("Sent débit du compte notification with ID: {}", notification.getId());
+                log.info("Sent débit du compte notification with ID: {}", notification.getId());
+            }
             return true;
         } else {
             throw new IllegalArgumentException("Compte not found with the given ID");
@@ -255,14 +258,14 @@ public class CompteServiceImpl implements CompteService {
 
     @Override
     @Transactional
-    public void changeSolde(String numCompte, Double montant) {
+    public void changeSolde(String numCompte, Double montant,Boolean isVirement) {
         if (montant > 0) {
-            Boolean success = debit(numCompte, montant);
+            Boolean success = debit(numCompte, montant,isVirement);
             if (success) {
                 log.info("Debit effectué avec succès : {}", montant);
             }
         } else {
-            Boolean success = credit(numCompte, -montant);
+            Boolean success = credit(numCompte, -montant,isVirement);
             if (success) {
                 log.info("Credit effectué avec succès : {}", -montant);
             }

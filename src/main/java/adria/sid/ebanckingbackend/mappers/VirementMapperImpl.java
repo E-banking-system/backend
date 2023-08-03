@@ -1,5 +1,6 @@
 package adria.sid.ebanckingbackend.mappers;
 
+import adria.sid.ebanckingbackend.dtos.virement.VirementPermanentReqDTO;
 import adria.sid.ebanckingbackend.dtos.virement.VirementResDTO;
 import adria.sid.ebanckingbackend.dtos.virement.VirementUnitReqDTO;
 import adria.sid.ebanckingbackend.entities.*;
@@ -39,6 +40,14 @@ public class VirementMapperImpl implements VirementMapper{
         virementPermanant.setId(UUID.randomUUID().toString());
         BeanUtils.copyProperties(virementUnitReqDTO,virementPermanant);
         return virementPermanant;
+    }
+
+    @Override
+    public VirementProgramme fromVirementPermanentReqDTOToVirementProgramme(VirementPermanentReqDTO virementPermanentReqDTO){
+        VirementProgramme virementProgramme=new VirementProgramme();
+        virementProgramme.setId(UUID.randomUUID().toString());
+        BeanUtils.copyProperties(virementPermanentReqDTO,virementProgramme);
+        return virementProgramme;
     }
 
     @Override

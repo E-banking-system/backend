@@ -1,5 +1,6 @@
 package adria.sid.ebanckingbackend.controllers;
 
+import adria.sid.ebanckingbackend.dtos.virement.VirementPermanentReqDTO;
 import adria.sid.ebanckingbackend.dtos.virement.VirementUnitReqDTO;
 import adria.sid.ebanckingbackend.exceptions.*;
 import adria.sid.ebanckingbackend.services.virement.VirementService;
@@ -29,7 +30,7 @@ public class VirementController {
         }
     }
 
-    /*@PostMapping("/permanent")
+    @PostMapping("/permanent")
     public ResponseEntity<String> effectuerVirementPermanent(@RequestBody @Valid VirementPermanentReqDTO virementPermanentReqDTO) {
         try {
             virementService.effectuerVirementPermanent(virementPermanentReqDTO);
@@ -41,7 +42,7 @@ public class VirementController {
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body("Une erreur est survenue lors de l'opération : " + e.getMessage());
         }
-    }*/
+    }
 
     // Exception handler to handle DatesVirementPermanentAreNotValide
     @ExceptionHandler(DatesVirementPermanentAreNotValide.class)
