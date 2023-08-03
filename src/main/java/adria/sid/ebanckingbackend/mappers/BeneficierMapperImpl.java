@@ -30,6 +30,9 @@ public class BeneficierMapperImpl implements BeneficierMapper{
     public Beneficier fromBeneficierReqDTOToBeneficier(BeneficierReqDTO beneficierReqDTO) {
         Beneficier beneficier=new Beneficier();
         beneficier.setId(UUID.randomUUID().toString());
+        UserEntity client=new UserEntity();
+        client.setId(beneficierReqDTO.getClientId());
+        beneficier.setClient(client);
         BeanUtils.copyProperties(beneficierReqDTO,beneficier);
         return beneficier;
     }

@@ -11,6 +11,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BeneficierReqDTO {
+    @NotBlank(message = "clientId is required")
+    private String clientId;
+
     @NotBlank(message = "Nom is required")
     private String nom;
 

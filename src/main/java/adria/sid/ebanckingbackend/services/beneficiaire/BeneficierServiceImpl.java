@@ -2,14 +2,11 @@ package adria.sid.ebanckingbackend.services.beneficiaire;
 
 import adria.sid.ebanckingbackend.dtos.beneficier.BeneficierReqDTO;
 import adria.sid.ebanckingbackend.dtos.beneficier.BeneficierResDTO;
-import adria.sid.ebanckingbackend.dtos.notification.NotificationResDTO;
 import adria.sid.ebanckingbackend.entities.Beneficier;
 import adria.sid.ebanckingbackend.entities.Compte;
-import adria.sid.ebanckingbackend.entities.Notification;
 import adria.sid.ebanckingbackend.entities.UserEntity;
 import adria.sid.ebanckingbackend.exceptions.CompteNotExistException;
 import adria.sid.ebanckingbackend.exceptions.IdUserIsNotValideException;
-import adria.sid.ebanckingbackend.exceptions.UserAlreadyExists;
 import adria.sid.ebanckingbackend.mappers.BeneficierMapper;
 import adria.sid.ebanckingbackend.repositories.BeneficierRepository;
 import adria.sid.ebanckingbackend.repositories.CompteRepository;
