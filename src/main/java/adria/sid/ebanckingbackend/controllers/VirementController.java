@@ -5,6 +5,7 @@ import adria.sid.ebanckingbackend.dtos.virement.VirementUnitReqDTO;
 import adria.sid.ebanckingbackend.exceptions.BeneficierIsNotExistException;
 import adria.sid.ebanckingbackend.exceptions.ClientIsNotExistException;
 import adria.sid.ebanckingbackend.exceptions.CompteNotExistException;
+import adria.sid.ebanckingbackend.exceptions.DatesVirementPermanentAreNotValide;
 import adria.sid.ebanckingbackend.services.virement.VirementService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -37,14 +38,20 @@ public class VirementController {
     public ResponseEntity<String> effectuerVirementPermanent(@RequestBody @Valid VirementPermanentReqDTO virementPermanentReqDTO) {
         try {
             virementService.effectuerVirementPermanent(virementPermanentReqDTO);
-            return ResponseEntity.ok("Virement effectué avec success : "+virementPermanentReqDTO.getMontant());
+            return ResponseEntity.ok("Virement effectué avec succès : " + virementPermanentReqDTO.getMontant());
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (DatesVirementPermanentAreNotValide e) {
+            return ResponseEntity.badRequest().body("Dates de virement permanent non valides : " + e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().body(e.getMessage());
-        } catch (ClientIsNotExistException | BeneficierIsNotExistException | CompteNotExistException e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.internalServerError().body("Une erreur est survenue lors de l'opération : " + e.getMessage());
         }
+    }
+
+    // Exception handler to handle DatesVirementPermanentAreNotValide
+    @ExceptionHandler(DatesVirementPermanentAreNotValide.class)
+    public ResponseEntity<String> handleDatesVirementPermanentAreNotValide(DatesVirementPermanentAreNotValide e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
 
     // Exception handler to handle ClientIsNotExistException

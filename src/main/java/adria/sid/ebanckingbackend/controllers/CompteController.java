@@ -37,6 +37,18 @@ public class CompteController {
         }
     }
 
+    // Exception handler to handle IdUserIsNotValideException
+    @ExceptionHandler(IdUserIsNotValideException.class)
+    public ResponseEntity<String> handleIdUserIsNotValideException(IdUserIsNotValideException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+    }
+
+    // Exception handler to handle InternalError
+    @ExceptionHandler(InternalError.class)
+    public ResponseEntity<String> handleInternalError(InternalError e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+    }
+
     @GetMapping
     public ResponseEntity<?> getComptes(
             @RequestParam(defaultValue = "0") int page,

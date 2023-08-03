@@ -19,12 +19,14 @@ import java.util.stream.Collectors;
 public class ClientPhysiqueMapperImpl implements ClientPhysiqueMapper{
     final private PasswordEncoder passwordEncoder;
 
+    @Override
     public ClientPhysiqueDTO fromUserToClientPhysiqueDTO(UserEntity user){
         ClientPhysiqueDTO clientPhysiqueDTO=new ClientPhysiqueDTO();
         BeanUtils.copyProperties(user,clientPhysiqueDTO);
         return  clientPhysiqueDTO;
     }
 
+    @Override
     public UserEntity fromClientPhysiqueToUser(ClientPhysiqueDTO clientPhysiqueDTO){
         UserEntity user=new UserEntity();
         user.setId(UUID.randomUUID().toString());
@@ -36,6 +38,7 @@ public class ClientPhysiqueMapperImpl implements ClientPhysiqueMapper{
         return  user;
     }
 
+    @Override
     public List<ClientPhysiqueDTO> toClientsPhysiqueDTOs(List<UserEntity> users) {
         return users.stream()
                 .map(this::fromUserToClientPhysiqueDTO)

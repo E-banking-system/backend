@@ -40,6 +40,14 @@ public class SecurityConfiguration {
                     "/api/v1/virement/unitaire/**",
                     "/api/v1/virement/permanent/**",
                     "/api/v1/compte/**",
+                    "/api/v1/compte/demande_suspend/**",
+                    "/api/v1/compte/demande_activer/**",
+                    "/api/v1/compte/demande_block/**",
+                    "/api/v1/compte/blocker/**",
+                    "/api/v1/compte/activer/**",
+                    "/api/v1/compte/suspender/**",
+                    "/api/v1/compte/change_solde/**",
+                    "/api/v1/compte/**",
                     "/api/v1/client/comptes",
                     "/api/v1/notification/**",
                     "/api/v1/beneficier/**",
@@ -57,10 +65,10 @@ public class SecurityConfiguration {
                     "/swagger-ui.html"
             )
             .permitAll()
-            .requestMatchers(GET,"/api/v1/notification/**").hasAnyRole(BANQUIER.name(),CLIENT.name())
+            //.requestMatchers(GET,"/api/v1/notification/**").hasAnyRole(BANQUIER.name(),CLIENT.name())
 
-            .requestMatchers(GET, "/api/v1/client/comptes").hasRole(CLIENT.name())
-            .requestMatchers(POST, "/api/v1/compte/demande_suspend/**").hasRole(CLIENT.name())
+            //.requestMatchers(GET, "/api/v1/client/comptes").hasRole(CLIENT.name())
+            /*.requestMatchers(POST, "/api/v1/compte/demande_suspend/**").hasRole(CLIENT.name())
             .requestMatchers(POST, "/api/v1/compte/demande_activer/**").hasRole(CLIENT.name())
             .requestMatchers(POST, "/api/v1/compte/demande_block/**").hasRole(CLIENT.name())
 
@@ -69,8 +77,8 @@ public class SecurityConfiguration {
             .requestMatchers(POST, "/api/v1/compte/blocker/**").hasRole(BANQUIER.name())
             .requestMatchers(POST, "/api/v1/compte/activer/**").hasRole(BANQUIER.name())
             .requestMatchers(POST, "/api/v1/compte/suspender/**").hasRole(BANQUIER.name())
-            .requestMatchers(POST, "/api/v1/compte/change_solde/**").hasRole(BANQUIER.name())
-            .requestMatchers(GET, "/api/v1/client/comptes/**").hasRole(BANQUIER.name())
+            .requestMatchers(POST, "/api/v1/compte/change_solde/**").hasRole(BANQUIER.name())*/
+            //.requestMatchers(GET, "/api/v1/client/comptes/**").hasRole(BANQUIER.name())
 
             .anyRequest()
             .authenticated()
