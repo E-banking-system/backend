@@ -20,10 +20,6 @@ public class BeneficierReqDTO {
     @NotBlank(message = "Prénom is required")
     private String prenom;
 
-    @NotBlank(message = "Email is required")
-    @Email(message = "Invalid email format")
-    private String email;
-
     @NotBlank(message = "Num compte is required")
     private String numCompte;
 }
