@@ -36,12 +36,12 @@ public class VirementController {
         try {
             virementService.effectuerVirementPermanent(virementPermanentReqDTO);
             return ResponseEntity.ok("Virement effectué avec succès : " + virementPermanentReqDTO.getMontant());
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | DatesVirementPermanentAreNotValide e) {
             return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (DatesVirementPermanentAreNotValide e) {
-            return ResponseEntity.badRequest().body("Dates de virement permanent non valides : " + e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().body("Une erreur est survenue lors de l'opération : " + e.getMessage());
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        } catch (CompteNotExistException e) {
+            throw new RuntimeException(e);
         }
     }
 

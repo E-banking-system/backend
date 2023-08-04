@@ -16,6 +16,7 @@ import java.util.UUID;
 public class NotificationServiceVirementImpl implements NotificationServiceVirement{
     final private NotificationRepository notificationRepository;
     final private CompteRepository compteRepository;
+
     public void saveVirementUnitaireEffectueNotification(VirementUnitaire virementUnitaire, UserEntity client, UserEntity beneficier) {
         // Create a notification for the client
         Notification clientNotification = new Notification();
@@ -81,45 +82,4 @@ public class NotificationServiceVirementImpl implements NotificationServiceVirem
         notificationRepository.save(clientNotification);
         log.info("le compte beneficier n'est pas active");
     }
-
-    @Override
-    public void clientCompteNotExists(VirementProgramme virementProgramme) {
-        Notification clientNotification = new Notification();
-        clientNotification.setId(UUID.randomUUID().toString());
-
-        /*Compte clientCompte=compteRepository.getCompteByNumCompte(virementProgramme.getNumCompteClient());
-        UserEntity client=clientCompte.getUser();
-
-        clientNotification.setContenu("Un virement permanant non effectué par monsieur/madame : " +
-                client.getNom() +" "+ client.getPrenom());
-        clientNotification.setUser(client);
-        clientNotification.setDateEnvoie(new Date());
-        clientNotification.setTitre("Votre compte numéro "+virementProgramme.getNumCompteClient()+" n'existe pas");
-
-        notificationRepository.save(clientNotification);*/
-        log.info("le compte client n'existe pas");
-    }
-
-    @Override
-    public void beneficierCompteNotExists(VirementProgramme virementProgramme) {
-        Notification clientNotification = new Notification();
-        clientNotification.setId(UUID.randomUUID().toString());
-
-        Compte clientCompte=compteRepository.getCompteByNumCompte(virementProgramme.getNumCompteClient());
-        UserEntity client=clientCompte.getUser();
-
-        /*Compte beneficierCompte=compteRepository.getCompteByNumCompte(virementProgramme.getNumCompteBeneficier());
-        UserEntity beneficier=beneficierCompte.getUser();*/
-
-        clientNotification.setContenu("Un virement permanant non effectué par monsieur/madame : " +
-                client.getNom() +" "+ client.getPrenom());
-        clientNotification.setUser(client);
-        clientNotification.setDateEnvoie(new Date());
-        clientNotification.setTitre("le compte beneficier "+/*de monsieur "+beneficier.getNom()+" "+beneficier.getPrenom()*/"n'existe pas");
-
-        notificationRepository.save(clientNotification);
-        log.info("le compte beneficer n'existe pas");
-    }
-
-
 }

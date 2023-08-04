@@ -89,10 +89,20 @@ public class VirementServiceImpl implements VirementService{
 
     // Method to perform a scheduled money transfer (Virement Permanent)
     @Override
-    public void effectuerVirementPermanent(VirementPermanentReqDTO virementPermanentReqDTO) throws DatesVirementPermanentAreNotValide {
+    public void effectuerVirementPermanent(VirementPermanentReqDTO virementPermanentReqDTO) throws DatesVirementPermanentAreNotValide, CompteNotExistException {
         // Validate the execution dates for the scheduled transfer
         if (virementPermanentReqDTO.getPremierDateExecution().compareTo(virementPermanentReqDTO.getDateFinExecution()) > 0) {
             throw new DatesVirementPermanentAreNotValide("Les dates pour programmé ce virement ne sont pas valide");
+        }
+
+        Compte clientCompte = compteRepository.getCompteByNumCompte(virementPermanentReqDTO.getNumCompteClient());
+        if(!(clientCompte.getEtatCompte() == EtatCompte.ACTIVE)){
+            throw new CompteNotExistException("Le numéro de compte du client n'est pas valide");
+        }
+
+        Compte beneficierCompte = compteRepository.getCompteByNumCompte(virementPermanentReqDTO.getNumCompteBeneficier());
+        if(!(beneficierCompte.getEtatCompte() == EtatCompte.ACTIVE)){
+            throw new CompteNotExistException("Le numéro de compte du beneficier n'est pas valide");
         }
 
         // Convert the scheduled transfer details to VirementProgramme

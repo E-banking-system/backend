@@ -12,5 +12,5 @@ public interface VirementService {
 
     void effectuerVirementPermanentAsync(VirementProgramme virementProgramme);
 
-    void effectuerVirementPermanent(VirementPermanentReqDTO virementPermanentReqDTO) throws DatesVirementPermanentAreNotValide;
+    void effectuerVirementPermanent(VirementPermanentReqDTO virementPermanentReqDTO) throws DatesVirementPermanentAreNotValide, CompteNotExistException;
 }
