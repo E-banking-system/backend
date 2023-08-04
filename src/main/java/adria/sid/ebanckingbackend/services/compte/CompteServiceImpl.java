@@ -7,7 +7,6 @@ import adria.sid.ebanckingbackend.entities.Compte;
 import adria.sid.ebanckingbackend.entities.Notification;
 import adria.sid.ebanckingbackend.entities.UserEntity;
 import adria.sid.ebanckingbackend.exceptions.CompteNotActiveException;
-import adria.sid.ebanckingbackend.exceptions.IdUserIsNotValideException;
 import adria.sid.ebanckingbackend.mappers.CompteMapper;
 import adria.sid.ebanckingbackend.repositories.CompteRepository;
 import adria.sid.ebanckingbackend.repositories.UserRepository;
@@ -21,7 +20,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -219,11 +217,27 @@ public class CompteServiceImpl implements CompteService {
                 }
                 return true;
             } else {
-                throw new IllegalArgumentException("Insufficient balance.");
+                if(isVirement){
+                    System.out.println("Insufficient balance.");
+                    Notification notification = new Notification();
+                    notification.setId(UUID.randomUUID().toString());
+                    notification.setContenu("Numéro du compte : " + numCompte);
+                    notification.setUser(compte.getUser());
+                    notification.setDateEnvoie(new Date());
+                    notification.setTitre("Un virement n'a pas été effectué ca le montant est insuffisant.");
+                    notificationService.saveNotification(notification);
+                } else{
+                    throw new IllegalArgumentException("Insufficient balance.");
+                }
             }
         } else {
-            throw new IllegalArgumentException("Compte not found with the given ID");
+            if (isVirement){
+                System.out.println("Compte not found with the given ID");
+            } else{
+                throw new IllegalArgumentException("Compte not found with the given ID");
+            }
         }
+        return false;
     }
 
     @Transactional
@@ -252,23 +266,43 @@ public class CompteServiceImpl implements CompteService {
             }
             return true;
         } else {
-            throw new IllegalArgumentException("Compte not found with the given ID");
+            if(isVirement){
+                System.out.println("Compte not found with the given ID");
+            } else{
+                throw new IllegalArgumentException("Compte not found with the given ID");
+            }
         }
+        return false;
     }
 
     @Override
     @Transactional
     public void changeSolde(String numCompte, Double montant,Boolean isVirement) {
+        Boolean success=false;
         if (montant > 0) {
-            Boolean success = debit(numCompte, montant,isVirement);
+            success = debit(numCompte, montant,isVirement);
             if (success) {
                 log.info("Debit effectué avec succès : {}", montant);
             }
         } else {
-            Boolean success = credit(numCompte, -montant,isVirement);
+            success = credit(numCompte, -montant,isVirement);
             if (success) {
                 log.info("Credit effectué avec succès : {}", -montant);
             }
+        }
+        if(isVirement && success){
+            // Create a notification for the client
+            Notification clientNotification = new Notification();
+            clientNotification.setId(UUID.randomUUID().toString());
+            Compte compte = compteRepository.getCompteByNumCompte(numCompte);
+            clientNotification.setContenu("Un virement programme effectué avec succès  monsieur/madame : " +
+                    compte.getUser().getNom() +" "+ compte.getUser().getPrenom());
+            clientNotification.setUser(compte.getUser());
+            clientNotification.setDateEnvoie(new Date());
+            clientNotification.setTitre("Un virement programme de " + montant + " DH effectué avec succès");
+
+            notificationService.saveNotification(clientNotification);
+            log.info("Virement permanent effectue notification with ID: {}", clientNotification.getId());
         }
     }
 }

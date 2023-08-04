@@ -5,10 +5,7 @@ import adria.sid.ebanckingbackend.entities.Notification;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
-
 public interface NotificationService {
     void saveNotification(Notification notification);
-    void supprimerNotification(String id);
     Page<NotificationResDTO> getNotificationsByUserId(Pageable pageable, String userId);
 }
