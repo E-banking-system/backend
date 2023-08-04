@@ -2,7 +2,6 @@ package adria.sid.ebanckingbackend.services.virement;
 
 import adria.sid.ebanckingbackend.dtos.virement.VirementPermanentReqDTO;
 import adria.sid.ebanckingbackend.dtos.virement.VirementUnitReqDTO;
-import adria.sid.ebanckingbackend.ennumerations.EVType;
 import adria.sid.ebanckingbackend.ennumerations.EtatCompte;
 import adria.sid.ebanckingbackend.entities.*;
 import adria.sid.ebanckingbackend.exceptions.*;
@@ -10,6 +9,7 @@ import adria.sid.ebanckingbackend.mappers.VirementMapper;
 import adria.sid.ebanckingbackend.repositories.*;
 import adria.sid.ebanckingbackend.services.compte.CompteService;
 import adria.sid.ebanckingbackend.services.notification.NotificationService;
+import adria.sid.ebanckingbackend.utils.codeGenerators.CodeGenerator;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,8 +33,10 @@ public class VirementServiceImpl implements VirementService{
     final private VirementUnitaireRepository virementUnitaireRepository;
     final private VirementMapper virementMapper;
     final private NotificationService notificationService;
+    final private CodeGenerator codeGenerator;
+    final private BeneficierRepository beneficierRepository;
 
-        // Method to perform a one-time money transfer (Virement Unitaire)
+    // Method to perform a one-time money transfer (Virement Unitaire)
     @Transactional
     @Override
     public void effectuerVirementUnitaire(VirementUnitReqDTO viremenentReqDTO)
@@ -72,6 +74,11 @@ public class VirementServiceImpl implements VirementService{
 
         // Save the transfer details in the virementUnitaireRepository
         VirementUnitaire virementUnitaire = virementMapper.fromVirementReqDTOToVirementUnitaire(viremenentReqDTO);
+        virementUnitaire.setUser(clientCompte.getUser());
+
+        Beneficier beneficier=beneficierRepository.getBeneficiersByNumCompte(beneficierCompte.getNumCompte());
+        virementUnitaire.setBeneficier(beneficier);
+
         virementUnitaireRepository.save(virementUnitaire);
 
         // Create a notification for the beneficiary
@@ -103,14 +110,13 @@ public class VirementServiceImpl implements VirementService{
         VirementProgramme virementProgramme = virementMapper.fromVirementPermanentReqDTOToVirementProgramme(virementPermanentReqDTO);
 
         // Generate the list of execution dates for the scheduled transfer
-        List<Date> datesExecution = virementProgramme.genererDatesExecution();
+        List<Date> datesExecution = codeGenerator.genererDatesVirementPermanent(virementPermanentReqDTO.getPremierDateExecution(),virementPermanentReqDTO.getDateFinExecution(),virementPermanentReqDTO.getFrequence());
 
         // Add the execution dates to the database as VirementProgramme entries
         for (Date dateExecution : datesExecution) {
             VirementProgramme virementProgrammeExecution = new VirementProgramme();
             virementProgrammeExecution.setId(UUID.randomUUID().toString());
-            virementProgrammeExecution.setPremierDateExecution(dateExecution);
-            virementProgrammeExecution.setDateFinExecution(virementProgramme.getDateFinExecution());
+            virementProgrammeExecution.setDateExecution(dateExecution);
             virementProgrammeExecution.setEffectuer(false);
             virementProgrammeExecution.setMontant(virementProgramme.getMontant());
             virementProgrammeExecution.setFrequence(virementProgramme.getFrequence());
@@ -145,36 +151,42 @@ public class VirementServiceImpl implements VirementService{
     // Method to perform immediate execution of scheduled money transfers
     @Transactional
     @Override
-    public void effectuerVirementPermanentNow(VirementUnitReqDTO viremenentReqDTO) {
+    public void effectuerVirementPermanentAsync(VirementProgramme virementProgramme) {
         // Get client's and beneficiary's account details from the repository
-        Compte clientCompte = compteRepository.getCompteByNumCompte(viremenentReqDTO.getNumCompteClient());
-        Compte beneficierCompte = compteRepository.getCompteByNumCompte(viremenentReqDTO.getNumCompteBeneficier());
+        Compte clientCompte = compteRepository.getCompteByNumCompte(virementProgramme.getNumCompteBeneficier());
+        Compte beneficierCompte = compteRepository.getCompteByNumCompte(virementProgramme.getNumCompteBeneficier());
 
         // Validate the existence of the client's and beneficiary's accounts
-        if (!validateCompteExistence(clientCompte, viremenentReqDTO.getNumCompteClient())) {
+        if (!validateCompteExistence(clientCompte, virementProgramme.getNumCompteClient())) {
             return;
         }
 
-        if (!validateCompteExistence(beneficierCompte, viremenentReqDTO.getNumCompteBeneficier())) {
+        if (!validateCompteExistence(beneficierCompte, virementProgramme.getNumCompteBeneficier())) {
             return;
         }
 
         // Validate the state of the client's account (must be ACTIVE)
-        if (!validateCompteState(clientCompte, EtatCompte.ACTIVE, viremenentReqDTO.getNumCompteClient())) {
+        if (!validateCompteState(clientCompte, EtatCompte.ACTIVE, virementProgramme.getNumCompteClient())) {
             return;
         }
 
         // Validate the state of the beneficiary's account (must be ACTIVE)
-        if (!validateCompteState(beneficierCompte, EtatCompte.ACTIVE, viremenentReqDTO.getNumCompteBeneficier())) {
+        if (!validateCompteState(beneficierCompte, EtatCompte.ACTIVE, virementProgramme.getNumCompteBeneficier())) {
             return;
         }
 
         // Perform the money transfer between the accounts
-        compteService.changeSolde(clientCompte.getNumCompte(), -viremenentReqDTO.getMontant(), true);
-        compteService.changeSolde(beneficierCompte.getNumCompte(), viremenentReqDTO.getMontant(), true);
+        compteService.changeSolde(clientCompte.getNumCompte(), -virementProgramme.getMontant(), true);
+        compteService.changeSolde(beneficierCompte.getNumCompte(), virementProgramme.getMontant(), true);
 
         // Save the transfer details in the virementPermanantRepository
-        VirementPermanant virementPermanant = virementMapper.fromVirementReqDTOToVirementPermanent(viremenentReqDTO);
+        VirementPermanant virementPermanant=virementMapper.fromVirementProgrammeToVirementPermanent(virementProgramme);
+        virementPermanant.setFrequence(virementProgramme.getFrequence());
+        virementPermanant.setUser(clientCompte.getUser());
+
+        Beneficier beneficier=beneficierRepository.getBeneficiersByNumCompte(beneficierCompte.getNumCompte());
+        virementPermanant.setBeneficier(beneficier);
+
         virementPermanantRepository.save(virementPermanant);
 
         // Print success message
@@ -182,24 +194,17 @@ public class VirementServiceImpl implements VirementService{
     }
 
     // Scheduled method to execute pending scheduled money transfers
-    @Bean
     @Scheduled(fixedRate = 5000) // Run every 5000 milliseconds (5 seconds)
     public void effectuerVirementProgramme()  {
         // Find pending scheduled transfers that are due for execution
         List<VirementProgramme> virementsProgramme = viremenProgrammeRepository.findPendingVirements(new Date());
         System.out.println("Les virements programme sont : " + virementsProgramme.size() + " virements");
-
         // Execute each pending scheduled transfer and update its status
         if (virementsProgramme.size() > 0) {
             for (VirementProgramme virementProgramme : virementsProgramme) {
                 if (!virementProgramme.isEffectuer()) {
-                    VirementUnitReqDTO virementUnitReqDTO = new VirementUnitReqDTO();
-                    virementUnitReqDTO.setMontant(virementProgramme.getMontant());
-                    virementUnitReqDTO.setNumCompteBeneficier(virementProgramme.getNumCompteBeneficier());
-                    virementUnitReqDTO.setNumCompteClient(virementProgramme.getNumCompteClient());
-
                     // Execute the pending scheduled transfer immediately
-                    effectuerVirementPermanentNow(virementUnitReqDTO);
+                    effectuerVirementPermanentAsync(virementProgramme);
                 }
 
                 // Mark the scheduled transfer as executed

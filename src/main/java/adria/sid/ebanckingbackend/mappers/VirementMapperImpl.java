@@ -54,6 +54,8 @@ public class VirementMapperImpl implements VirementMapper{
     public VirementPermanant fromVirementProgrammeToVirementPermanent(VirementProgramme virementProgramme){
         VirementPermanant virementPermanant=new VirementPermanant();
         virementPermanant.setId(UUID.randomUUID().toString());
+        virementPermanant.setDateOperation(new Date());
+        virementPermanant.setFrequence(virementProgramme.getFrequence());
         BeanUtils.copyProperties(virementProgramme,virementPermanant);
         return virementPermanant;
     }

@@ -22,13 +22,13 @@ public class Beneficier extends Personne {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "beneficier")
     private List<Virement> virements;
 
-    public void addVirement(Virement virement) {
+    /*public void addVirement(Virement virement) {
         if (virements == null) {
             virements = new ArrayList<>();
         }
         virements.add(virement);
         virement.setBeneficier(this);
-    }
+    }*/
 
     @Override
     public String toString() {

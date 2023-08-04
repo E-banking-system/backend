@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface BeneficierRepository extends JpaRepository<Beneficier, String> {
     List<Beneficier> findByClientId(String id);
+    Beneficier getBeneficiersByNumCompte(String numCompte);
 }

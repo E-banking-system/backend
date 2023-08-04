@@ -9,6 +9,6 @@ import java.util.Date;
 import java.util.List;
 
 public interface ViremenProgrammeRepository extends JpaRepository<VirementProgramme,String> {
-    @Query("SELECT vp FROM VirementProgramme vp WHERE vp.premierDateExecution <= :currentDate AND vp.dateFinExecution >= :currentDate AND vp.effectuer = false")
+    @Query("SELECT vp FROM VirementProgramme vp WHERE vp.dateExecution <= :currentDate AND vp.effectuer = false")
     List<VirementProgramme> findPendingVirements(@Param("currentDate") Date currentDate);
 }
