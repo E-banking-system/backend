@@ -39,6 +39,9 @@ public class BeneficierServiceImpl implements BeneficierService {
         if(compte == null){
             throw new CompteNotExistException("Ce compte nexiste pas pour ce beneficier");
         }
+        if(compte.getEtatCompte().toString() != "ACTIVE"){
+            throw new CompteNotExistException("Ce compte n'est pas actif");
+        }
 
         beneficiaireRepository.save(beneficier);
     }
