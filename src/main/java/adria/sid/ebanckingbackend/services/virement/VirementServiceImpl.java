@@ -153,7 +153,7 @@ public class VirementServiceImpl implements VirementService{
     @Override
     public void effectuerVirementPermanentAsync(VirementProgramme virementProgramme) {
         // Get client's and beneficiary's account details from the repository
-        Compte clientCompte = compteRepository.getCompteByNumCompte(virementProgramme.getNumCompteBeneficier());
+        Compte clientCompte = compteRepository.getCompteByNumCompte(virementProgramme.getNumCompteClient());
         Compte beneficierCompte = compteRepository.getCompteByNumCompte(virementProgramme.getNumCompteBeneficier());
 
         // Validate the existence of the client's and beneficiary's accounts
