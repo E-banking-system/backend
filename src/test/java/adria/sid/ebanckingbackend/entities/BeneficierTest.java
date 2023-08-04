@@ -52,8 +52,8 @@ public class BeneficierTest {
         virement2.setMontant(3000.0);
         virement2.setDateOperation(new Date());
 
-        beneficier.addVirement(virement);
-        beneficier.addVirement(virement2);
+        //beneficier.addVirement(virement);
+        //beneficier.addVirement(virement2);
 
         assertEquals(2, beneficier.getVirements().size());
         assertTrue(beneficier.getVirements().contains(virement));

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/virement")
 public class VirementController {
     final private VirementService virementService;
+
     @PostMapping("/unitaire")
     public ResponseEntity<String> effectuerVirementUnitaire(@RequestBody @Valid VirementUnitReqDTO virementUnitReqDTO) {
         try {
