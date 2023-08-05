@@ -4,7 +4,6 @@ import adria.sid.ebanckingbackend.dtos.compte.*;
 import adria.sid.ebanckingbackend.ennumerations.ERole;
 import adria.sid.ebanckingbackend.ennumerations.EtatCompte;
 import adria.sid.ebanckingbackend.entities.Compte;
-import adria.sid.ebanckingbackend.entities.Notification;
 import adria.sid.ebanckingbackend.entities.UserEntity;
 import adria.sid.ebanckingbackend.exceptions.CompteNotActiveException;
 import adria.sid.ebanckingbackend.mappers.CompteMapper;
@@ -12,6 +11,7 @@ import adria.sid.ebanckingbackend.repositories.CompteRepository;
 import adria.sid.ebanckingbackend.repositories.UserRepository;
 import adria.sid.ebanckingbackend.services.email.EmailSender;
 import adria.sid.ebanckingbackend.services.notification.NotificationService;
+import adria.sid.ebanckingbackend.services.notification.NotificationCompteService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -31,6 +30,7 @@ public class CompteServiceImpl implements CompteService {
     final private CompteRepository compteRepository;
     final private UserRepository userRepository;
     final private NotificationService notificationService;
+    final private NotificationCompteService notificationServiceVirement;
     final private EmailSender emailSender;
     final private CompteMapper compteMapper;
 
@@ -79,15 +79,7 @@ public class CompteServiceImpl implements CompteService {
         if (compte != null) {
             compte.activerCompte();
             compteRepository.save(compte);
-
-            Notification notification=new Notification();
-            notification.setId(UUID.randomUUID().toString());
-            notification.setContenu("Id compte : "+compte.getId());
-            notification.setUser(compte.getUser());
-            notification.setDateEnvoie(new Date());
-            notification.setTitre("Compte activer avec success");
-            notificationService.saveNotification(notification);
-            log.info("Activated compte with ID: {}", compteId);
+            notificationServiceVirement.activerCompte(compte.getId(),compte.getUser());
         } else {
             throw new IllegalArgumentException("Compte not found with the given ID");
         }
@@ -100,14 +92,7 @@ public class CompteServiceImpl implements CompteService {
             compte.setDerniereDateBloquage(new Date());
             compte.blockerCompte();
             compteRepository.save(compte);
-
-            Notification notification=new Notification();
-            notification.setId(UUID.randomUUID().toString());
-            notification.setContenu("Id compte : "+compte.getId());
-            notification.setUser(compte.getUser());
-            notification.setDateEnvoie(new Date());
-            notification.setTitre("Compte blocké avec success");
-            notificationService.saveNotification(notification);
+            notificationServiceVirement.blockeCompte(compte.getId(),compte.getUser());
             log.info("Blocked compte with ID: {}", compteId);
         } else {
             throw new IllegalArgumentException("Compte not found with the given ID");
@@ -121,14 +106,7 @@ public class CompteServiceImpl implements CompteService {
             compte.setDerniereDateSuspention(new Date());
             compte.suspenduCompte();
             compteRepository.save(compte);
-
-            Notification notification=new Notification();
-            notification.setId(UUID.randomUUID().toString());
-            notification.setContenu("Id compte : "+compte.getId());
-            notification.setUser(compte.getUser());
-            notification.setDateEnvoie(new Date());
-            notification.setTitre("Compte suspendé avec success");
-            notificationService.saveNotification(notification);
+            notificationServiceVirement.suspendCompte(compte.getId(),compte.getUser());
             log.info("Suspended compte with ID: {}", compteId);
         } else {
             throw new IllegalArgumentException("Compte not found with the given ID");
@@ -145,48 +123,24 @@ public class CompteServiceImpl implements CompteService {
     }
 
     @Override
-    public Notification demandeSuspendCompte(DemandeSuspendDTO demandeSuspendDTO){
+    public void demandeSuspendCompte(DemandeSuspendDTO demandeSuspendDTO){
         UserEntity user=userRepository.findByRole(ERole.BANQUIER).get(0);
-        Notification notification=new Notification();
-        notification.setId(UUID.randomUUID().toString());
-        notification.setContenu("Id compte : "+demandeSuspendDTO.getCompteId());
-        notification.setUser(user);
-        notification.setDateEnvoie(new Date());
-        notification.setTitre("Demande de suspend d'un compte");
-        notificationService.saveNotification(notification);
-
-        log.info("Sent demande de suspend d'un compte notification with ID: {}", notification.getId());
-        return notification;
+        notificationServiceVirement.demandeSuspendCompte(demandeSuspendDTO.getCompteId(),user);
+        log.info("Sent demande de suspend d'un compte numéro : "+demandeSuspendDTO.getCompteId());
     }
 
     @Override
-    public Notification demandeBlockCompte(DemandeBlockDTO demandeBlockDTO){
+    public void demandeBlockCompte(DemandeBlockDTO demandeBlockDTO){
         UserEntity user=userRepository.findByRole(ERole.BANQUIER).get(0);
-        Notification notification=new Notification();
-        notification.setId(UUID.randomUUID().toString());
-        notification.setContenu("Id compte : "+demandeBlockDTO.getCompteId());
-        notification.setUser(user);
-        notification.setDateEnvoie(new Date());
-        notification.setTitre("Demande de block d'un compte");
-        notificationService.saveNotification(notification);
-
-        log.info("Sent demande de block d'un compte notification with ID: {}", notification.getId());
-        return notification;
+        notificationServiceVirement.demandeBlockCompte(demandeBlockDTO.getCompteId(),user);
+        log.info("Sent demande de block d'un compte numéro : "+demandeBlockDTO.getCompteId());
     }
 
     @Override
-    public Notification demandeActivateCompte(DemandeActivateDTO demandeActivateDTO){
+    public void demandeActivateCompte(DemandeActivateDTO demandeActivateDTO){
         UserEntity user=userRepository.findByRole(ERole.BANQUIER).get(0);
-        Notification notification=new Notification();
-        notification.setId(UUID.randomUUID().toString());
-        notification.setContenu("Id compte : "+demandeActivateDTO.getCompteId());
-        notification.setUser(user);
-        notification.setDateEnvoie(new Date());
-        notification.setTitre("Demande d'activer d'un compte");
-        notificationService.saveNotification(notification);
-
-        log.info("Sent demande d'activer d'un compte notification with ID: {}", notification.getId());
-        return notification;
+        notificationServiceVirement.demandeActivateCompte(demandeActivateDTO.getCompteId(), user);
+        log.info("Sent demande d'activer d'un compte numéro : "+demandeActivateDTO.getCompteId());
     }
 
     @Transactional
@@ -205,37 +159,20 @@ public class CompteServiceImpl implements CompteService {
                 log.info("Changed solde for compte  NumCompte: {} by amount: {}", numCompte, montant);
 
                 if(!isVirement) {
-                    Notification notification = new Notification();
-                    notification.setId(UUID.randomUUID().toString());
-                    notification.setContenu("Numéro du compte : " + numCompte);
-                    notification.setUser(compte.getUser());
-                    notification.setDateEnvoie(new Date());
-                    notification.setTitre("Crédit de " + montant + " DH effectué avec success, le solde actuel est : " + newSolde + " DH");
-                    notificationService.saveNotification(notification);
-
-                    log.info("Sent crédit du compte notification with ID: {}", notification.getId());
+                    notificationServiceVirement.retraitCompte(numCompte,compte.getUser(),montant,newSolde);
+                    log.info("Retrait de "+montant);
                 }
                 return true;
             } else {
                 if(isVirement){
-                    System.out.println("Insufficient balance.");
-                    Notification notification = new Notification();
-                    notification.setId(UUID.randomUUID().toString());
-                    notification.setContenu("Numéro du compte : " + numCompte);
-                    notification.setUser(compte.getUser());
-                    notification.setDateEnvoie(new Date());
-                    notification.setTitre("Un virement n'a pas été effectué ca le montant est insuffisant.");
-                    notificationService.saveNotification(notification);
+                    notificationServiceVirement.soldeInsifisantCompte(numCompte,compte.getUser());
+                    log.info("Insufficient balance.");
                 } else{
                     throw new IllegalArgumentException("Insufficient balance.");
                 }
             }
         } else {
-            if (isVirement){
-                System.out.println("Compte not found with the given ID");
-            } else{
-                throw new IllegalArgumentException("Compte not found with the given ID");
-            }
+            throw new IllegalArgumentException("Compte not found with the given ID");
         }
         return false;
     }
@@ -254,55 +191,34 @@ public class CompteServiceImpl implements CompteService {
 
             log.info("Changed solde for compte  NumCompte: {} by amount: {}", numCompte, montant);
             if(!isVirement) {
-                Notification notification = new Notification();
-                notification.setId(UUID.randomUUID().toString());
-                notification.setContenu("Numéro du compte : " + numCompte);
-                notification.setUser(compte.getUser());
-                notification.setDateEnvoie(new Date());
-                notification.setTitre("Débit de " + montant + " DH effectué avec success, le solde actuel est : " + newSolde + " DH");
-                notificationService.saveNotification(notification);
-
-                log.info("Sent débit du compte notification with ID: {}", notification.getId());
+                notificationServiceVirement.depotCompte(numCompte,compte.getUser(),montant,newSolde);
+                log.info("Depot de "+montant);
             }
             return true;
         } else {
-            if(isVirement){
-                System.out.println("Compte not found with the given ID");
-            } else{
-                throw new IllegalArgumentException("Compte not found with the given ID");
-            }
+            throw new IllegalArgumentException("Compte not found with the given ID");
         }
-        return false;
     }
 
     @Override
     @Transactional
     public void changeSolde(String numCompte, Double montant,Boolean isVirement) {
-        Boolean success=false;
+        Boolean success;
         if (montant > 0) {
             success = debit(numCompte, montant,isVirement);
             if (success) {
-                log.info("Debit effectué avec succès : {}", montant);
+                log.info("Depot effectué avec succès : {}", montant);
             }
         } else {
             success = credit(numCompte, -montant,isVirement);
             if (success) {
-                log.info("Credit effectué avec succès : {}", -montant);
+                log.info("Retrait effectué avec succès : {}", -montant);
             }
         }
         if(isVirement && success){
             // Create a notification for the client
-            Notification clientNotification = new Notification();
-            clientNotification.setId(UUID.randomUUID().toString());
-            Compte compte = compteRepository.getCompteByNumCompte(numCompte);
-            clientNotification.setContenu("Un virement programme effectué avec succès  monsieur/madame : " +
-                    compte.getUser().getNom() +" "+ compte.getUser().getPrenom());
-            clientNotification.setUser(compte.getUser());
-            clientNotification.setDateEnvoie(new Date());
-            clientNotification.setTitre("Un virement programme de " + montant + " DH effectué avec succès");
-
-            notificationService.saveNotification(clientNotification);
-            log.info("Virement permanent effectue notification with ID: {}", clientNotification.getId());
+            notificationServiceVirement.virementToClientCompte(numCompte,montant);
+            log.info("Virement permanent effectue");
         }
     }
 }

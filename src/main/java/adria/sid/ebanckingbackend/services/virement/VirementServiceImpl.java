@@ -8,7 +8,7 @@ import adria.sid.ebanckingbackend.exceptions.*;
 import adria.sid.ebanckingbackend.mappers.VirementMapper;
 import adria.sid.ebanckingbackend.repositories.*;
 import adria.sid.ebanckingbackend.services.compte.CompteService;
-import adria.sid.ebanckingbackend.services.notification.NotificationServiceVirement;
+import adria.sid.ebanckingbackend.services.notification.NotificationCompteService;
 import adria.sid.ebanckingbackend.utils.codeGenerators.CodeGenerator;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -31,7 +31,7 @@ public class VirementServiceImpl implements VirementService{
     final private VirementPermanantRepository virementPermanantRepository;
     final private VirementUnitaireRepository virementUnitaireRepository;
     final private VirementMapper virementMapper;
-    final private NotificationServiceVirement notificationServiceVirement;
+    final private NotificationCompteService notificationServiceVirement;
     final private CodeGenerator codeGenerator;
     final private BeneficierRepository beneficierRepository;
 
@@ -58,12 +58,12 @@ public class VirementServiceImpl implements VirementService{
         }
 
         // Validate the state of the client's account (must be ACTIVE)
-        if (!validateCompteState(clientCompte, EtatCompte.ACTIVE, viremenentReqDTO.getNumCompteClient())) {
+        if (validateCompteState(clientCompte, EtatCompte.ACTIVE, viremenentReqDTO.getNumCompteClient())) {
             throw new CompteNotActiveException("Ce compte client n'est pas active");
         }
 
         // Validate the state of the beneficiary's account (must be ACTIVE)
-        if (!validateCompteState(beneficierCompte, EtatCompte.ACTIVE, viremenentReqDTO.getNumCompteBeneficier())) {
+        if (validateCompteState(beneficierCompte, EtatCompte.ACTIVE, viremenentReqDTO.getNumCompteBeneficier())) {
             throw new CompteNotActiveException("Ce compte beneficier n'est pas active");
         }
 
@@ -99,7 +99,7 @@ public class VirementServiceImpl implements VirementService{
         if(!(clientCompte.getEtatCompte() == EtatCompte.ACTIVE)){
             throw new CompteNotExistException("Le numéro de compte du client n'est pas valide");
         }
-
+        System.out.println("is done");
         Compte beneficierCompte = compteRepository.getCompteByNumCompte(virementPermanentReqDTO.getNumCompteBeneficier());
         if(!(beneficierCompte.getEtatCompte() == EtatCompte.ACTIVE)){
             throw new CompteNotExistException("Le numéro de compte du beneficier n'est pas valide");
@@ -142,9 +142,9 @@ public class VirementServiceImpl implements VirementService{
     private boolean validateCompteState(Compte compte, EtatCompte etat, String numCompte) {
         if (!Objects.equals(compte.getEtatCompte(), etat)) {
             System.out.println("Le compte " + numCompte + " n'est pas actif");
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 
     // Method to perform immediate execution of scheduled money transfers
@@ -155,26 +155,15 @@ public class VirementServiceImpl implements VirementService{
         Compte clientCompte = compteRepository.getCompteByNumCompte(virementProgramme.getNumCompteClient());
         Compte beneficierCompte = compteRepository.getCompteByNumCompte(virementProgramme.getNumCompteBeneficier());
 
-        // Validate the existence of the client's and beneficiary's accounts
-        if (!validateCompteExistence(clientCompte, virementProgramme.getNumCompteClient())) {
-            //notificationServiceVirement.clientCompteNotExists(virementProgramme);
-            return;
-        }
-
-        if (!validateCompteExistence(beneficierCompte, virementProgramme.getNumCompteBeneficier())) {
-            //notificationServiceVirement.beneficierCompteNotExists(virementProgramme);
-            return;
-        }
-
         // Validate the state of the client's account (must be ACTIVE)
-        if (!validateCompteState(clientCompte, EtatCompte.ACTIVE, virementProgramme.getNumCompteClient())) {
-            //notificationServiceVirement.clientCompteNotActive(virementProgramme);
+        if (validateCompteState(clientCompte, EtatCompte.ACTIVE, virementProgramme.getNumCompteClient())) {
+            notificationServiceVirement.clientCompteNotActive(virementProgramme);
             return;
         }
 
         // Validate the state of the beneficiary's account (must be ACTIVE)
-        if (!validateCompteState(beneficierCompte, EtatCompte.ACTIVE, virementProgramme.getNumCompteBeneficier())) {
-            //notificationServiceVirement.beneficierCompteNotActive(virementProgramme);
+        if (validateCompteState(beneficierCompte, EtatCompte.ACTIVE, virementProgramme.getNumCompteBeneficier())) {
+            notificationServiceVirement.beneficierCompteNotActive(virementProgramme);
             return;
         }
 
