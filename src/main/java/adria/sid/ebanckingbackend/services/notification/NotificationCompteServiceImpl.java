@@ -75,7 +75,7 @@ public class NotificationCompteServiceImpl implements NotificationCompteService 
         clientNotification.setContenu("Un virement permanant non effectué");
         clientNotification.setUser(client);
         clientNotification.setDateEnvoie(new Date());
-        clientNotification.setTitre("le compte beneficier de monsieur "+beneficier.getNom()+" "+beneficier.getPrenom()+"  n'est pas active");
+        clientNotification.setTitre("le compte beneficier n'est pas active");
 
         notificationRepository.save(clientNotification);
         log.info("le compte beneficier n'est pas active");
