@@ -52,8 +52,7 @@ public class NotificationCompteServiceImpl implements NotificationCompteService 
         Compte clientCompte=compteRepository.getCompteByNumCompte(virementProgramme.getNumCompteClient());
         UserEntity client=clientCompte.getUser();
 
-        clientNotification.setContenu("Un virement permanant non effectué par monsieur/madame : " +
-               client.getNom() +" "+ client.getPrenom());
+        clientNotification.setContenu("Un virement permanant non effectué");
         clientNotification.setUser(client);
         clientNotification.setDateEnvoie(new Date());
         clientNotification.setTitre("Votre compte numéro "+virementProgramme.getNumCompteClient()+" n'est pas active");
@@ -73,8 +72,7 @@ public class NotificationCompteServiceImpl implements NotificationCompteService 
         Compte beneficierCompte=compteRepository.getCompteByNumCompte(virementProgramme.getNumCompteBeneficier());
         UserEntity beneficier=beneficierCompte.getUser();
 
-        clientNotification.setContenu("Un virement permanant non effectué par monsieur/madame : " +
-                client.getNom() +" "+ client.getPrenom());
+        clientNotification.setContenu("Un virement permanant non effectué");
         clientNotification.setUser(client);
         clientNotification.setDateEnvoie(new Date());
         clientNotification.setTitre("le compte beneficier de monsieur "+beneficier.getNom()+" "+beneficier.getPrenom()+"  n'est pas active");
