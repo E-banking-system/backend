@@ -3,6 +3,7 @@ package adria.sid.ebanckingbackend.services.virement;
 import adria.sid.ebanckingbackend.dtos.virement.VirementPermanentReqDTO;
 import adria.sid.ebanckingbackend.dtos.virement.VirementUnitReqDTO;
 import adria.sid.ebanckingbackend.ennumerations.EtatCompte;
+import adria.sid.ebanckingbackend.ennumerations.OPType;
 import adria.sid.ebanckingbackend.entities.*;
 import adria.sid.ebanckingbackend.exceptions.*;
 import adria.sid.ebanckingbackend.mappers.VirementMapper;
@@ -68,8 +69,8 @@ public class VirementServiceImpl implements VirementService{
         }
 
         // Deduct the amount from the client's account and add it to the beneficiary's account
-        compteService.changeSolde(clientCompte.getNumCompte(), -viremenentReqDTO.getMontant(), true);
-        compteService.changeSolde(beneficierCompte.getNumCompte(), viremenentReqDTO.getMontant(), true);
+        compteService.changeSolde(clientCompte.getNumCompte(), -viremenentReqDTO.getMontant(), OPType.VIREMENT_UNITAIRE);
+        compteService.changeSolde(beneficierCompte.getNumCompte(), viremenentReqDTO.getMontant(), OPType.VIREMENT_UNITAIRE);
 
         // Save the transfer details in the virementUnitaireRepository
         VirementUnitaire virementUnitaire = virementMapper.fromVirementReqDTOToVirementUnitaire(viremenentReqDTO);
@@ -79,9 +80,6 @@ public class VirementServiceImpl implements VirementService{
         virementUnitaire.setBeneficier(beneficier);
 
         virementUnitaireRepository.save(virementUnitaire);
-
-        // Create a notification for the beneficiary and the client
-        notificationServiceVirement.saveVirementUnitaireEffectueNotification(virementUnitaire,clientCompte.getUser(),beneficierCompte.getUser());
 
         // Print success message
         System.out.println("Virement effectué avec succès");
@@ -99,7 +97,7 @@ public class VirementServiceImpl implements VirementService{
         if(!(clientCompte.getEtatCompte() == EtatCompte.ACTIVE)){
             throw new CompteNotExistException("Le numéro de compte du client n'est pas valide");
         }
-        System.out.println("is done");
+
         Compte beneficierCompte = compteRepository.getCompteByNumCompte(virementPermanentReqDTO.getNumCompteBeneficier());
         if(!(beneficierCompte.getEtatCompte() == EtatCompte.ACTIVE)){
             throw new CompteNotExistException("Le numéro de compte du beneficier n'est pas valide");
@@ -168,8 +166,8 @@ public class VirementServiceImpl implements VirementService{
         }
 
         // Perform the money transfer between the accounts
-        compteService.changeSolde(clientCompte.getNumCompte(), -virementProgramme.getMontant(), true);
-        compteService.changeSolde(beneficierCompte.getNumCompte(), virementProgramme.getMontant(), true);
+        compteService.changeSolde(clientCompte.getNumCompte(), -virementProgramme.getMontant(), OPType.VIREMENT_PERMANENT);
+        compteService.changeSolde(beneficierCompte.getNumCompte(), virementProgramme.getMontant(), OPType.VIREMENT_PERMANENT);
 
         // Save the transfer details in the virementPermanantRepository
         VirementPermanant virementPermanant=virementMapper.fromVirementProgrammeToVirementPermanent(virementProgramme);

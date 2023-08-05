@@ -3,6 +3,7 @@ package adria.sid.ebanckingbackend.controllers;
 
 import adria.sid.ebanckingbackend.dtos.compte.ChangeSoldeReqDTO;
 import adria.sid.ebanckingbackend.dtos.compte.*;
+import adria.sid.ebanckingbackend.ennumerations.OPType;
 import adria.sid.ebanckingbackend.exceptions.IdUserIsNotValideException;
 import adria.sid.ebanckingbackend.services.compte.CompteService;
 import jakarta.validation.Valid;
@@ -114,8 +115,13 @@ public class CompteController {
     public ResponseEntity<?> changeSolde(@RequestBody @Valid ChangeSoldeReqDTO changeSoldeReqDTO) {
         try {
             System.out.println(changeSoldeReqDTO.toString());
-            compteService.changeSolde(changeSoldeReqDTO.getNumCompte(), changeSoldeReqDTO.getMontant(),false);
-            return ResponseEntity.ok("Solde modifié avec succès : "+changeSoldeReqDTO.getMontant());
+            if(changeSoldeReqDTO.getMontant()>0){
+                compteService.changeSolde(changeSoldeReqDTO.getNumCompte(), changeSoldeReqDTO.getMontant(), OPType.DEPOT);
+                return ResponseEntity.ok("Depot effectuée avec succès : "+changeSoldeReqDTO.getMontant());
+            } else{
+                compteService.changeSolde(changeSoldeReqDTO.getNumCompte(), changeSoldeReqDTO.getMontant(),OPType.RETRAIT);
+                return ResponseEntity.ok("Retrait effectuée avec succès : "+changeSoldeReqDTO.getMontant());
+            }
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {

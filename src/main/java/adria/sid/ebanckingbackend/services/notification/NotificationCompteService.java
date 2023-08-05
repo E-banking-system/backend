@@ -17,6 +17,8 @@ public interface NotificationCompteService {
     void retraitCompte(String numCompte,UserEntity user,double montant,double newSolde);
     void depotCompte(String numCompte,UserEntity user,double montant,double newSolde);
     void soldeInsifisantCompte(String numCompte,UserEntity user);
-    void virementToClientCompte(String numCompte,double montant);
-    void virementToBeneficierCompte(String numCompte,double montant);
+    void virementPermanentToClientCompte(String numCompte,double montant);
+    void virementPermanentToBeneficierCompte(String numCompte,double montant);
+    void virementUnitaireToClientCompte(String numCompte,double montant);
+    void virementUnitaireToBeneficierCompte(String numCompte,double montant);
 }

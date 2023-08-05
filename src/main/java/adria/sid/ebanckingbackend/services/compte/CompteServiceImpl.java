@@ -3,6 +3,7 @@ package adria.sid.ebanckingbackend.services.compte;
 import adria.sid.ebanckingbackend.dtos.compte.*;
 import adria.sid.ebanckingbackend.ennumerations.ERole;
 import adria.sid.ebanckingbackend.ennumerations.EtatCompte;
+import adria.sid.ebanckingbackend.ennumerations.OPType;
 import adria.sid.ebanckingbackend.entities.Compte;
 import adria.sid.ebanckingbackend.entities.UserEntity;
 import adria.sid.ebanckingbackend.exceptions.CompteNotActiveException;
@@ -144,7 +145,7 @@ public class CompteServiceImpl implements CompteService {
     }
 
     @Transactional
-    public Boolean credit(String numCompte,Double montant,Boolean isVirement){
+    public Boolean credit(String numCompte,Double montant,OPType opType){
         Compte compte = compteRepository.getCompteByNumCompte(numCompte);
         if (compte != null) {
             if(!compte.getEtatCompte().equals(EtatCompte.ACTIVE)){
@@ -158,13 +159,13 @@ public class CompteServiceImpl implements CompteService {
 
                 log.info("Changed solde for compte  NumCompte: {} by amount: {}", numCompte, montant);
 
-                if(!isVirement) {
+                if(opType.equals(OPType.RETRAIT)) {
                     notificationServiceVirement.retraitCompte(numCompte,compte.getUser(),montant,newSolde);
                     log.info("Retrait de "+montant);
                 }
                 return true;
             } else {
-                if(isVirement){
+                if(opType.equals(OPType.VIREMENT_UNITAIRE) || opType.equals(OPType.VIREMENT_PERMANENT)){
                     notificationServiceVirement.soldeInsifisantCompte(numCompte,compte.getUser());
                     log.info("Insufficient balance.");
                 } else{
@@ -178,7 +179,7 @@ public class CompteServiceImpl implements CompteService {
     }
 
     @Transactional
-    public Boolean debit(String numCompte,Double montant,Boolean isVirement){
+    public Boolean debit(String numCompte,Double montant,OPType opType){
         Compte compte = compteRepository.getCompteByNumCompte(numCompte);
         if (compte != null) {
             if(!compte.getEtatCompte().equals(EtatCompte.ACTIVE)){
@@ -190,7 +191,7 @@ public class CompteServiceImpl implements CompteService {
             compteRepository.save(compte);
 
             log.info("Changed solde for compte  NumCompte: {} by amount: {}", numCompte, montant);
-            if(!isVirement) {
+            if(opType.equals(OPType.DEPOT)) {
                 notificationServiceVirement.depotCompte(numCompte,compte.getUser(),montant,newSolde);
                 log.info("Depot de "+montant);
             }
@@ -202,27 +203,40 @@ public class CompteServiceImpl implements CompteService {
 
     @Override
     @Transactional
-    public void changeSolde(String numCompte, Double montant,Boolean isVirement) {
+    public void changeSolde(String numCompte, Double montant, OPType opType) {
         Boolean success;
         if (montant > 0) {
-            success = debit(numCompte, montant,isVirement);
+            success = debit(numCompte, montant,opType);
             if (success) {
                 log.info("Depot effectué avec succès : {}", montant);
             }
         } else {
-            success = credit(numCompte, -montant,isVirement);
+            success = credit(numCompte, -montant,opType);
             if (success) {
                 log.info("Retrait effectué avec succès : {}", -montant);
             }
         }
-        if(isVirement && success){
+
+        if(opType.equals(OPType.VIREMENT_UNITAIRE) && success){
             if(montant > 0){
                 // Create a notification for the client
-                notificationServiceVirement.virementToClientCompte(numCompte,montant);
+                notificationServiceVirement.virementUnitaireToClientCompte(numCompte,montant);
+                log.info("Virement unitaire effectuée");
+            } else {
+                // Create a notification for the beneficier
+                notificationServiceVirement.virementUnitaireToBeneficierCompte(numCompte,montant);
+                log.info("Virement unitaire effectuée");
+            }
+        }
+
+        if(opType.equals(OPType.VIREMENT_PERMANENT) && success){
+            if(montant > 0){
+                // Create a notification for the client
+                notificationServiceVirement.virementPermanentToClientCompte(numCompte,montant);
                 log.info("Virement permanent effectue");
             } else {
-                // Create a notification for the client
-                notificationServiceVirement.virementToBeneficierCompte(numCompte,montant);
+                // Create a notification for the beneficier
+                notificationServiceVirement.virementPermanentToBeneficierCompte(numCompte,montant);
                 log.info("Virement permanent effectue");
             }
         }

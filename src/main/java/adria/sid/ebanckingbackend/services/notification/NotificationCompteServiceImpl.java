@@ -180,7 +180,7 @@ public class NotificationCompteServiceImpl implements NotificationCompteService 
     }
 
     @Override
-    public void virementToClientCompte(String numCompte,double montant){
+    public void virementPermanentToClientCompte(String numCompte,double montant){
         Notification clientNotification = new Notification();
         clientNotification.setId(UUID.randomUUID().toString());
         Compte compte = compteRepository.getCompteByNumCompte(numCompte);
@@ -192,11 +192,35 @@ public class NotificationCompteServiceImpl implements NotificationCompteService 
     }
 
     @Override
-    public void virementToBeneficierCompte(String numCompte,double montant){
+    public void virementPermanentToBeneficierCompte(String numCompte,double montant){
         Notification clientNotification = new Notification();
         clientNotification.setId(UUID.randomUUID().toString());
         Compte compte = compteRepository.getCompteByNumCompte(numCompte);
         clientNotification.setContenu("VIREMENT WEB PROGRAMMÉ ENVOYÉ A "+compte.getUser().getNom() +" "+ compte.getUser().getPrenom());
+        clientNotification.setUser(compte.getUser());
+        clientNotification.setDateEnvoie(new Date());
+        clientNotification.setTitre(montant+"DH");
+        notificationRepository.save(clientNotification);
+    }
+
+    @Override
+    public void virementUnitaireToClientCompte(String numCompte,double montant){
+        Notification clientNotification = new Notification();
+        clientNotification.setId(UUID.randomUUID().toString());
+        Compte compte = compteRepository.getCompteByNumCompte(numCompte);
+        clientNotification.setContenu("VIREMENT UNITAIRE REÇU DE "+compte.getUser().getNom() +" "+ compte.getUser().getPrenom());
+        clientNotification.setUser(compte.getUser());
+        clientNotification.setDateEnvoie(new Date());
+        clientNotification.setTitre("+"+montant+"DH");
+        notificationRepository.save(clientNotification);
+    }
+
+    @Override
+    public void virementUnitaireToBeneficierCompte(String numCompte,double montant){
+        Notification clientNotification = new Notification();
+        clientNotification.setId(UUID.randomUUID().toString());
+        Compte compte = compteRepository.getCompteByNumCompte(numCompte);
+        clientNotification.setContenu("VIREMENT UNITAIRE ENVOYÉ A "+compte.getUser().getNom() +" "+ compte.getUser().getPrenom());
         clientNotification.setUser(compte.getUser());
         clientNotification.setDateEnvoie(new Date());
         clientNotification.setTitre(montant+"DH");
