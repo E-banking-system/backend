@@ -216,9 +216,15 @@ public class CompteServiceImpl implements CompteService {
             }
         }
         if(isVirement && success){
-            // Create a notification for the client
-            notificationServiceVirement.virementToClientCompte(numCompte,montant);
-            log.info("Virement permanent effectue");
+            if(montant > 0){
+                // Create a notification for the client
+                notificationServiceVirement.virementToClientCompte(numCompte,montant);
+                log.info("Virement permanent effectue");
+            } else {
+                // Create a notification for the client
+                notificationServiceVirement.virementToBeneficierCompte(numCompte,montant);
+                log.info("Virement permanent effectue");
+            }
         }
     }
 }

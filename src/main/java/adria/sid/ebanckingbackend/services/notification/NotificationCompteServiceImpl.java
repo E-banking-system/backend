@@ -90,7 +90,7 @@ public class NotificationCompteServiceImpl implements NotificationCompteService 
         notification.setContenu("Id compte : "+compteId);
         notification.setUser(user);
         notification.setDateEnvoie(new Date());
-        notification.setTitre("Compte activer avec success");
+        notification.setTitre("Activation d'un compte effectuée avec success");
         notificationRepository.save(notification);
     }
 
@@ -101,7 +101,7 @@ public class NotificationCompteServiceImpl implements NotificationCompteService 
         notification.setContenu("Id compte : "+compteId);
         notification.setUser(user);
         notification.setDateEnvoie(new Date());
-        notification.setTitre("Compte blocké avec success");
+        notification.setTitre("Bloackage d'un compte effectuée avec success");
         notificationRepository.save(notification);
     }
 
@@ -112,7 +112,7 @@ public class NotificationCompteServiceImpl implements NotificationCompteService 
         notification.setContenu("Id compte : "+compteId);
         notification.setUser(user);
         notification.setDateEnvoie(new Date());
-        notification.setTitre("Compte suspendé avec success");
+        notification.setTitre("Suspension d'un compte effectué avec success");
         notificationRepository.save(notification);
     }
 
@@ -123,7 +123,7 @@ public class NotificationCompteServiceImpl implements NotificationCompteService 
         notification.setContenu("Id compte : "+compteId);
         notification.setUser(user);
         notification.setDateEnvoie(new Date());
-        notification.setTitre("Demande de suspend d'un compte");
+        notification.setTitre("Demande de suspension d'un compte");
         notificationRepository.save(notification);
     }
 
@@ -134,7 +134,7 @@ public class NotificationCompteServiceImpl implements NotificationCompteService 
         notification.setContenu("Id compte : "+compteId);
         notification.setUser(user);
         notification.setDateEnvoie(new Date());
-        notification.setTitre("Demande de block d'un compte");
+        notification.setTitre("Demande de blockage d'un compte");
         notificationRepository.save(notification);
     }
 
@@ -145,7 +145,7 @@ public class NotificationCompteServiceImpl implements NotificationCompteService 
         notification.setContenu("Id compte : "+compteId);
         notification.setUser(user);
         notification.setDateEnvoie(new Date());
-        notification.setTitre("Demande d'activer d'un compte");
+        notification.setTitre("Demande d'activation d'un compte");
         notificationRepository.save(notification);
     }
 
@@ -153,10 +153,10 @@ public class NotificationCompteServiceImpl implements NotificationCompteService 
     public void retraitCompte(String numCompte,UserEntity user,double montant,double newSolde){
         Notification notification = new Notification();
         notification.setId(UUID.randomUUID().toString());
-        notification.setContenu("Numéro du compte : " + numCompte);
+        notification.setContenu("Un retrait de "+montant+" a été effectueé avec success");
         notification.setUser(user);
         notification.setDateEnvoie(new Date());
-        notification.setTitre("Retrait de " + montant + " DH effectué avec success, le solde actuel est : " + newSolde + " DH");
+        notification.setTitre("Numéro du compte : " + numCompte);
         notificationRepository.save(notification);
     }
 
@@ -164,20 +164,20 @@ public class NotificationCompteServiceImpl implements NotificationCompteService 
     public void depotCompte(String numCompte,UserEntity user,double montant,double newSolde){
         Notification notification = new Notification();
         notification.setId(UUID.randomUUID().toString());
-        notification.setContenu("Numéro du compte : " + numCompte);
+        notification.setContenu("Un dépot de "+montant+" a été effectueé avec success");
         notification.setUser(user);
         notification.setDateEnvoie(new Date());
-        notification.setTitre("Débit de " + montant + " DH effectué avec success, le solde actuel est : " + newSolde + " DH");
+        notification.setTitre("Numéro du compte : " + numCompte);
         notificationRepository.save(notification);
     }
     @Override
     public void soldeInsifisantCompte(String numCompte,UserEntity user){
         Notification notification = new Notification();
         notification.setId(UUID.randomUUID().toString());
-        notification.setContenu("Numéro du compte : " + numCompte);
+        notification.setContenu("Un virement n'a pas été effectué car le montant est insuffisant.");
         notification.setUser(user);
         notification.setDateEnvoie(new Date());
-        notification.setTitre("Un virement n'a pas été effectué ca le montant est insuffisant.");
+        notification.setTitre("Numéro du compte : " + numCompte);
         notificationRepository.save(notification);
     }
 
@@ -186,11 +186,22 @@ public class NotificationCompteServiceImpl implements NotificationCompteService 
         Notification clientNotification = new Notification();
         clientNotification.setId(UUID.randomUUID().toString());
         Compte compte = compteRepository.getCompteByNumCompte(numCompte);
-        clientNotification.setContenu("Un virement programme effectué avec succès  monsieur/madame : " +
-                compte.getUser().getNom() +" "+ compte.getUser().getPrenom());
+        clientNotification.setContenu("VIREMENT WEB PROGRAMMÉ REÇU DE "+compte.getUser().getNom() +" "+ compte.getUser().getPrenom());
         clientNotification.setUser(compte.getUser());
         clientNotification.setDateEnvoie(new Date());
-        clientNotification.setTitre("Un virement programme de " + montant + " DH effectué avec succès");
+        clientNotification.setTitre("+"+montant+"DH");
+        notificationRepository.save(clientNotification);
+    }
+
+    @Override
+    public void virementToBeneficierCompte(String numCompte,double montant){
+        Notification clientNotification = new Notification();
+        clientNotification.setId(UUID.randomUUID().toString());
+        Compte compte = compteRepository.getCompteByNumCompte(numCompte);
+        clientNotification.setContenu("VIREMENT WEB PROGRAMMÉ ENVOYÉ A "+compte.getUser().getNom() +" "+ compte.getUser().getPrenom());
+        clientNotification.setUser(compte.getUser());
+        clientNotification.setDateEnvoie(new Date());
+        clientNotification.setTitre(montant+"DH");
         notificationRepository.save(clientNotification);
     }
 }
