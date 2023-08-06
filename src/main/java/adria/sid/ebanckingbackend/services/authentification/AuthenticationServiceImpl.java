@@ -4,12 +4,17 @@ import adria.sid.ebanckingbackend.dtos.authentification.AuthReqDTO;
 import adria.sid.ebanckingbackend.dtos.authentification.AuthResDTO;
 import adria.sid.ebanckingbackend.dtos.client.ClientMoraleDTO;
 import adria.sid.ebanckingbackend.dtos.client.ClientPhysiqueDTO;
+import adria.sid.ebanckingbackend.dtos.client.ClientResDTO;
+import adria.sid.ebanckingbackend.dtos.virement.VirementResDTO;
 import adria.sid.ebanckingbackend.ennumerations.ERole;
+import adria.sid.ebanckingbackend.entities.Virement;
 import adria.sid.ebanckingbackend.exceptions.UserAlreadyExists;
 import adria.sid.ebanckingbackend.exceptions.UserHasNotAnyCompte;
 import adria.sid.ebanckingbackend.exceptions.UserNotEnabledException;
+import adria.sid.ebanckingbackend.mappers.ClientMapper;
 import adria.sid.ebanckingbackend.mappers.ClientMoraleMapper;
 import adria.sid.ebanckingbackend.mappers.ClientPhysiqueMapper;
+import adria.sid.ebanckingbackend.repositories.VirementRepository;
 import adria.sid.ebanckingbackend.security.accessToken.Token;
 import adria.sid.ebanckingbackend.security.accessToken.TokenUserRepository;
 import adria.sid.ebanckingbackend.security.JwtService;
@@ -24,6 +29,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -51,7 +58,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
   private final MotdepasseTokenServiceImpl passwordResetTokenService;
   private final ClientPhysiqueMapper clientPhysiqueMapper;
   private final ClientMoraleMapper clientMoraleMapper;
+  private final ClientMapper clientMapper;
 
+  @Override
+  public Page<ClientResDTO> getClientVirements(Pageable pageable) {
+    Page<UserEntity> clientsPage = userRepository.findAllUsersByRole(ERole.CLIENT, pageable);
+    return clientsPage.map(clientMapper::fromUserToClientResDTO);
+  }
 
   @Override
   public UserEntity registerClientPhysique(ClientPhysiqueDTO clientPhysiqueDTO, String url) {

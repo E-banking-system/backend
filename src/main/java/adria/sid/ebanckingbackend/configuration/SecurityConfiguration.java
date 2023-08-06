@@ -49,6 +49,7 @@ public class SecurityConfiguration {
                     "/api/v1/compte/change_solde/**",
                     "/api/v1/compte/**",
                     "/api/v1/client/**",
+                    "/api/v1/banquier/**",
                     "/api/v1/notification/**",
                     "/api/v1/beneficier/**",
                     "/api/v1/auth/**",

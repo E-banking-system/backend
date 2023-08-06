@@ -4,16 +4,20 @@ import adria.sid.ebanckingbackend.dtos.authentification.AuthReqDTO;
 import adria.sid.ebanckingbackend.dtos.authentification.AuthResDTO;
 import adria.sid.ebanckingbackend.dtos.client.ClientMoraleDTO;
 import adria.sid.ebanckingbackend.dtos.client.ClientPhysiqueDTO;
+import adria.sid.ebanckingbackend.dtos.client.ClientResDTO;
 import adria.sid.ebanckingbackend.entities.UserEntity;
 import adria.sid.ebanckingbackend.exceptions.UserHasNotAnyCompte;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.io.IOException;
 import java.util.Optional;
 
 
 public interface AuthenticationService {
+    Page<ClientResDTO> getClientVirements(Pageable pageable);
     void saveUserVerificationToken(UserEntity theUser, String token);
     String validateToken(String theToken);
     UserEntity registerClientPhysique(ClientPhysiqueDTO clientPhysiqueDTO, String url);
