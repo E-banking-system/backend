@@ -66,4 +66,10 @@ public class ClientController {
     public ResponseEntity<String> handleInternalError(InternalError e) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
     }
+
+    // Exception handler to handle IdUserIsNotValideException
+    @ExceptionHandler(IdUserIsNotValideException.class)
+    public ResponseEntity<String> handleIdUserIsNotValideException(IdUserIsNotValideException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+    }
 }
