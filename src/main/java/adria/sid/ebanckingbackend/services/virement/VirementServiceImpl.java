@@ -1,6 +1,8 @@
 package adria.sid.ebanckingbackend.services.virement;
 
+import adria.sid.ebanckingbackend.dtos.compte.CompteResDTO;
 import adria.sid.ebanckingbackend.dtos.virement.VirementPermanentReqDTO;
+import adria.sid.ebanckingbackend.dtos.virement.VirementResDTO;
 import adria.sid.ebanckingbackend.dtos.virement.VirementUnitReqDTO;
 import adria.sid.ebanckingbackend.ennumerations.EtatCompte;
 import adria.sid.ebanckingbackend.ennumerations.OPType;
@@ -14,6 +16,8 @@ import adria.sid.ebanckingbackend.utils.codeGenerators.CodeGenerator;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +39,14 @@ public class VirementServiceImpl implements VirementService{
     final private NotificationCompteService notificationServiceVirement;
     final private CodeGenerator codeGenerator;
     final private BeneficierRepository beneficierRepository;
+    final private VirementRepository virementRepository;
+
+    @Override
+    public Page<VirementResDTO> getClientVirements(String userId, Pageable pageable) {
+        Page<Virement> virementsPage = virementRepository.findByUserIdAndMontant(userId, pageable);
+        return virementsPage.map(virementMapper::fromVirementToVirementResDTO);
+    }
+
 
     // Method to perform a one-time money transfer (Virement Unitaire)
     @Transactional

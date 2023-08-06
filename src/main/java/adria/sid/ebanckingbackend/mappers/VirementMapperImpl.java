@@ -18,11 +18,12 @@ import java.util.stream.Collectors;
 public class VirementMapperImpl implements VirementMapper{
 
     @Override
-    public VirementResDTO fromVirementToVirementResDTO(Virement virement){
-        VirementResDTO virementResDTO=new VirementResDTO();
-        BeanUtils.copyProperties(virement,virementResDTO);
+    public VirementResDTO fromVirementToVirementResDTO(Virement virement) {
+        VirementResDTO virementResDTO = new VirementResDTO();
+        BeanUtils.copyProperties(virement, virementResDTO);
         return virementResDTO;
     }
+
 
     @Override
     public VirementUnitaire fromVirementReqDTOToVirementUnitaire(VirementUnitReqDTO virementUnitReqDTO){

@@ -25,5 +25,4 @@ public class Virement {
     @ManyToOne
     @JoinColumn(name = "beneficier_id")
     private Beneficier beneficier;
-
 }
