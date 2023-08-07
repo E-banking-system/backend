@@ -2,6 +2,7 @@ package adria.sid.ebanckingbackend.services.authentification;
 
 import adria.sid.ebanckingbackend.dtos.authentification.AuthReqDTO;
 import adria.sid.ebanckingbackend.dtos.authentification.AuthResDTO;
+import adria.sid.ebanckingbackend.dtos.authentification.ChangeOperateurReqDTO;
 import adria.sid.ebanckingbackend.dtos.authentification.UserInfosResDTO;
 import adria.sid.ebanckingbackend.dtos.client.ClientMoraleDTO;
 import adria.sid.ebanckingbackend.dtos.client.ClientPhysiqueDTO;
@@ -63,6 +64,23 @@ public class AuthenticationServiceImpl implements AuthenticationService {
   private final ClientMoraleMapper clientMoraleMapper;
   private final ClientMapper clientMapper;
   private final UserMapper userMapper;
+
+
+  @Override
+  public Boolean changeOperateur(ChangeOperateurReqDTO changeOperateurReqDTO) {
+    // Find the user by ID
+    Optional<UserEntity> optionalUser = userRepository.findById(changeOperateurReqDTO.getUserId());
+    UserEntity user = optionalUser.orElseThrow(() -> new IdUserIsNotValideException("User ID is not valid"));
+
+    // Update the operateur value
+    user.setOperateur(changeOperateurReqDTO.getOperateur());
+
+    // Save the updated user entity
+    userRepository.save(user);
+
+    // Return true to indicate the operation was successful
+    return true;
+  }
 
   @Override
   public UserInfosResDTO getUserInfos(String userId){

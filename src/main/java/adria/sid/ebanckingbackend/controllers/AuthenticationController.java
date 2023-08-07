@@ -2,6 +2,7 @@ package adria.sid.ebanckingbackend.controllers;
 
 import adria.sid.ebanckingbackend.dtos.authentification.AuthReqDTO;
 import adria.sid.ebanckingbackend.dtos.authentification.AuthResDTO;
+import adria.sid.ebanckingbackend.dtos.authentification.ChangeOperateurReqDTO;
 import adria.sid.ebanckingbackend.dtos.authentification.UserInfosResDTO;
 import adria.sid.ebanckingbackend.dtos.client.ClientResDTO;
 import adria.sid.ebanckingbackend.exceptions.IdUserIsNotValideException;
@@ -32,6 +33,23 @@ import java.io.IOException;
 @Slf4j
 public class AuthenticationController {
   private final AuthenticationService authenticationService;
+
+  @PutMapping("/operateur")
+  public ResponseEntity<?> updateOperateur(@RequestBody @Valid ChangeOperateurReqDTO changeOperateurReqDTO) {
+    try {
+      Boolean success = authenticationService.changeOperateur(changeOperateurReqDTO);
+      if (success) {
+        return ResponseEntity.ok().body("Your operateur field is changed with success"); // Return 200 OK
+      } else {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update operateur.");
+      }
+    } catch (IdUserIsNotValideException e) {
+      return ResponseEntity.badRequest().body(e.getMessage());
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred.");
+    }
+  }
+
 
   @GetMapping("/infos")
   public ResponseEntity<?> getClients(
