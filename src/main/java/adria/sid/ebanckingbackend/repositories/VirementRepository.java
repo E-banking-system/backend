@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface VirementRepository extends JpaRepository<Virement, String> {
-    @Query("SELECT v FROM Virement v WHERE v.user.id = :userId")
+    @Query("SELECT v FROM Virement v WHERE v.user.id = :userId order by v.dateOperation desc ")
     Page<Virement> findByUserIdAndMontant(@Param("userId") String userId, Pageable pageable);
 
     @Query("SELECT COUNT(v) > 0 FROM Virement v WHERE v.beneficier.id = :beneficierId")
