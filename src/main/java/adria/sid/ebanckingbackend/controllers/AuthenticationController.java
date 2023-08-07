@@ -2,6 +2,9 @@ package adria.sid.ebanckingbackend.controllers;
 
 import adria.sid.ebanckingbackend.dtos.authentification.AuthReqDTO;
 import adria.sid.ebanckingbackend.dtos.authentification.AuthResDTO;
+import adria.sid.ebanckingbackend.dtos.authentification.UserInfosResDTO;
+import adria.sid.ebanckingbackend.dtos.client.ClientResDTO;
+import adria.sid.ebanckingbackend.exceptions.IdUserIsNotValideException;
 import adria.sid.ebanckingbackend.exceptions.UserHasNotAnyCompte;
 import adria.sid.ebanckingbackend.services.authentification.AuthenticationService;
 import adria.sid.ebanckingbackend.exceptions.UserNotEnabledException;
@@ -10,6 +13,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -26,6 +32,20 @@ import java.io.IOException;
 @Slf4j
 public class AuthenticationController {
   private final AuthenticationService authenticationService;
+
+  @GetMapping("/infos")
+  public ResponseEntity<?> getClients(
+          @RequestParam String userId
+  ) {
+    try {
+      UserInfosResDTO userInfosResDTO = authenticationService.getUserInfos(userId);
+      return ResponseEntity.ok(userInfosResDTO);
+    } catch (InternalError e) {
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+    } catch (IdUserIsNotValideException e){
+      return ResponseEntity.badRequest().body(e.getMessage());
+    }
+  }
 
   @PostMapping("/authenticate")
   public ResponseEntity<?> authenticate(@RequestBody @Valid AuthReqDTO request) {

@@ -2,18 +2,21 @@ package adria.sid.ebanckingbackend.services.authentification;
 
 import adria.sid.ebanckingbackend.dtos.authentification.AuthReqDTO;
 import adria.sid.ebanckingbackend.dtos.authentification.AuthResDTO;
+import adria.sid.ebanckingbackend.dtos.authentification.UserInfosResDTO;
 import adria.sid.ebanckingbackend.dtos.client.ClientMoraleDTO;
 import adria.sid.ebanckingbackend.dtos.client.ClientPhysiqueDTO;
 import adria.sid.ebanckingbackend.dtos.client.ClientResDTO;
 import adria.sid.ebanckingbackend.dtos.virement.VirementResDTO;
 import adria.sid.ebanckingbackend.ennumerations.ERole;
 import adria.sid.ebanckingbackend.entities.Virement;
+import adria.sid.ebanckingbackend.exceptions.IdUserIsNotValideException;
 import adria.sid.ebanckingbackend.exceptions.UserAlreadyExists;
 import adria.sid.ebanckingbackend.exceptions.UserHasNotAnyCompte;
 import adria.sid.ebanckingbackend.exceptions.UserNotEnabledException;
 import adria.sid.ebanckingbackend.mappers.ClientMapper;
 import adria.sid.ebanckingbackend.mappers.ClientMoraleMapper;
 import adria.sid.ebanckingbackend.mappers.ClientPhysiqueMapper;
+import adria.sid.ebanckingbackend.mappers.UserMapper;
 import adria.sid.ebanckingbackend.repositories.VirementRepository;
 import adria.sid.ebanckingbackend.security.accessToken.Token;
 import adria.sid.ebanckingbackend.security.accessToken.TokenUserRepository;
@@ -59,6 +62,17 @@ public class AuthenticationServiceImpl implements AuthenticationService {
   private final ClientPhysiqueMapper clientPhysiqueMapper;
   private final ClientMoraleMapper clientMoraleMapper;
   private final ClientMapper clientMapper;
+  private final UserMapper userMapper;
+
+  @Override
+  public UserInfosResDTO getUserInfos(String userId){
+      UserEntity user=userRepository.findById(userId).orElse(null);
+      if(user != null) {
+        return userMapper.fromUserToUserResDTO(user);
+      } else{
+        throw new IdUserIsNotValideException("User id is not valide");
+      }
+  }
 
   @Override
   public Page<ClientResDTO> getClientVirements(Pageable pageable) {

@@ -2,6 +2,7 @@ package adria.sid.ebanckingbackend.services.authentification;
 
 import adria.sid.ebanckingbackend.dtos.authentification.AuthReqDTO;
 import adria.sid.ebanckingbackend.dtos.authentification.AuthResDTO;
+import adria.sid.ebanckingbackend.dtos.authentification.UserInfosResDTO;
 import adria.sid.ebanckingbackend.dtos.client.ClientMoraleDTO;
 import adria.sid.ebanckingbackend.dtos.client.ClientPhysiqueDTO;
 import adria.sid.ebanckingbackend.dtos.client.ClientResDTO;
@@ -17,6 +18,7 @@ import java.util.Optional;
 
 
 public interface AuthenticationService {
+    UserInfosResDTO getUserInfos(String userId);
     Page<ClientResDTO> getClientVirements(Pageable pageable);
     void saveUserVerificationToken(UserEntity theUser, String token);
     String validateToken(String theToken);
