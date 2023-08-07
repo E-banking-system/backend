@@ -76,9 +76,11 @@ public class BeneficierController {
     public ResponseEntity<String> deleteBeneficier(@PathVariable String beneficierId) {
         try {
             beneficierService.supprimerBeneficier(beneficierId);
-            return ResponseEntity.ok("Beneficier à été supprimer");
+            return ResponseEntity.ok("Beneficier a été supprimé");
         } catch (EmptyResultDataAccessException e) {
             return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
         }
     }
 

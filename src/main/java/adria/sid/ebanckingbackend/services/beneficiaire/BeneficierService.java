@@ -12,7 +12,7 @@ import java.util.List;
 public interface BeneficierService {
     void ajouterBeneficiair(BeneficierReqDTO beneficierReqDTO) throws CompteNotExistException;
     void modifierBeneficier(BeneficierReqDTO beneficierReqDTO, String beneficierId);
-    void supprimerBeneficier(String beneficierId);
+    void supprimerBeneficier(String beneficierId) throws Exception;
     Beneficier getBeneficierById(String beneficierId);
     public Page<BeneficierResDTO> getBeneficiersByClientId(Pageable pageable, String clientId);
 }

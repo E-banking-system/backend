@@ -11,6 +11,7 @@ import adria.sid.ebanckingbackend.mappers.BeneficierMapper;
 import adria.sid.ebanckingbackend.repositories.BeneficierRepository;
 import adria.sid.ebanckingbackend.repositories.CompteRepository;
 import adria.sid.ebanckingbackend.repositories.UserRepository;
+import adria.sid.ebanckingbackend.repositories.VirementRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +32,7 @@ public class BeneficierServiceImpl implements BeneficierService {
     final private BeneficierMapper beneficierMapper;
     final private UserRepository userRepository;
     final private CompteRepository compteRepository;
+    private final VirementRepository virementRepository;
 
     @Override
     public void ajouterBeneficiair(BeneficierReqDTO beneficierReqDTO) throws CompteNotExistException {
@@ -56,9 +58,16 @@ public class BeneficierServiceImpl implements BeneficierService {
         beneficiaireRepository.save(updatedBeneficier);
     }
 
-    @Override
-    public void supprimerBeneficier(String beneficierId) {
+    public void supprimerBeneficier(String beneficierId) throws Exception {
+        if (isBeneficiaryReferencedInVirement(beneficierId)) {
+            throw new Exception("Ce beneficier est une clé étrangère");
+        }
+
         beneficiaireRepository.deleteById(beneficierId);
+    }
+
+    private boolean isBeneficiaryReferencedInVirement(String beneficierId) {
+        return virementRepository.existsByBeneficierId(beneficierId);
     }
 
     @Override
