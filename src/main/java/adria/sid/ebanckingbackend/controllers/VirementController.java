@@ -88,4 +88,10 @@ public class VirementController {
     public ResponseEntity<String> handleNotificationNotSendedException(NotificationNotSended e) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
     }
+
+    // Exception handler to handle InsufficientBalanceException
+    @ExceptionHandler(InsufficientBalanceException.class)
+    public ResponseEntity<String> handleInsufficientBalanceExceptionException(InsufficientBalanceException e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+    }
 }

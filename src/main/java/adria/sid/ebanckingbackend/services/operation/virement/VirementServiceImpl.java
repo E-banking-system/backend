@@ -163,8 +163,14 @@ public class VirementServiceImpl implements VirementService{
             operationNotificationService.sendBeneficierCompteNotActiveNotificationToClient(clientCompte,beneficierCompte);
         }
 
-        creditVirementPermanent(clientCompte, virementProgramme.getMontant());
-        debit(beneficierCompte, virementProgramme.getMontant());
+        double newClientSolde=clientCompte.getSolde()-virementProgramme.getMontant();
+        if(newClientSolde>0) {
+            creditVirementPermanent(clientCompte, virementProgramme.getMontant());
+            debit(beneficierCompte, virementProgramme.getMontant());
+        } else {
+            System.out.println("Virement programme non effectué, Solde infsifusant");
+            return;
+        }
 
         // Save the transfer details in the virementPermanantRepository
         VirementPermanant virementPermanant=virementMapper.fromVirementProgrammeToVirementPermanent(virementProgramme);
