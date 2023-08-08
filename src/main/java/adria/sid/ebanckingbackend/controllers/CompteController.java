@@ -6,6 +6,7 @@ import adria.sid.ebanckingbackend.dtos.operation.RetraitReqDTO;
 import adria.sid.ebanckingbackend.exceptions.IdUserIsNotValideException;
 import adria.sid.ebanckingbackend.exceptions.InsufficientBalanceException;
 import adria.sid.ebanckingbackend.exceptions.NotificationNotSended;
+import adria.sid.ebanckingbackend.exceptions.OperationNotSaved;
 import adria.sid.ebanckingbackend.services.compte.CompteService;
 import adria.sid.ebanckingbackend.services.operation.changeSolde.ChangeSoldeService;
 import jakarta.validation.Valid;
@@ -137,7 +138,7 @@ public class CompteController {
         try {
             changeSoldeService.depot(depotReqDTO);
             return ResponseEntity.ok("Depot d'argent effectué avec succès.");
-        } catch (Exception | NotificationNotSended e){
+        } catch (Exception | NotificationNotSended | OperationNotSaved e){
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
@@ -149,7 +150,7 @@ public class CompteController {
             return ResponseEntity.ok("Retrait d'argent effectué avec succès.");
         } catch (Exception | NotificationNotSended e){
             return ResponseEntity.internalServerError().body(e.getMessage());
-        } catch (InsufficientBalanceException e) {
+        } catch (InsufficientBalanceException | OperationNotSaved e) {
             throw new RuntimeException(e);
         }
     }
@@ -175,6 +176,12 @@ public class CompteController {
     // Exception handler to handle InsufficientBalanceException
     @ExceptionHandler(InsufficientBalanceException.class)
     public ResponseEntity<String> handleInsufficientBalanceExceptionException(InsufficientBalanceException e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+    }
+
+    // Exception handler to handle OperationNotSaved
+    @ExceptionHandler(OperationNotSaved.class)
+    public ResponseEntity<String> handleOperationNotSavedException(OperationNotSaved e) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
     }
 }

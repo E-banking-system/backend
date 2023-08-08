@@ -59,6 +59,11 @@ public class VirementServiceImpl implements VirementService{
             throw new CompteNotActiveException("This beneficier account is not active");
         }
 
+        creditVirementUnitaire(clientCompte, virementUnitReqDTO.getMontant());
+        debit(beneficierCompte, virementUnitReqDTO.getMontant());
+        operationNotificationService.sendVirementUnitNotificationToClient(clientCompte,virementUnitReqDTO.getMontant());
+        operationNotificationService.sendVirementUnitNotificationToBeneficier(beneficierCompte,virementUnitReqDTO.getMontant());
+
         try {
             VirementUnitaire virementUnitaire=new VirementUnitaire();
             virementUnitaire.setId(UUID.randomUUID().toString());
@@ -72,11 +77,6 @@ public class VirementServiceImpl implements VirementService{
         } catch (Exception e){
             throw new OperationNotSaved("This unit transfer is not saved");
         }
-
-        creditVirementUnitaire(clientCompte, virementUnitReqDTO.getMontant());
-        debit(beneficierCompte, virementUnitReqDTO.getMontant());
-        operationNotificationService.sendVirementUnitNotificationToClient(clientCompte,virementUnitReqDTO.getMontant());
-        operationNotificationService.sendVirementUnitNotificationToBeneficier(beneficierCompte,virementUnitReqDTO.getMontant());
     }
 
     @Transactional
@@ -158,7 +158,7 @@ public class VirementServiceImpl implements VirementService{
 
     // Method to perform immediate execution of scheduled money transfers
     @Transactional
-    public void virementPermanent(VirementProgramme virementProgramme) throws NotificationNotSended {
+    public void virementPermanent(VirementProgramme virementProgramme) throws NotificationNotSended, OperationNotSaved {
         // Get client's and beneficiary's account details from the repository
         Compte clientCompte = compteRepository.getCompteByNumCompte(virementProgramme.getNumCompteClient());
         // Validate the state of the client's account (must be ACTIVE)
@@ -185,17 +185,23 @@ public class VirementServiceImpl implements VirementService{
         VirementPermanant virementPermanant=virementMapper.fromVirementProgrammeToVirementPermanent(virementProgramme);
         virementPermanant.setFrequence(virementProgramme.getFrequence());
         virementPermanant.setCompte(clientCompte);
+        virementPermanant.setDateOperation(new Date());
 
         Beneficier beneficier=beneficierRepository.getBeneficiersByNumCompte(beneficierCompte.getNumCompte());
         virementPermanant.setBeneficier(beneficier);
 
-        virementPermanentRepository.save(virementPermanant);
+        try {
+            virementPermanentRepository.save(virementPermanant);
+        }catch (Exception e){
+            throw new OperationNotSaved("This programed transfer is not saved");
+        }
+
         operationNotificationService.sendVirementPermanentNotificationToClientCompte(clientCompte, virementProgramme.getMontant());
         operationNotificationService.sendVirementPermanentNotificationToBeneficierCompte(beneficierCompte, virementProgramme.getMontant());
     }
 
     @Scheduled(fixedRate = 5000) // Run every 5000 milliseconds (5 seconds)
-    public void effectuerVirementProgramme() throws NotificationNotSended {
+    public void effectuerVirementProgramme() throws NotificationNotSended, OperationNotSaved {
         // Find pending scheduled transfers that are due for execution
         List<VirementProgramme> virementsProgramme = virementProgrammeRepository.findPendingVirements(new Date());
         // Execute each pending scheduled transfer and update its status
