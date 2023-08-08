@@ -37,7 +37,7 @@ public class VirementController {
     public ResponseEntity<String> effectuerVirementPermanent(@RequestBody @Valid VirementPermaReqDTO virementPermanentReqDTO) {
         try {
             virementService.virementProgramme(virementPermanentReqDTO);
-            return ResponseEntity.ok("Virement effectué avec succès : " + virementPermanentReqDTO.getMontant());
+            return ResponseEntity.ok("Virement permanent programé avec succèss");
         } catch (IllegalArgumentException | DatesVirementPermanentAreNotValide e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
