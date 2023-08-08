@@ -1,15 +1,19 @@
 package adria.sid.ebanckingbackend.controllers;
 
 import adria.sid.ebanckingbackend.entities.Message;
-import adria.sid.ebanckingbackend.repositories.MessageRepository;
-import adria.sid.ebanckingbackend.repositories.UserRepository;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
+import adria.sid.ebanckingbackend.repositories.MessageRepository;
+import adria.sid.ebanckingbackend.repositories.UserRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
+import org.springframework.security.access.AccessDeniedException;
 
 import java.time.LocalDateTime;
 
+@Slf4j
 @Controller
 public class ChatController {
 
@@ -28,15 +32,22 @@ public class ChatController {
     }
 
     @MessageMapping("/chat.sendMessage")
-    public void sendMessage(@Payload Message message) {
-        message.setTimestamp(LocalDateTime.now());
-        message.setSender(userRepository.findById(message.getSender().getId()).orElse(null));
-        message.setReceiver(userRepository.findById(message.getReceiver().getId()).orElse(null));
+    public void sendMessage(@Payload Message message, SimpMessageHeaderAccessor headerAccessor) {
+        try {
+            message.setTimestamp(LocalDateTime.now());
+            message.setSender(userRepository.findById(message.getSender().getId()).orElse(null));
+            message.setReceiver(userRepository.findById(message.getReceiver().getId()).orElse(null));
 
-        // Save the message in the database
-        messageRepository.save(message);
+            log.info("Yoooooooooooooohhhhohohoohooooohhhhhhhhhhoooooooohohohoh");
 
-        // Send the message to the user's specific destination
-        messagingTemplate.convertAndSendToUser(message.getReceiver().getUsername(), "/queue/private", message);
+            // Save the message in the database
+            messageRepository.save(message);
+
+            // Send the message to the user's specific destination
+            messagingTemplate.convertAndSendToUser(message.getReceiver().getUsername(), "/queue/private", message);
+        } catch (Exception e) {
+            log.error("Error sending message: {}", e.getMessage());
+            throw new AccessDeniedException("Error sending message: " + e.getMessage(), e);
+        }
     }
 }

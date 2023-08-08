@@ -17,10 +17,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/chat");
+        registry.addEndpoint("/chat"); // Allow connections from Postman
 
-        registry.addEndpoint("/chat")
-                .setAllowedOrigins("*") // Allow connections from frontend
-                .withSockJS();
+        //registry.addEndpoint("/chat").setAllowedOrigins("*").withSockJS(); // Allow connections from frontend
     }
 }
