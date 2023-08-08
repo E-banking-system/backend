@@ -3,16 +3,10 @@ package adria.sid.ebanckingbackend.services.operation.virement;
 import adria.sid.ebanckingbackend.dtos.operation.VirementPermaReqDTO;
 import adria.sid.ebanckingbackend.dtos.operation.VirementUnitReqDTO;
 import adria.sid.ebanckingbackend.ennumerations.EtatCompte;
-import adria.sid.ebanckingbackend.entities.Beneficier;
-import adria.sid.ebanckingbackend.entities.Compte;
-import adria.sid.ebanckingbackend.entities.VirementPermanant;
-import adria.sid.ebanckingbackend.entities.VirementProgramme;
+import adria.sid.ebanckingbackend.entities.*;
 import adria.sid.ebanckingbackend.exceptions.*;
 import adria.sid.ebanckingbackend.mappers.VirementMapper;
-import adria.sid.ebanckingbackend.repositories.BeneficierRepository;
-import adria.sid.ebanckingbackend.repositories.CompteRepository;
-import adria.sid.ebanckingbackend.repositories.VirementPermanentRepository;
-import adria.sid.ebanckingbackend.repositories.VirementProgrammeRepository;
+import adria.sid.ebanckingbackend.repositories.*;
 import adria.sid.ebanckingbackend.services.notification.OperationNotificationService;
 import adria.sid.ebanckingbackend.utils.codeGenerators.CodeGenerator;
 import jakarta.transaction.Transactional;
@@ -34,10 +28,11 @@ public class VirementServiceImpl implements VirementService{
     final private CodeGenerator codeGenerator;
     final private OperationNotificationService operationNotificationService;
     final private VirementMapper virementMapper;
+    final private VirementUnitaireRepository virementUnitaireRepository;
 
     @Transactional
     @Override
-    public void virementUnitaire(VirementUnitReqDTO virementUnitReqDTO) throws InsufficientBalanceException, MontantNotValide, CompteNotExistException, NotificationNotSended {
+    public void virementUnitaire(VirementUnitReqDTO virementUnitReqDTO) throws InsufficientBalanceException, MontantNotValide, CompteNotExistException, NotificationNotSended, OperationNotSaved {
         if (virementUnitReqDTO.getMontant() < 100) {
             throw new MontantNotValide("The amount must be more than 100 dirhams");
         }
@@ -62,6 +57,20 @@ public class VirementServiceImpl implements VirementService{
         // Validate the state of the beneficiary's account (must be ACTIVE)
         if(!beneficierCompte.getEtatCompte().equals(EtatCompte.ACTIVE)){
             throw new CompteNotActiveException("This beneficier account is not active");
+        }
+
+        try {
+            VirementUnitaire virementUnitaire=new VirementUnitaire();
+            virementUnitaire.setId(UUID.randomUUID().toString());
+            virementUnitaire.setMontant(virementUnitReqDTO.getMontant());
+            virementUnitaire.setDateOperation(new Date());
+            virementUnitaire.setCompte(clientCompte);
+
+            Beneficier beneficier=beneficierRepository.getBeneficiersByNumCompte(beneficierCompte.getNumCompte());
+            virementUnitaire.setBeneficier(beneficier);
+            virementUnitaireRepository.save(virementUnitaire);
+        } catch (Exception e){
+            throw new OperationNotSaved("This unit transfer is not saved");
         }
 
         creditVirementUnitaire(clientCompte, virementUnitReqDTO.getMontant());

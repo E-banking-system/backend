@@ -28,7 +28,7 @@ public class VirementController {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e.getMessage());
-        } catch (NotificationNotSended | InsufficientBalanceException e) {
+        } catch (NotificationNotSended | InsufficientBalanceException | OperationNotSaved e) {
             throw new RuntimeException(e);
         }
     }
@@ -92,6 +92,12 @@ public class VirementController {
     // Exception handler to handle InsufficientBalanceException
     @ExceptionHandler(InsufficientBalanceException.class)
     public ResponseEntity<String> handleInsufficientBalanceExceptionException(InsufficientBalanceException e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+    }
+
+    // Exception handler to handle OperationNotSaved
+    @ExceptionHandler(OperationNotSaved.class)
+    public ResponseEntity<String> handleOperationNotSavedException(OperationNotSaved e) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
     }
 }

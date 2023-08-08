@@ -12,7 +12,7 @@ import lombok.*;
 @Getter
 @Setter
 public class VirementPermanant extends Virement{
-    private Boolean estPermanent=true;
+    private Boolean estVirementPermanent=true;
 
     @Enumerated(EnumType.STRING)
     private EVType frequence;
