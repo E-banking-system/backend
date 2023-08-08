@@ -63,7 +63,6 @@ class UserTest {
         Compte compte1 = new Compte();
         String compte1Id = UUID.randomUUID().toString();
         compte1.setId(compte1Id);
-        compte1.setRIB("8754218974561289745");
         compte1.setNature("cheque");
         compte1.setDatePeremption(new Date());
         compte1.setDateCreation(new Date());
@@ -72,7 +71,6 @@ class UserTest {
         Compte compte2 = new Compte();
         String compte2Id = UUID.randomUUID().toString();
         compte2.setId(compte2Id);
-        compte2.setRIB("8754218974561289745");
         compte2.setNature("cheque");
         compte2.setDatePeremption(new Date());
         compte2.setDateCreation(new Date());

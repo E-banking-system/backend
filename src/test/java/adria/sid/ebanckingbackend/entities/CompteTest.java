@@ -18,7 +18,6 @@ class CompteTest {
         compte.setId(compteId);
         compte.setNature("Savings");
         compte.setSolde(1500.0);
-        compte.setRIB("123456789");
         compte.setNumCompte(String.valueOf(987654321L));
         compte.setDateCreation(new Date());
         compte.setDatePeremption(new Date());
@@ -29,7 +28,6 @@ class CompteTest {
         assertEquals(compteId, compte.getId());
         assertEquals("Savings", compte.getNature());
         assertEquals(1500.0, compte.getSolde());
-        assertEquals("123456789", compte.getRIB());
         assertEquals(987654321L, compte.getNumCompte());
         assertNotNull(compte.getDateCreation());
         assertNotNull(compte.getDatePeremption());

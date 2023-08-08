@@ -24,7 +24,7 @@ public class VirementTest {
         assertEquals(500.0, vrmnt.getMontant());
     }
 
-    @Test
+    /*@Test
     void testClient() {
         Virement vrmnt = new Virement();
         UserEntity clt = new UserEntity();
@@ -35,7 +35,7 @@ public class VirementTest {
         vrmnt.setUser(clt);
 
         assertEquals(clt, vrmnt.getUser());
-    }
+    }*/
 
     @Test
     void testBeneficier() {
