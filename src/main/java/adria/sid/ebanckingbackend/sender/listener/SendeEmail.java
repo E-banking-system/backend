@@ -1,6 +1,6 @@
 package adria.sid.ebanckingbackend.sender.listener;
 
-import adria.sid.ebanckingbackend.entities.EmailCorps;
+import adria.sid.ebanckingbackend.services.email.EmailCorps;
 import adria.sid.ebanckingbackend.sender.SendeEmailEvent;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;

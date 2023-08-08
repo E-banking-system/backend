@@ -11,7 +11,7 @@ public class Message {
     @Id
     private String id;
     private String message;
-    private Boolean isRead;
+    private Boolean isRead=false;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")

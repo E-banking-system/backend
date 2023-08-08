@@ -1,4 +1,4 @@
-package adria.sid.ebanckingbackend.entities;
+package adria.sid.ebanckingbackend.services.email;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

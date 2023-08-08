@@ -1,6 +1,6 @@
 package adria.sid.ebanckingbackend.sender;
 
-import adria.sid.ebanckingbackend.entities.EmailCorps;
+import adria.sid.ebanckingbackend.services.email.EmailCorps;
 import adria.sid.ebanckingbackend.entities.UserEntity;
 import lombok.Getter;
 import lombok.Setter;

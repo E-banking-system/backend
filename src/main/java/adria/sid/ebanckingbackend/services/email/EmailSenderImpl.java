@@ -1,6 +1,5 @@
 package adria.sid.ebanckingbackend.services.email;
 
-import adria.sid.ebanckingbackend.entities.EmailCorps;
 import adria.sid.ebanckingbackend.entities.UserEntity;
 import adria.sid.ebanckingbackend.sender.SendeEmailEvent;
 import adria.sid.ebanckingbackend.utils.codeGenerators.HtmlCodeGenerator;
