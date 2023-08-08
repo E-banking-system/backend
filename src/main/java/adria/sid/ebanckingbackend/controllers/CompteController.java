@@ -2,11 +2,9 @@ package adria.sid.ebanckingbackend.controllers;
 
 import adria.sid.ebanckingbackend.dtos.compte.*;
 import adria.sid.ebanckingbackend.dtos.operation.DepotReqDTO;
+import adria.sid.ebanckingbackend.dtos.operation.OperationResDTO;
 import adria.sid.ebanckingbackend.dtos.operation.RetraitReqDTO;
-import adria.sid.ebanckingbackend.exceptions.IdUserIsNotValideException;
-import adria.sid.ebanckingbackend.exceptions.InsufficientBalanceException;
-import adria.sid.ebanckingbackend.exceptions.NotificationNotSended;
-import adria.sid.ebanckingbackend.exceptions.OperationNotSaved;
+import adria.sid.ebanckingbackend.exceptions.*;
 import adria.sid.ebanckingbackend.services.compte.CompteService;
 import adria.sid.ebanckingbackend.services.operation.changeSolde.ChangeSoldeService;
 import jakarta.validation.Valid;
@@ -29,6 +27,27 @@ import org.springframework.web.bind.annotation.*;
 public class CompteController {
     final private CompteService compteService;
     final private ChangeSoldeService changeSoldeService;
+
+    @GetMapping("/operations")
+    public ResponseEntity<?> getCompteOperations(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(required = false) String compteId
+    ) {
+        try {
+            Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+
+            Page<OperationResDTO> operationResDTOPage;
+            operationResDTOPage = compteService.getCompteOperations(pageable,compteId);
+
+            return ResponseEntity.ok(operationResDTOPage);
+        } catch (Exception | CompteNotExistException e) {
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
+
+
 
     @PostMapping
     public ResponseEntity<String> saveCompte(@RequestBody @Valid CompteReqDTO accountDTO) {
@@ -182,6 +201,12 @@ public class CompteController {
     // Exception handler to handle OperationNotSaved
     @ExceptionHandler(OperationNotSaved.class)
     public ResponseEntity<String> handleOperationNotSavedException(OperationNotSaved e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+    }
+
+    // Exception handler to handle CompteNotExistException
+    @ExceptionHandler(CompteNotExistException.class)
+    public ResponseEntity<String> handleCompteNotExistExceptionException(CompteNotExistException e) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
     }
 }

@@ -1,6 +1,8 @@
 package adria.sid.ebanckingbackend.services.compte;
 
 import adria.sid.ebanckingbackend.dtos.compte.*;
+import adria.sid.ebanckingbackend.dtos.operation.OperationResDTO;
+import adria.sid.ebanckingbackend.exceptions.CompteNotExistException;
 import adria.sid.ebanckingbackend.exceptions.NotificationNotSended;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +18,9 @@ public interface CompteService {
     void demandeSuspendCompte(DemandeSuspendDTO demandeSuspendDTO) throws NotificationNotSended;
     void demandeActivateCompte(DemandeActivateDTO demandeActivateDTO) throws NotificationNotSended;
     void demandeBlockCompte(DemandeBlockDTO demandeBlockDTO) throws NotificationNotSended;
+
+    Page<OperationResDTO> getCompteOperations(Pageable pageable, String compteId) throws CompteNotExistException;
+
     Page<CompteResDTO> searchComptes(Pageable pageable, String keyword);
     Page<CompteResDTO> getClientComptes(String userId, Pageable pageable, String keyword);
 }
