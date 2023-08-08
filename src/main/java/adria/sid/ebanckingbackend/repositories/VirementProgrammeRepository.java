@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.Date;
 import java.util.List;
 
-public interface ViremenProgrammeRepository extends JpaRepository<VirementProgramme,String> {
+public interface VirementProgrammeRepository extends JpaRepository<VirementProgramme,String> {
     @Query("SELECT vp FROM VirementProgramme vp WHERE vp.dateExecution <= :currentDate AND vp.effectuer = false")
     List<VirementProgramme> findPendingVirements(@Param("currentDate") Date currentDate);
 }

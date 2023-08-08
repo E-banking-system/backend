@@ -1,6 +1,7 @@
 package adria.sid.ebanckingbackend.repositories;
 
 import adria.sid.ebanckingbackend.entities.Compte;
+import adria.sid.ebanckingbackend.entities.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,15 +17,9 @@ public interface CompteRepository extends JpaRepository<Compte, String> {
     @Query("SELECT c FROM Compte c WHERE c.numCompte = :numCompte")
     Compte getCompteByNumCompte(@Param("numCompte") String numCompte);
 
-    @Query("UPDATE Compte c SET c.solde = c.solde + :montant WHERE c.id = :compteId")
-    void changeSolde(@Param("compteId") String compteId, @Param("montant") Double montant);
-
-    @Query("SELECT c FROM Compte c WHERE c.user.id = :userId")
-    List<Compte> getComptesByUserId(@Param("userId") String userId);
-
-    @Query("SELECT c FROM Compte c WHERE LOWER(c.nature) LIKE %:keyword% OR c.RIB LIKE %:keyword% OR LOWER(c.etatCompte) LIKE %:keyword% OR LOWER(c.id) LIKE %:keyword%")
+    @Query("SELECT c FROM Compte c WHERE LOWER(c.nature) LIKE %:keyword% OR c.rib LIKE %:keyword% OR LOWER(c.etatCompte) LIKE %:keyword% OR LOWER(c.id) LIKE %:keyword%")
     Page<Compte> searchComptes(Pageable pageable, @Param("keyword") String keyword);
 
-    @Query("SELECT c FROM Compte c WHERE c.user.id = :userId AND (LOWER(c.nature) LIKE %:keyword% OR c.RIB LIKE %:keyword% OR LOWER(c.etatCompte) LIKE %:keyword%)")
+    @Query("SELECT c FROM Compte c WHERE c.user.id = :userId AND (LOWER(c.nature) LIKE %:keyword% OR c.rib LIKE %:keyword% OR LOWER(c.etatCompte) LIKE %:keyword%)")
     Page<Compte> searchComptesByUserIdAndKeyword(@Param("userId") String userId, @Param("keyword") String keyword, Pageable pageable);
 }

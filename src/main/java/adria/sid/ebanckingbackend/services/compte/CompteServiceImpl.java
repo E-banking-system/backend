@@ -2,17 +2,14 @@ package adria.sid.ebanckingbackend.services.compte;
 
 import adria.sid.ebanckingbackend.dtos.compte.*;
 import adria.sid.ebanckingbackend.ennumerations.ERole;
-import adria.sid.ebanckingbackend.ennumerations.EtatCompte;
-import adria.sid.ebanckingbackend.ennumerations.OPType;
 import adria.sid.ebanckingbackend.entities.Compte;
 import adria.sid.ebanckingbackend.entities.UserEntity;
-import adria.sid.ebanckingbackend.exceptions.CompteNotActiveException;
+import adria.sid.ebanckingbackend.exceptions.NotificationNotSended;
 import adria.sid.ebanckingbackend.mappers.CompteMapper;
 import adria.sid.ebanckingbackend.repositories.CompteRepository;
 import adria.sid.ebanckingbackend.repositories.UserRepository;
 import adria.sid.ebanckingbackend.services.email.EmailSender;
-import adria.sid.ebanckingbackend.services.notification.NotificationService;
-import adria.sid.ebanckingbackend.services.notification.NotificationCompteService;
+import adria.sid.ebanckingbackend.services.notification.OperationNotificationService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,8 +27,7 @@ public class CompteServiceImpl implements CompteService {
 
     final private CompteRepository compteRepository;
     final private UserRepository userRepository;
-    final private NotificationService notificationService;
-    final private NotificationCompteService notificationServiceVirement;
+    final private OperationNotificationService notificationServiceVirement;
     final private EmailSender emailSender;
     final private CompteMapper compteMapper;
 
@@ -75,25 +71,25 @@ public class CompteServiceImpl implements CompteService {
     }
 
     @Override
-    public void activerCompte(String compteId) {
+    public void activerCompte(String compteId) throws NotificationNotSended {
         Compte compte = compteRepository.getCompteById(compteId);
         if (compte != null) {
             compte.activerCompte();
             compteRepository.save(compte);
-            notificationServiceVirement.activerCompte(compte.getId(),compte.getUser());
+            notificationServiceVirement.sendActiverCompteNotificationToClient(compte.getId(),compte.getUser());
         } else {
             throw new IllegalArgumentException("Compte not found with the given ID");
         }
     }
 
     @Override
-    public void blockCompte(String compteId) {
+    public void blockCompte(String compteId) throws NotificationNotSended {
         Compte compte = compteRepository.getCompteById(compteId);
         if (compte != null) {
             compte.setDerniereDateBloquage(new Date());
             compte.blockerCompte();
             compteRepository.save(compte);
-            notificationServiceVirement.blockeCompte(compte.getId(),compte.getUser());
+            notificationServiceVirement.sendBlockeCompteNotificationToClient(compte.getId(),compte.getUser());
             log.info("Blocked compte with ID: {}", compteId);
         } else {
             throw new IllegalArgumentException("Compte not found with the given ID");
@@ -101,13 +97,13 @@ public class CompteServiceImpl implements CompteService {
     }
 
     @Override
-    public void suspendCompte(String compteId) {
+    public void suspendCompte(String compteId) throws NotificationNotSended {
         Compte compte = compteRepository.getCompteById(compteId);
         if (compte != null) {
             compte.setDerniereDateSuspention(new Date());
             compte.suspenduCompte();
             compteRepository.save(compte);
-            notificationServiceVirement.suspendCompte(compte.getId(),compte.getUser());
+            notificationServiceVirement.sendSuspendCompteNotificationToClient(compte.getId(),compte.getUser());
             log.info("Suspended compte with ID: {}", compteId);
         } else {
             throw new IllegalArgumentException("Compte not found with the given ID");
@@ -124,121 +120,23 @@ public class CompteServiceImpl implements CompteService {
     }
 
     @Override
-    public void demandeSuspendCompte(DemandeSuspendDTO demandeSuspendDTO){
+    public void demandeSuspendCompte(DemandeSuspendDTO demandeSuspendDTO) throws NotificationNotSended {
         UserEntity user=userRepository.findByRole(ERole.BANQUIER).get(0);
-        notificationServiceVirement.demandeSuspendCompte(demandeSuspendDTO.getCompteId(),user);
+        notificationServiceVirement.sendDemandeSuspendCompteNotificationToBanquier(demandeSuspendDTO.getCompteId(),user);
         log.info("Sent demande de suspend d'un compte numéro : "+demandeSuspendDTO.getCompteId());
     }
 
     @Override
-    public void demandeBlockCompte(DemandeBlockDTO demandeBlockDTO){
+    public void demandeBlockCompte(DemandeBlockDTO demandeBlockDTO) throws NotificationNotSended {
         UserEntity user=userRepository.findByRole(ERole.BANQUIER).get(0);
-        notificationServiceVirement.demandeBlockCompte(demandeBlockDTO.getCompteId(),user);
+        notificationServiceVirement.sendDemandeBlockCompteNotificationToBanquier(demandeBlockDTO.getCompteId(),user);
         log.info("Sent demande de block d'un compte numéro : "+demandeBlockDTO.getCompteId());
     }
 
     @Override
-    public void demandeActivateCompte(DemandeActivateDTO demandeActivateDTO){
+    public void demandeActivateCompte(DemandeActivateDTO demandeActivateDTO) throws NotificationNotSended {
         UserEntity user=userRepository.findByRole(ERole.BANQUIER).get(0);
-        notificationServiceVirement.demandeActivateCompte(demandeActivateDTO.getCompteId(), user);
+        notificationServiceVirement.sendDemandeActivateCompteNotificationToBanquier(demandeActivateDTO.getCompteId(), user);
         log.info("Sent demande d'activer d'un compte numéro : "+demandeActivateDTO.getCompteId());
-    }
-
-    @Transactional
-    public Boolean credit(String numCompte,Double montant,OPType opType){
-        Compte compte = compteRepository.getCompteByNumCompte(numCompte);
-        if (compte != null) {
-            if(!compte.getEtatCompte().equals(EtatCompte.ACTIVE)){
-                throw new CompteNotActiveException("Ce compte n'est pas active.");
-            }
-
-            double newSolde = compte.getSolde() - montant;
-            if (newSolde >= 0) {
-                compte.setSolde(newSolde);
-                compteRepository.save(compte);
-
-                log.info("Changed solde for compte  NumCompte: {} by amount: {}", numCompte, montant);
-
-                if(opType.equals(OPType.RETRAIT)) {
-                    notificationServiceVirement.retraitCompte(numCompte,compte.getUser(),montant,newSolde);
-                    log.info("Retrait de "+montant);
-                }
-                return true;
-            } else {
-                if(opType.equals(OPType.VIREMENT_UNITAIRE) || opType.equals(OPType.VIREMENT_PERMANENT)){
-                    notificationServiceVirement.soldeInsifisantCompte(numCompte,compte.getUser());
-                    log.info("Insufficient balance.");
-                } else{
-                    throw new IllegalArgumentException("Insufficient balance.");
-                }
-            }
-        } else {
-            throw new IllegalArgumentException("Compte not found with the given ID");
-        }
-        return false;
-    }
-
-    @Transactional
-    public Boolean debit(String numCompte,Double montant,OPType opType){
-        Compte compte = compteRepository.getCompteByNumCompte(numCompte);
-        if (compte != null) {
-            if(!compte.getEtatCompte().equals(EtatCompte.ACTIVE)){
-                throw new CompteNotActiveException("Ce compte n'est pas active.");
-            }
-
-            double newSolde = compte.getSolde() + montant;
-            compte.setSolde(newSolde);
-            compteRepository.save(compte);
-
-            log.info("Changed solde for compte  NumCompte: {} by amount: {}", numCompte, montant);
-            if(opType.equals(OPType.DEPOT)) {
-                notificationServiceVirement.depotCompte(numCompte,compte.getUser(),montant,newSolde);
-                log.info("Depot de "+montant);
-            }
-            return true;
-        } else {
-            throw new IllegalArgumentException("Compte not found with the given ID");
-        }
-    }
-
-    @Override
-    @Transactional
-    public void changeSolde(String numCompte, Double montant, OPType opType) {
-        Boolean success;
-        if (montant > 0) {
-            success = debit(numCompte, montant,opType);
-            if (success) {
-                log.info("Depot effectué avec succès : {}", montant);
-            }
-        } else {
-            success = credit(numCompte, -montant,opType);
-            if (success) {
-                log.info("Retrait effectué avec succès : {}", -montant);
-            }
-        }
-
-        if(opType.equals(OPType.VIREMENT_UNITAIRE) && success){
-            if(montant > 0){
-                // Create a notification for the client
-                notificationServiceVirement.virementUnitaireToClientCompte(numCompte,montant);
-                log.info("Virement unitaire effectuée");
-            } else {
-                // Create a notification for the beneficier
-                notificationServiceVirement.virementUnitaireToBeneficierCompte(numCompte,montant);
-                log.info("Virement unitaire effectuée");
-            }
-        }
-
-        if(opType.equals(OPType.VIREMENT_PERMANENT) && success){
-            if(montant > 0){
-                // Create a notification for the client
-                notificationServiceVirement.virementPermanentToClientCompte(numCompte,montant);
-                log.info("Virement permanent effectue");
-            } else {
-                // Create a notification for the beneficier
-                notificationServiceVirement.virementPermanentToBeneficierCompte(numCompte,montant);
-                log.info("Virement permanent effectue");
-            }
-        }
     }
 }

@@ -9,6 +9,8 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Getter
+@Setter
 public class VirementPermanant extends Virement{
     private Boolean estPermanent=true;
 

@@ -1,4 +1,4 @@
-package adria.sid.ebanckingbackend.dtos.virement;
+package adria.sid.ebanckingbackend.dtos.operation;
 
 import adria.sid.ebanckingbackend.ennumerations.EVType;
 import jakarta.persistence.EnumType;

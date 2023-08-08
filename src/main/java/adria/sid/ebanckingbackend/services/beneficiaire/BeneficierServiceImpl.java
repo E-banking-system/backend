@@ -21,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -41,7 +42,7 @@ public class BeneficierServiceImpl implements BeneficierService {
         if(compte == null){
             throw new CompteNotExistException("Ce compte nexiste pas pour ce beneficier");
         }
-        if(compte.getEtatCompte().toString() != "ACTIVE"){
+        if(!Objects.equals(compte.getEtatCompte().toString(), "ACTIVE")){
             throw new CompteNotExistException("Ce compte n'est pas actif");
         }
 
@@ -82,7 +83,7 @@ public class BeneficierServiceImpl implements BeneficierService {
             throw new IdUserIsNotValideException("Client is not exists: " + clientId);
         }
 
-        List<Beneficier> beneficiers = beneficiaireRepository.findByClientId(clientId);
+        List<Beneficier> beneficiers = beneficiaireRepository.findByUserId(clientId);
         List<BeneficierResDTO> beneficierResDTOList = beneficiers.stream()
                 .map(beneficierMapper::fromBeneficierToBeneficierResDTO)
                 .collect(Collectors.toList());

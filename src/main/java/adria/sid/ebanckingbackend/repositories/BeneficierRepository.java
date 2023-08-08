@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface BeneficierRepository extends JpaRepository<Beneficier, String> {
-    List<Beneficier> findByClientId(String id);
+    List<Beneficier> findByUserId(String id);
     Beneficier getBeneficiersByNumCompte(String numCompte);
 }

@@ -24,12 +24,6 @@ public class NotificationServiceImpl implements NotificationService {
     final private NotificationMapper notificationMapper;
 
     @Override
-    public void saveNotification(Notification notification) {
-        notificationRepository.save(notification);
-        log.info("Saved notification with ID: {}", notification.getId());
-    }
-
-    @Override
     public Page<NotificationResDTO> getNotificationsByUserId(Pageable pageable, String userId) {
         List<Notification> notifications = notificationRepository.getNotificationsByUserId(userId);
         List<NotificationResDTO> notificationResDTOList = notifications.stream()

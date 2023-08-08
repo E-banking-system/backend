@@ -1,8 +1,6 @@
-package adria.sid.ebanckingbackend.dtos.virement;
+package adria.sid.ebanckingbackend.dtos.operation;
 
 import adria.sid.ebanckingbackend.ennumerations.EVType;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,11 +8,10 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class VirementPermanentReqDTO {
+public class VirementPermaReqDTO {
     @NotNull
     private Double montant;
     @NotNull

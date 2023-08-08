@@ -6,6 +6,5 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface NotificationService {
-    void saveNotification(Notification notification);
     Page<NotificationResDTO> getNotificationsByUserId(Pageable pageable, String userId);
 }

@@ -1,10 +1,8 @@
 package adria.sid.ebanckingbackend.controllers;
 
-
-import adria.sid.ebanckingbackend.dtos.compte.ChangeSoldeReqDTO;
 import adria.sid.ebanckingbackend.dtos.compte.*;
-import adria.sid.ebanckingbackend.ennumerations.OPType;
 import adria.sid.ebanckingbackend.exceptions.IdUserIsNotValideException;
+import adria.sid.ebanckingbackend.exceptions.NotificationNotSended;
 import adria.sid.ebanckingbackend.services.compte.CompteService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -36,18 +34,6 @@ public class CompteController {
         } catch (InternalError e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
-    }
-
-    // Exception handler to handle IdUserIsNotValideException
-    @ExceptionHandler(IdUserIsNotValideException.class)
-    public ResponseEntity<String> handleIdUserIsNotValideException(IdUserIsNotValideException e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-    }
-
-    // Exception handler to handle InternalError
-    @ExceptionHandler(InternalError.class)
-    public ResponseEntity<String> handleInternalError(InternalError e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
     }
 
     @GetMapping
@@ -82,7 +68,7 @@ public class CompteController {
             return ResponseEntity.ok("Compte activé avec succès.");
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (Exception e) {
+        } catch (Exception | NotificationNotSended e) {
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
@@ -94,7 +80,7 @@ public class CompteController {
             return ResponseEntity.ok("Compte bloqué avec succès.");
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (Exception e) {
+        } catch (Exception | NotificationNotSended e) {
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
@@ -106,25 +92,7 @@ public class CompteController {
             return ResponseEntity.ok("Compte suspendu avec succès.");
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().body(e.getMessage());
-        }
-    }
-
-    @PostMapping("/change_solde")
-    public ResponseEntity<?> changeSolde(@RequestBody @Valid ChangeSoldeReqDTO changeSoldeReqDTO) {
-        try {
-            System.out.println(changeSoldeReqDTO.toString());
-            if(changeSoldeReqDTO.getMontant()>0){
-                compteService.changeSolde(changeSoldeReqDTO.getNumCompte(), changeSoldeReqDTO.getMontant(), OPType.DEPOT);
-                return ResponseEntity.ok("Depot effectuée avec succès : "+changeSoldeReqDTO.getMontant());
-            } else{
-                compteService.changeSolde(changeSoldeReqDTO.getNumCompte(), changeSoldeReqDTO.getMontant(),OPType.RETRAIT);
-                return ResponseEntity.ok("Retrait effectuée avec succès : "+changeSoldeReqDTO.getMontant());
-            }
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (Exception e) {
+        } catch (Exception | NotificationNotSended e) {
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
@@ -134,7 +102,7 @@ public class CompteController {
         try {
             compteService.demandeSuspendCompte(demandeSuspendDTO);
             return ResponseEntity.ok("Demande de suspend du compte a été envoyé avec succès.");
-        } catch (Exception e){
+        } catch (Exception | NotificationNotSended e){
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
@@ -144,7 +112,7 @@ public class CompteController {
         try {
             compteService.demandeBlockCompte(demandeBlockDTO);
             return ResponseEntity.ok("Demande de block du compte a été envoyé avec succès.");
-        } catch (Exception e){
+        } catch (Exception | NotificationNotSended e){
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
@@ -154,9 +122,26 @@ public class CompteController {
         try {
             compteService.demandeActivateCompte(demandeActivateDTO);
             return ResponseEntity.ok("Demande d'activer du compte a été envoyé avec succès.");
-        } catch (Exception e){
+        } catch (Exception | NotificationNotSended e){
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
 
+    // Exception handler to handle IdUserIsNotValideException
+    @ExceptionHandler(NotificationNotSended.class)
+    public ResponseEntity<String> handleNotificationNotSendedException(NotificationNotSended e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+    }
+
+    // Exception handler to handle IdUserIsNotValideException
+    @ExceptionHandler(IdUserIsNotValideException.class)
+    public ResponseEntity<String> handleIdUserIsNotValideException(IdUserIsNotValideException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+    }
+
+    // Exception handler to handle InternalError
+    @ExceptionHandler(InternalError.class)
+    public ResponseEntity<String> handleInternalError(InternalError e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+    }
 }

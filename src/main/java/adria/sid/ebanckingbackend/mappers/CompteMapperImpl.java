@@ -42,7 +42,7 @@ public class CompteMapperImpl implements CompteMapper{
         // Manually set the ID for the Compte entity
         newCompte.setId(UUID.randomUUID().toString());
 
-        newCompte.setRIB(rib);
+        newCompte.setRib(rib);
         newCompte.setNumCompte(String.valueOf(numeroCompte));
         newCompte.setDateCreation(new Date());
 

@@ -1,12 +1,7 @@
 package adria.sid.ebanckingbackend.controllers;
 
 import adria.sid.ebanckingbackend.dtos.client.ClientResDTO;
-import adria.sid.ebanckingbackend.dtos.compte.CompteResDTO;
-import adria.sid.ebanckingbackend.dtos.virement.VirementResDTO;
-import adria.sid.ebanckingbackend.exceptions.IdUserIsNotValideException;
 import adria.sid.ebanckingbackend.services.authentification.AuthenticationService;
-import adria.sid.ebanckingbackend.services.compte.CompteService;
-import adria.sid.ebanckingbackend.services.virement.VirementService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

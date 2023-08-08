@@ -2,14 +2,10 @@ package adria.sid.ebanckingbackend.mappers;
 
 import adria.sid.ebanckingbackend.dtos.beneficier.BeneficierReqDTO;
 import adria.sid.ebanckingbackend.dtos.beneficier.BeneficierResDTO;
-import adria.sid.ebanckingbackend.dtos.client.ClientMoraleDTO;
-import adria.sid.ebanckingbackend.ennumerations.EPType;
-import adria.sid.ebanckingbackend.ennumerations.ERole;
 import adria.sid.ebanckingbackend.entities.Beneficier;
 import adria.sid.ebanckingbackend.entities.UserEntity;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,7 +28,7 @@ public class BeneficierMapperImpl implements BeneficierMapper{
         beneficier.setId(UUID.randomUUID().toString());
         UserEntity client=new UserEntity();
         client.setId(beneficierReqDTO.getClientId());
-        beneficier.setClient(client);
+        beneficier.setUser(client);
         BeanUtils.copyProperties(beneficierReqDTO,beneficier);
         return beneficier;
     }

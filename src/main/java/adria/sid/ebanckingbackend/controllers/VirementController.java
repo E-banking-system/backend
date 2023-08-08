@@ -1,9 +1,9 @@
 package adria.sid.ebanckingbackend.controllers;
 
-import adria.sid.ebanckingbackend.dtos.virement.VirementPermanentReqDTO;
-import adria.sid.ebanckingbackend.dtos.virement.VirementUnitReqDTO;
+import adria.sid.ebanckingbackend.dtos.operation.VirementPermaReqDTO;
+import adria.sid.ebanckingbackend.dtos.operation.VirementUnitReqDTO;
 import adria.sid.ebanckingbackend.exceptions.*;
-import adria.sid.ebanckingbackend.services.virement.VirementService;
+import adria.sid.ebanckingbackend.services.operation.virement.VirementService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,20 +21,22 @@ public class VirementController {
     @PostMapping("/unitaire")
     public ResponseEntity<String> effectuerVirementUnitaire(@RequestBody @Valid VirementUnitReqDTO virementUnitReqDTO) {
         try {
-            virementService.effectuerVirementUnitaire(virementUnitReqDTO);
+            virementService.virementUnitaire(virementUnitReqDTO);
             return ResponseEntity.ok("Virement effectué avec success : "+virementUnitReqDTO.getMontant());
-        } catch (IllegalArgumentException | BeneficierIsNotExistException | ClientIsNotExistException |
+        } catch (IllegalArgumentException |
                  CompteNotExistException | MontantNotValide e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e.getMessage());
+        } catch (NotificationNotSended | InsufficientBalanceException e) {
+            throw new RuntimeException(e);
         }
     }
 
     @PostMapping("/permanent")
-    public ResponseEntity<String> effectuerVirementPermanent(@RequestBody @Valid VirementPermanentReqDTO virementPermanentReqDTO) {
+    public ResponseEntity<String> effectuerVirementPermanent(@RequestBody @Valid VirementPermaReqDTO virementPermanentReqDTO) {
         try {
-            virementService.effectuerVirementPermanent(virementPermanentReqDTO);
+            virementService.virementProgramme(virementPermanentReqDTO);
             return ResponseEntity.ok("Virement effectué avec succès : " + virementPermanentReqDTO.getMontant());
         } catch (IllegalArgumentException | DatesVirementPermanentAreNotValide e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -79,5 +81,11 @@ public class VirementController {
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException e) {
         return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(e.getMessage());
+    }
+
+    // Exception handler to handle IdUserIsNotValideException
+    @ExceptionHandler(NotificationNotSended.class)
+    public ResponseEntity<String> handleNotificationNotSendedException(NotificationNotSended e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
     }
 }
