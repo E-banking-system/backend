@@ -1,6 +1,7 @@
 package adria.sid.ebanckingbackend.controllers;
 
 import adria.sid.ebanckingbackend.entities.Message;
+import adria.sid.ebanckingbackend.repositories.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
