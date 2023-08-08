@@ -1,9 +1,13 @@
 package adria.sid.ebanckingbackend.controllers;
 
 import adria.sid.ebanckingbackend.dtos.compte.*;
+import adria.sid.ebanckingbackend.dtos.operation.DepotReqDTO;
+import adria.sid.ebanckingbackend.dtos.operation.RetraitReqDTO;
 import adria.sid.ebanckingbackend.exceptions.IdUserIsNotValideException;
+import adria.sid.ebanckingbackend.exceptions.InsufficientBalanceException;
 import adria.sid.ebanckingbackend.exceptions.NotificationNotSended;
 import adria.sid.ebanckingbackend.services.compte.CompteService;
+import adria.sid.ebanckingbackend.services.operation.changeSolde.ChangeSoldeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +26,8 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @Slf4j
 public class CompteController {
-    private final CompteService compteService;
+    final private CompteService compteService;
+    final private ChangeSoldeService changeSoldeService;
 
     @PostMapping
     public ResponseEntity<String> saveCompte(@RequestBody @Valid CompteReqDTO accountDTO) {
@@ -124,6 +129,28 @@ public class CompteController {
             return ResponseEntity.ok("Demande d'activer du compte a été envoyé avec succès.");
         } catch (Exception | NotificationNotSended e){
             return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/depot")
+    public ResponseEntity<?> depot(@RequestBody @Valid DepotReqDTO depotReqDTO){
+        try {
+            changeSoldeService.depot(depotReqDTO);
+            return ResponseEntity.ok("Depot d'argent effectué avec succès.");
+        } catch (Exception | NotificationNotSended e){
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/retrait")
+    public ResponseEntity<?> retrait(@RequestBody @Valid RetraitReqDTO retraitReqDTO){
+        try {
+            changeSoldeService.retrait(retraitReqDTO);
+            return ResponseEntity.ok("Retrait d'argent effectué avec succès.");
+        } catch (Exception | NotificationNotSended e){
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        } catch (InsufficientBalanceException e) {
+            throw new RuntimeException(e);
         }
     }
 
