@@ -34,8 +34,11 @@ public class UserEntity extends Personne implements UserDetails {
     @Enumerated(EnumType.STRING)
     private ERole role;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-    private List<Message> messages;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "sender")
+    private List<Message> sentMessages; // Messages sent by the user
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "receiver")
+    private List<Message> receivedMessages; // Messages received by the user
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private List<Token> tokens;

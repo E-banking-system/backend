@@ -63,7 +63,9 @@ public class SecurityConfiguration {
                     "/configuration/security",
                     "/swagger-ui/**",
                     "/webjars/**",
-                    "/swagger-ui.html"
+                    "/swagger-ui.html",
+                    "/app/chat.sendMessage",
+                    "/chat"
             )
             .permitAll()
             //.requestMatchers(GET,"/api/v1/notification/**").hasAnyRole(BANQUIER.name(),CLIENT.name())

@@ -52,8 +52,8 @@ public class MessageTest {
         String userId = UUID.randomUUID().toString();
         user.setId(userId);
 
-        msg.setUser(user);
+        msg.setSender(user);
 
-        assertEquals(user, msg.getUser());
+        assertEquals(user, msg.getSender());
     }
 }
