@@ -33,7 +33,7 @@ public class VirementServiceImpl implements VirementService{
     @Transactional
     @Override
     public void virementUnitaire(VirementUnitReqDTO virementUnitReqDTO) throws InsufficientBalanceException, MontantNotValide, CompteNotExistException, NotificationNotSended, OperationNotSaved {
-        if (virementUnitReqDTO.getMontant() <= 100) {
+        if (virementUnitReqDTO.getMontant() < 100) {
             throw new MontantNotValide("The amount must be more than 100 dirhams");
         }
 
