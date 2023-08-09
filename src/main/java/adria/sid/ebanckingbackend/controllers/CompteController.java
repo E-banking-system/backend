@@ -47,8 +47,6 @@ public class CompteController {
         }
     }
 
-
-
     @PostMapping
     public ResponseEntity<String> saveCompte(@RequestBody @Valid CompteReqDTO accountDTO) {
         try {

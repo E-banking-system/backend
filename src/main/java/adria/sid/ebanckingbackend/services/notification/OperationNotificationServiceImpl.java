@@ -84,7 +84,7 @@ public class OperationNotificationServiceImpl implements OperationNotificationSe
     public void sendClientCompteNotActiveNotificationToClient(Compte clientCompte) throws NotificationNotSended {
         System.out.println("sendClientCompteNotActiveNotificationToClient");
         System.out.println(clientCompte.getNumCompte());
-        /*try {
+        try {
             Notification clientNotification = new Notification();
             clientNotification.setId(UUID.randomUUID().toString());
 
@@ -98,7 +98,7 @@ public class OperationNotificationServiceImpl implements OperationNotificationSe
             notificationRepository.save(clientNotification);
         } catch (Exception e){
             throw new NotificationNotSended("This notification is not sended");
-        }*/
+        }
     }
 
     @Override
