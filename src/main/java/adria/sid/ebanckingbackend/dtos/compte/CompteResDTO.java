@@ -15,7 +15,7 @@ public class CompteResDTO {
     private String id;
     private String nature;
     private Double solde;
-    private String RIB;
+    private String rib;
     private String numCompte;
     private Date dateCreation;
     private Date datePeremption;

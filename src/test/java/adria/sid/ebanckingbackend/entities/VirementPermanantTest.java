@@ -19,12 +19,10 @@ public class VirementPermanantTest {
         Date dateOp = new Date();
         vrmnt.setDateOperation(dateOp);
         vrmnt.setMontant(500.0);
-        vrmnt.setEstPermanent(true);
         Date horaire = new Date();
 
         assertEquals(vrmntId, vrmnt.getId());
         assertEquals(dateOp, vrmnt.getDateOperation());
         assertEquals(500.0, vrmnt.getMontant());
-        assertEquals(true, vrmnt.getEstPermanent());
     }
 }
