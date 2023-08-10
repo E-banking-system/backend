@@ -7,9 +7,14 @@ This is the backend application for an E-banking system.
 ![Backend Architecture Diagram](./assets/Backend.jpg)
 *Backend Architecture Diagram*
 
-## Class Diagram
+## Class Diagram v1
 
 ![Class Diagram](./assets/class%20diagram.jpg)
+*Class Diagram*
+
+## Class Diagram v2
+
+![Class Diagram](./assets/v2.jpg)
 *Class Diagram*
 
 ## Dependencies

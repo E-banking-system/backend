@@ -74,6 +74,7 @@ public class VirementServiceImpl implements VirementService{
             Beneficier beneficier=beneficierRepository.getBeneficiersByNumCompte(beneficierCompte.getNumCompte());
             virementUnitaire.setBeneficier(beneficier);
             virementUnitaireRepository.save(virementUnitaire);
+            System.out.println(virementUnitaire.getEstVirementUnitaire());
         } catch (Exception e){
             throw new OperationNotSaved("This unit transfer is not saved");
         }

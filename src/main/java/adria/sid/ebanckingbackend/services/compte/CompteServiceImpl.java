@@ -6,6 +6,7 @@ import adria.sid.ebanckingbackend.ennumerations.ERole;
 import adria.sid.ebanckingbackend.entities.Compte;
 import adria.sid.ebanckingbackend.entities.Operation;
 import adria.sid.ebanckingbackend.entities.UserEntity;
+import adria.sid.ebanckingbackend.entities.VirementUnitaire;
 import adria.sid.ebanckingbackend.exceptions.CompteNotExistException;
 import adria.sid.ebanckingbackend.exceptions.NotificationNotSended;
 import adria.sid.ebanckingbackend.mappers.CompteMapper;
@@ -13,6 +14,7 @@ import adria.sid.ebanckingbackend.mappers.OperationMapper;
 import adria.sid.ebanckingbackend.repositories.CompteRepository;
 import adria.sid.ebanckingbackend.repositories.OperationRepository;
 import adria.sid.ebanckingbackend.repositories.UserRepository;
+import adria.sid.ebanckingbackend.repositories.VirementUnitaireRepository;
 import adria.sid.ebanckingbackend.services.email.EmailSender;
 import adria.sid.ebanckingbackend.services.notification.OperationNotificationService;
 import jakarta.transaction.Transactional;
@@ -37,11 +39,12 @@ public class CompteServiceImpl implements CompteService {
     final private CompteMapper compteMapper;
     final private OperationMapper operationMapper;
     final private OperationRepository operationRepository;
+    final private VirementUnitaireRepository virementUnitaireRepository;
 
     @Override
     public Page<OperationResDTO> getCompteOperations(Pageable pageable, String compteId) throws CompteNotExistException {
         try {
-            Page<Operation> operationPage = operationRepository.getCompteOperations(pageable, compteId);
+            Page<VirementUnitaire> operationPage = virementUnitaireRepository.findByCompteId(pageable, compteId);
             return operationPage.map(operationMapper::fromOperationToOperationResDTO);
         }catch (Exception e){
             throw new CompteNotExistException("This account with this id is not exists");

@@ -1,6 +1,7 @@
 package adria.sid.ebanckingbackend.repositories;
 
 import adria.sid.ebanckingbackend.entities.Compte;
+import adria.sid.ebanckingbackend.entities.Operation;
 import adria.sid.ebanckingbackend.entities.Virement;
 import adria.sid.ebanckingbackend.entities.VirementUnitaire;
 import org.springframework.data.domain.Page;

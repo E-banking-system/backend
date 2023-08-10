@@ -15,7 +15,7 @@ public class Operation {
     @Id
     private String id;
     private Date dateOperation;
-    private Double montant;
+    private double montant;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "compte_id")
