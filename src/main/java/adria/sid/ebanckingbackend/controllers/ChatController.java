@@ -33,6 +33,7 @@ public class ChatController {
 
     @MessageMapping("/chat.sendMessage")
     public void sendMessage(@Payload Message message, SimpMessageHeaderAccessor headerAccessor) {
+        System.out.println("It works well");
         try {
             message.setTimestamp(LocalDateTime.now());
             message.setSender(userRepository.findById(message.getSender().getId()).orElse(null));

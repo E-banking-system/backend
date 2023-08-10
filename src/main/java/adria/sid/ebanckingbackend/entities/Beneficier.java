@@ -12,7 +12,6 @@ import java.util.List;
 @AllArgsConstructor
 @PrimaryKeyJoinColumn(name = "beneficier_id")
 public class Beneficier extends Personne {
-    private String rib;
     private String numCompte;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "beneficier")

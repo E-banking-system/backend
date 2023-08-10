@@ -51,7 +51,7 @@ public class OperationNotificationServiceImpl implements OperationNotificationSe
     }
 
     @Override
-    public void sendVirementUnitNotificationToClient(Compte compte, double montant) throws NotificationNotSended {
+    public void sendVirementUnitNotificationToBeneficier(Compte compte, double montant) throws NotificationNotSended {
         try {
             Notification clientNotification = new Notification();
             clientNotification.setId(UUID.randomUUID().toString());
@@ -66,7 +66,7 @@ public class OperationNotificationServiceImpl implements OperationNotificationSe
     }
 
     @Override
-    public void sendVirementUnitNotificationToBeneficier(Compte compte, double montant) throws NotificationNotSended {
+    public void sendVirementUnitNotificationToClient(Compte compte, double montant) throws NotificationNotSended {
         try {
             Notification clientNotification = new Notification();
             clientNotification.setId(UUID.randomUUID().toString());

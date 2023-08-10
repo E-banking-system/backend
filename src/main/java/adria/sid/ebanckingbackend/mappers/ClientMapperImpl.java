@@ -15,6 +15,7 @@ public class ClientMapperImpl implements ClientMapper{
     @Override
     public ClientResDTO fromUserToClientResDTO(UserEntity user) {
         ClientResDTO clientResDTO=new ClientResDTO();
+        clientResDTO.setEmail(user.getEmail());
         BeanUtils.copyProperties(user,clientResDTO);
         return  clientResDTO;
     }
