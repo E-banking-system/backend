@@ -67,7 +67,7 @@ public class ChangeSoldeServiceImpl implements ChangeSoldeService {
                 throw new CompteNotActiveException("This account is not active.");
             }
 
-            double newSolde=compte.getSolde()-retraitReqDTO.getMontant();
+            double newSolde=compte.getSolde()+retraitReqDTO.getMontant();
 
             if(newSolde>=0){
                 compte.setSolde(newSolde);

@@ -18,11 +18,9 @@ public class VirementUnitaireTest {
         Date dateOp = new Date();
         vrmnt.setDateOperation(dateOp);
         vrmnt.setMontant(500.0);
-        vrmnt.setEstUnitaire(true);
 
         assertEquals(vrmntId, vrmnt.getId());
         assertEquals(dateOp, vrmnt.getDateOperation());
         assertEquals(500.0, vrmnt.getMontant());
-        assertEquals(true, vrmnt.getEstUnitaire());
     }
 }
