@@ -14,11 +14,8 @@ public class BeneficierReqDTO {
     @NotBlank(message = "clientId is required")
     private String clientId;
 
-    @NotBlank(message = "Nom is required")
-    private String nom;
-
-    @NotBlank(message = "Prénom is required")
-    private String prenom;
+    @NotBlank(message = "Email is required")
+    private String email;
 
     @NotBlank(message = "Num compte is required")
     private String numCompte;

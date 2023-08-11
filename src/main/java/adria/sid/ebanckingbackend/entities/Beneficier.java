@@ -10,8 +10,10 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@PrimaryKeyJoinColumn(name = "beneficier_id")
-public class Beneficier extends Personne {
+public class Beneficier {
+    @Id
+    private String beneficier_id;
+
     private String numCompte;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "beneficier")
@@ -20,4 +22,8 @@ public class Beneficier extends Personne {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private UserEntity user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_user_id")
+    private UserEntity parent_user;
 }

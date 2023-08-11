@@ -2,9 +2,12 @@ package adria.sid.ebanckingbackend.services.beneficiaire;
 
 import adria.sid.ebanckingbackend.dtos.beneficier.BeneficierReqDTO;
 import adria.sid.ebanckingbackend.dtos.beneficier.BeneficierResDTO;
+import adria.sid.ebanckingbackend.ennumerations.EGender;
+import adria.sid.ebanckingbackend.ennumerations.EPType;
 import adria.sid.ebanckingbackend.entities.Beneficier;
 import adria.sid.ebanckingbackend.entities.Compte;
 import adria.sid.ebanckingbackend.entities.UserEntity;
+import adria.sid.ebanckingbackend.exceptions.BeneficierEmailIsNotExiste;
 import adria.sid.ebanckingbackend.exceptions.CompteNotExistException;
 import adria.sid.ebanckingbackend.exceptions.IdUserIsNotValideException;
 import adria.sid.ebanckingbackend.mappers.BeneficierMapper;
@@ -23,6 +26,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,18 +40,27 @@ public class BeneficierServiceImpl implements BeneficierService {
     private final VirementRepository virementRepository;
 
     @Override
-    public void ajouterBeneficiair(BeneficierReqDTO beneficierReqDTO) throws CompteNotExistException {
-        Beneficier beneficier=beneficierMapper.fromBeneficierReqDTOToBeneficier(beneficierReqDTO);
-        Compte compte=compteRepository.getCompteByNumCompte(beneficier.getNumCompte());
-        if(compte == null){
-            throw new CompteNotExistException("Ce compte nexiste pas pour ce beneficier");
+    public void ajouterBeneficiair(BeneficierReqDTO beneficierReqDTO) throws CompteNotExistException, BeneficierEmailIsNotExiste {
+        Beneficier beneficier = beneficierMapper.fromBeneficierReqDTOToBeneficier(beneficierReqDTO);
+        Compte compte = compteRepository.getCompteByNumCompte(beneficier.getNumCompte());
+
+        if (compte == null) {
+            throw new CompteNotExistException("Ce compte n'existe pas pour ce beneficier");
         }
-        if(!Objects.equals(compte.getEtatCompte().toString(), "ACTIVE")){
+
+        if (!Objects.equals(compte.getEtatCompte().toString(), "ACTIVE")) {
             throw new CompteNotExistException("Ce compte n'est pas actif");
         }
 
+        UserEntity user=userRepository.findByEmail(beneficierReqDTO.getEmail()).orElseThrow(null);
+        if(user == null){
+            throw new BeneficierEmailIsNotExiste("This email is not related with any existed client");
+        }
+        beneficier.setParent_user(user);
+        // Save the Beneficier entity
         beneficiaireRepository.save(beneficier);
     }
+
 
     @Override
     public void modifierBeneficier(BeneficierReqDTO beneficierReqDTO, String beneficierId) {
@@ -55,7 +68,7 @@ public class BeneficierServiceImpl implements BeneficierService {
                 .orElseThrow(() -> new EntityNotFoundException("Beneficier not found with ID: " + beneficierId));
 
         Beneficier updatedBeneficier = beneficierMapper.fromBeneficierReqDTOToBeneficier(beneficierReqDTO);
-        updatedBeneficier.setId(existingBeneficier.getId());
+        updatedBeneficier.setBeneficier_id(existingBeneficier.getBeneficier_id());
         beneficiaireRepository.save(updatedBeneficier);
     }
 

@@ -1,26 +1,24 @@
 package adria.sid.ebanckingbackend.dtos.beneficier;
 
-import adria.sid.ebanckingbackend.ennumerations.EGender;
-import adria.sid.ebanckingbackend.ennumerations.EPType;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Id;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
+import adria.sid.ebanckingbackend.entities.UserEntity;
+import adria.sid.ebanckingbackend.entities.Virement;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class BeneficierResDTO {
-    private String id;
+    private String beneficier_id;
     private String numCompte;
+    private String user_manager_id;
+    private String parent_user_id;
     private String nom;
     private String prenom;
-    private String email;
 }

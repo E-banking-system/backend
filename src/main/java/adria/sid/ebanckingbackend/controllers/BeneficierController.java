@@ -2,6 +2,7 @@ package adria.sid.ebanckingbackend.controllers;
 
 import adria.sid.ebanckingbackend.dtos.beneficier.BeneficierReqDTO;
 import adria.sid.ebanckingbackend.dtos.beneficier.BeneficierResDTO;
+import adria.sid.ebanckingbackend.exceptions.BeneficierEmailIsNotExiste;
 import adria.sid.ebanckingbackend.exceptions.CompteNotExistException;
 import adria.sid.ebanckingbackend.exceptions.IdUserIsNotValideException;
 import adria.sid.ebanckingbackend.services.beneficiaire.BeneficierService;
@@ -55,6 +56,8 @@ public class BeneficierController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         } catch (CompteNotExistException e) {
             throw new RuntimeException(e);
+        } catch (BeneficierEmailIsNotExiste e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -99,6 +102,12 @@ public class BeneficierController {
     // Exception handler to handle CompteNotExistException
     @ExceptionHandler(CompteNotExistException.class)
     public ResponseEntity<String> handleCompteNotExistException(CompteNotExistException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+    }
+
+    // Exception handler to handle BeneficierEmailIsNotExiste
+    @ExceptionHandler(BeneficierEmailIsNotExiste.class)
+    public ResponseEntity<String> handleBeneficierEmailIsNotExisteException(BeneficierEmailIsNotExiste e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }
 }
