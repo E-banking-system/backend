@@ -19,7 +19,7 @@ This is the backend application for an E-banking system.
 
 ## Class Diagram v3
 
-![Class Diagram](./assets/v3.jpg)
+![Class Diagram](./assets/v3.pdf)
 *Class Diagram*
 
 ## Dependencies
