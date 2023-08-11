@@ -17,6 +17,11 @@ This is the backend application for an E-banking system.
 ![Class Diagram](./assets/v2.jpg)
 *Class Diagram*
 
+## Class Diagram v3
+
+![Class Diagram](./assets/v3.jpg)
+*Class Diagram*
+
 ## Dependencies
 
 The project uses the following dependencies:
