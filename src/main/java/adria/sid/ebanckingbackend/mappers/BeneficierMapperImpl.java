@@ -19,8 +19,6 @@ public class BeneficierMapperImpl implements BeneficierMapper{
     public BeneficierResDTO fromBeneficierToBeneficierResDTO(Beneficier beneficier) {
         BeneficierResDTO beneficierResDTO=new BeneficierResDTO();
         BeanUtils.copyProperties(beneficier,beneficierResDTO);
-        beneficierResDTO.setParent_user_id(beneficier.getParent_user().getId());
-        beneficierResDTO.setUser_manager_id(beneficier.getUser().getId());
         beneficierResDTO.setNom(beneficier.getParent_user().getNom());
         beneficierResDTO.setPrenom(beneficier.getParent_user().getPrenom());
         return  beneficierResDTO;

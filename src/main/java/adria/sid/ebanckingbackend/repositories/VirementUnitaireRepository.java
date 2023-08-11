@@ -9,7 +9,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface VirementUnitaireRepository extends JpaRepository<VirementUnitaire,String> {
-    @Query("SELECT v FROM VirementUnitaire v WHERE v.compte.id = :compteId or v.beneficier.parent_user.id = :userId")
-    Page<VirementUnitaire> findByCompteId(Pageable pageable, @Param("compteId") String compteId, @Param("userId") String userId);
-}
+public interface VirementUnitaireRepository extends JpaRepository<VirementUnitaire,String> {}

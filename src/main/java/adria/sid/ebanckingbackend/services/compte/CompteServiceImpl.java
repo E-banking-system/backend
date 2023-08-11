@@ -39,11 +39,11 @@ public class CompteServiceImpl implements CompteService {
     final private CompteMapper compteMapper;
     final private OperationMapper operationMapper;
     final private VirementUnitaireRepository virementUnitaireRepository;
-
+    final private OperationRepository operationRepository;
     @Override
     public Page<OperationResDTO> getCompteOperations(Pageable pageable, String compteId, String userId) throws CompteNotExistException {
         try {
-            Page<VirementUnitaire> operationPage = virementUnitaireRepository.findByCompteId(pageable, compteId, userId);
+            Page<Operation> operationPage = operationRepository.findByCompteId(pageable, compteId, userId);
             return operationPage.map(operationMapper::fromOperationToOperationResDTO);
         }catch (Exception e){
             throw new CompteNotExistException("This account with this id is not exists");

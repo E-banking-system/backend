@@ -7,10 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface OperationRepository extends JpaRepository<Operation,String> {
-    @Query("SELECT o FROM Operation o WHERE o.compte.id = :compteId")
-    Page<Operation> getCompteOperations(
-            Pageable pageable,
-            @Param("compteId") String compteId
-            );
+public interface OperationRepository extends JpaRepository<Operation, String> {
+    @Query(value = "SELECT * FROM operation o WHERE o.compte_id = :compteId OR (o.dtype = 'VirementUnitaire' AND o.beneficier_id IN (SELECT b.beneficier_id FROM beneficier b WHERE b.parent_user_id = :userId))", nativeQuery = true)
+    Page<Operation> findByCompteId(Pageable pageable, @Param("compteId") String compteId, @Param("userId") String userId);
 }
