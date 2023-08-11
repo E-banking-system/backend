@@ -38,13 +38,12 @@ public class CompteServiceImpl implements CompteService {
     final private EmailSender emailSender;
     final private CompteMapper compteMapper;
     final private OperationMapper operationMapper;
-    final private OperationRepository operationRepository;
     final private VirementUnitaireRepository virementUnitaireRepository;
 
     @Override
-    public Page<OperationResDTO> getCompteOperations(Pageable pageable, String compteId) throws CompteNotExistException {
+    public Page<OperationResDTO> getCompteOperations(Pageable pageable, String compteId, String userId) throws CompteNotExistException {
         try {
-            Page<VirementUnitaire> operationPage = virementUnitaireRepository.findByCompteId(pageable, compteId);
+            Page<VirementUnitaire> operationPage = virementUnitaireRepository.findByCompteId(pageable, compteId, userId);
             return operationPage.map(operationMapper::fromOperationToOperationResDTO);
         }catch (Exception e){
             throw new CompteNotExistException("This account with this id is not exists");

@@ -19,7 +19,7 @@ public interface CompteService {
     void demandeActivateCompte(DemandeActivateDTO demandeActivateDTO) throws NotificationNotSended;
     void demandeBlockCompte(DemandeBlockDTO demandeBlockDTO) throws NotificationNotSended;
 
-    Page<OperationResDTO> getCompteOperations(Pageable pageable, String compteId) throws CompteNotExistException;
+    Page<OperationResDTO> getCompteOperations(Pageable pageable, String compteId, String userId) throws CompteNotExistException;
 
     Page<CompteResDTO> searchComptes(Pageable pageable, String keyword);
     Page<CompteResDTO> getClientComptes(String userId, Pageable pageable, String keyword);

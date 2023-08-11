@@ -33,13 +33,14 @@ public class CompteController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "id") String sortBy,
-            @RequestParam(required = false) String compteId
+            @RequestParam String compteId,
+            @RequestParam String userId
     ) {
         try {
             Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
 
             Page<OperationResDTO> operationResDTOPage;
-            operationResDTOPage = compteService.getCompteOperations(pageable,compteId);
+            operationResDTOPage = compteService.getCompteOperations(pageable,compteId,userId);
 
             return ResponseEntity.ok(operationResDTOPage);
         } catch (Exception | CompteNotExistException e) {
