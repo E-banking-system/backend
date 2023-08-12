@@ -72,6 +72,8 @@ public class BeneficierController {
             return ResponseEntity.notFound().build();
         } catch (IdUserIsNotValideException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (CompteNotExistException e) {
+            throw new RuntimeException(e);
         }
     }
 

@@ -63,9 +63,15 @@ public class BeneficierServiceImpl implements BeneficierService {
 
 
     @Override
-    public void modifierBeneficier(BeneficierReqDTO beneficierReqDTO, String beneficierId) {
+    public void modifierBeneficier(BeneficierReqDTO beneficierReqDTO, String beneficierId) throws CompteNotExistException {
         Beneficier existingBeneficier = beneficiaireRepository.findById(beneficierId)
                 .orElseThrow(() -> new EntityNotFoundException("Beneficier not found with ID: " + beneficierId));
+
+        Compte compte = compteRepository.getCompteByNumCompte(beneficierReqDTO.getNumCompte());
+
+        if (compte == null) {
+            throw new CompteNotExistException("Ce compte n'existe pas pour ce beneficier");
+        }
 
         Beneficier updatedBeneficier = beneficierMapper.fromBeneficierReqDTOToBeneficier(beneficierReqDTO);
         updatedBeneficier.setBeneficier_id(existingBeneficier.getBeneficier_id());
