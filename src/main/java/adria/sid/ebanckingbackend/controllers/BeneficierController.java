@@ -86,28 +86,4 @@ public class BeneficierController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
         }
     }
-
-    // Exception handler to handle IdUserIsNotValideException
-    @ExceptionHandler(IdUserIsNotValideException.class)
-    public ResponseEntity<String> handleIdUserIsNotValideException(IdUserIsNotValideException e) {
-        return ResponseEntity.badRequest().body(e.getMessage());
-    }
-
-    // Exception handler to handle InternalError
-    @ExceptionHandler(InternalError.class)
-    public ResponseEntity<String> handleInternalError(InternalError e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-    }
-
-    // Exception handler to handle CompteNotExistException
-    @ExceptionHandler(CompteNotExistException.class)
-    public ResponseEntity<String> handleCompteNotExistException(CompteNotExistException e) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-    }
-
-    // Exception handler to handle BeneficierEmailIsNotExiste
-    @ExceptionHandler(BeneficierEmailIsNotExiste.class)
-    public ResponseEntity<String> handleBeneficierEmailIsNotExisteException(BeneficierEmailIsNotExiste e) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-    }
 }

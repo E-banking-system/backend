@@ -172,40 +172,4 @@ public class CompteController {
             throw new RuntimeException(e);
         }
     }
-
-    // Exception handler to handle IdUserIsNotValideException
-    @ExceptionHandler(NotificationNotSended.class)
-    public ResponseEntity<String> handleNotificationNotSendedException(NotificationNotSended e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-    }
-
-    // Exception handler to handle IdUserIsNotValideException
-    @ExceptionHandler(IdUserIsNotValideException.class)
-    public ResponseEntity<String> handleIdUserIsNotValideException(IdUserIsNotValideException e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-    }
-
-    // Exception handler to handle InternalError
-    @ExceptionHandler(InternalError.class)
-    public ResponseEntity<String> handleInternalError(InternalError e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-    }
-
-    // Exception handler to handle InsufficientBalanceException
-    @ExceptionHandler(InsufficientBalanceException.class)
-    public ResponseEntity<String> handleInsufficientBalanceExceptionException(InsufficientBalanceException e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-    }
-
-    // Exception handler to handle OperationNotSaved
-    @ExceptionHandler(OperationNotSaved.class)
-    public ResponseEntity<String> handleOperationNotSavedException(OperationNotSaved e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-    }
-
-    // Exception handler to handle CompteNotExistException
-    @ExceptionHandler(CompteNotExistException.class)
-    public ResponseEntity<String> handleCompteNotExistExceptionException(CompteNotExistException e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-    }
 }

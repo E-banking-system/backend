@@ -97,34 +97,4 @@ public class AuthenticationController {
     authenticationService.refreshToken(request, response);
   }
 
-  // Exception handler to handle RuntimeException
-  @ExceptionHandler(RuntimeException.class)
-  public ResponseEntity<String> handleRuntimeException(RuntimeException e) {
-    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-  }
-
-  // Exception handler to handle UsernameNotFoundException
-  @ExceptionHandler(UsernameNotFoundException.class)
-  public ResponseEntity<String> handleUsernameNotFoundException(UsernameNotFoundException e) {
-    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-  }
-
-  // Exception handler to handle BadCredentialsException
-  @ExceptionHandler(BadCredentialsException.class)
-  public ResponseEntity<String> handleBadCredentialsException(BadCredentialsException e) {
-    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
-  }
-
-  // Exception handler to handle UserHasNotAnyCompte
-  @ExceptionHandler(UserHasNotAnyCompte.class)
-  public ResponseEntity<String> handleUserHasNotAnyCompte(UserHasNotAnyCompte e) {
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-  }
-
-  // Exception handler to handle UserNotEnabledException
-  @ExceptionHandler(UserNotEnabledException.class)
-  public ResponseEntity<String> handleUserNotEnabledException(UserNotEnabledException e) {
-    return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
-  }
-
 }
