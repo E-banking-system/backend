@@ -24,4 +24,7 @@ public class OperationResDTO {
     private Boolean estRetrait;
     private Boolean estVirementPermanent;
     private Boolean estVirementUnitaire;
+
+    private String compteId;
+    private String beneficierId;
 }

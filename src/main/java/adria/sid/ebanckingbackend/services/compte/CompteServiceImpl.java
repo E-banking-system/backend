@@ -3,10 +3,7 @@ package adria.sid.ebanckingbackend.services.compte;
 import adria.sid.ebanckingbackend.dtos.compte.*;
 import adria.sid.ebanckingbackend.dtos.operation.OperationResDTO;
 import adria.sid.ebanckingbackend.ennumerations.ERole;
-import adria.sid.ebanckingbackend.entities.Compte;
-import adria.sid.ebanckingbackend.entities.Operation;
-import adria.sid.ebanckingbackend.entities.UserEntity;
-import adria.sid.ebanckingbackend.entities.VirementUnitaire;
+import adria.sid.ebanckingbackend.entities.*;
 import adria.sid.ebanckingbackend.exceptions.CompteNotExistException;
 import adria.sid.ebanckingbackend.exceptions.NotificationNotSended;
 import adria.sid.ebanckingbackend.mappers.CompteMapper;
@@ -40,12 +37,23 @@ public class CompteServiceImpl implements CompteService {
     final private OperationMapper operationMapper;
     final private VirementUnitaireRepository virementUnitaireRepository;
     final private OperationRepository operationRepository;
+
     @Override
     public Page<OperationResDTO> getCompteOperations(Pageable pageable, String compteId, String userId) throws CompteNotExistException {
         try {
             Page<Operation> operationPage = operationRepository.findByCompteId(pageable, compteId, userId);
-            return operationPage.map(operationMapper::fromOperationToOperationResDTO);
-        }catch (Exception e){
+            return operationPage.map(operation -> {
+                OperationResDTO operationResDTO = operationMapper.fromOperationToOperationResDTO(operation);
+                operationResDTO.setCompteId(operation.getCompte().getId());
+
+                if (operation instanceof Virement) {
+                    Virement virement = (Virement) operation;
+                    operationResDTO.setBeneficierId(virement.getBeneficier().getBeneficier_id());
+                }
+
+                return operationResDTO;
+            });
+        } catch (Exception e) {
             throw new CompteNotExistException("This account with this id is not exists");
         }
     }
