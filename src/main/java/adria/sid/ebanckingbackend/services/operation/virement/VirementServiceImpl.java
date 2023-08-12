@@ -139,7 +139,7 @@ public class VirementServiceImpl implements VirementService{
         }
 
         // Generate the list of execution dates for the scheduled transfer
-        List<Date> datesExecution = codeGenerator.genererDatesVirementPermanent(virementPermaReqDTO.getPremierDateExecution(),virementPermaReqDTO.getDateFinExecution(),virementPermaReqDTO.getFrequence());
+        List<Date> datesExecution = codeGenerator.genererDatesVirementPermanentVersionTest(virementPermaReqDTO.getPremierDateExecution(),virementPermaReqDTO.getDateFinExecution(),virementPermaReqDTO.getFrequence());
 
         // Add the execution dates to the database as VirementProgramme entries
         for (Date dateExecution : datesExecution) {

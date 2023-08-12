@@ -18,12 +18,6 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class CompteMapperImpl implements CompteMapper{
     final private CodeGenerator codeGenerator;
-    @Override
-    public CompteReqDTO fromCompteToCompteReqDTO(Compte compte) {
-        CompteReqDTO compteDTO=new CompteReqDTO();
-        BeanUtils.copyProperties(compte,compteDTO);
-        return  compteDTO;
-    }
 
     @Override
     public CompteResDTO fromCompteToCompteResDTO(Compte compte) {
@@ -61,12 +55,5 @@ public class CompteMapperImpl implements CompteMapper{
         // Now copy the other properties from compteDTO to newCompte
         BeanUtils.copyProperties(compteDTO, newCompte);
         return newCompte;
-    }
-
-    @Override
-    public List<CompteResDTO> toComptesResDTOs(List<Compte> comptes) {
-        return comptes.stream()
-                .map(this::fromCompteToCompteResDTO)
-                .collect(Collectors.toList());
     }
 }

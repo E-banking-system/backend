@@ -11,5 +11,6 @@ public interface CodeGenerator {
     String generatePinCode();
     String generateRIBCode();
     Long numeroCompte();
-    List<Date> genererDatesVirementPermanent(Date premierDateExecution, Date dateFinExecution, EVType frequence);
+    List<Date> genererDatesVirementPermanentVersionTest(Date premierDateExecution, Date dateFinExecution, EVType frequence);
+    List<Date> genererDatesVirementPermanentVersionProduction(Date premierDateExecution, Date dateFinExecution, EVType frequence);
 }

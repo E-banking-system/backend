@@ -37,11 +37,4 @@ public class ClientPhysiqueMapperImpl implements ClientPhysiqueMapper{
         BeanUtils.copyProperties(clientPhysiqueDTO,user);
         return  user;
     }
-
-    @Override
-    public List<ClientPhysiqueDTO> toClientsPhysiqueDTOs(List<UserEntity> users) {
-        return users.stream()
-                .map(this::fromUserToClientPhysiqueDTO)
-                .collect(Collectors.toList());
-    }
 }

@@ -8,5 +8,4 @@ import java.util.List;
 public interface ClientPhysiqueMapper {
     ClientPhysiqueDTO fromUserToClientPhysiqueDTO(UserEntity user);
     UserEntity fromClientPhysiqueToUser(ClientPhysiqueDTO clientPhysiqueDTO);
-    List<ClientPhysiqueDTO> toClientsPhysiqueDTOs(List<UserEntity> users);
 }

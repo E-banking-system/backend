@@ -26,13 +26,6 @@ public class NotificationMapperImpl implements NotificationMapper {
     }
 
     @Override
-    public Notification fromNotificationResToNotification(NotificationResDTO notificationResDTO){
-        Notification notification=new Notification();
-        BeanUtils.copyProperties(notificationResDTO,notification);
-        return  notification;
-    }
-
-    @Override
     public List<NotificationResDTO> toNotificationResDTOs(List<Notification> notifications) {
         return notifications.stream()
                 .map(this::fromNotificationToNotificationResDTO)

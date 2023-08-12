@@ -8,5 +8,4 @@ import java.util.List;
 public interface ClientMoraleMapper {
     ClientMoraleDTO fromUserToClientMoraleDTO(UserEntity user);
     UserEntity fromClientMoraleToUser(ClientMoraleDTO clientMoraleDTO);
-    List<ClientMoraleDTO> toClientsMoraleDTOs(List<UserEntity> users);
 }

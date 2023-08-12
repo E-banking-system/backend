@@ -34,11 +34,4 @@ public class ClientMoraleMapperImpl implements ClientMoraleMapper{
         BeanUtils.copyProperties(clientMoraleDTO,user);
         return  user;
     }
-
-    @Override
-    public List<ClientMoraleDTO> toClientsMoraleDTOs(List<UserEntity> users) {
-        return users.stream()
-                .map(this::fromUserToClientMoraleDTO)
-                .collect(Collectors.toList());
-    }
 }

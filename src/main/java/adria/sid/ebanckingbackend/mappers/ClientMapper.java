@@ -7,5 +7,4 @@ import java.util.List;
 
 public interface ClientMapper {
     ClientResDTO fromUserToClientResDTO(UserEntity user);
-    List<ClientResDTO> toClientResDTOs(List<UserEntity> users);
 }

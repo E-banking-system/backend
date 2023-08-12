@@ -19,11 +19,4 @@ public class ClientMapperImpl implements ClientMapper{
         BeanUtils.copyProperties(user,clientResDTO);
         return  clientResDTO;
     }
-
-    @Override
-    public List<ClientResDTO> toClientResDTOs(List<UserEntity> users) {
-        return users.stream()
-                .map(this::fromUserToClientResDTO)
-                .collect(Collectors.toList());
-    }
 }

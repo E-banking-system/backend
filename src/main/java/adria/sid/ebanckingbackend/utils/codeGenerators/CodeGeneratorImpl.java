@@ -38,7 +38,7 @@ public class CodeGeneratorImpl implements CodeGenerator{
 
     //test version
     @Override
-    public List<Date> genererDatesVirementPermanent(Date premierDateExecution, Date dateFinExecution, EVType frequence) {
+    public List<Date> genererDatesVirementPermanentVersionTest(Date premierDateExecution, Date dateFinExecution, EVType frequence) {
         List<Date> datesExecution = new ArrayList<>();
 
         LocalDateTime dateTimeDebut = premierDateExecution.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
@@ -63,8 +63,8 @@ public class CodeGeneratorImpl implements CodeGenerator{
     }
 
     //production version
-    /*@Override
-    public List<Date> genererDatesVirementPermanent(Date premierDateExecution, Date dateFinExecution, EVType frequence) {
+    @Override
+    public List<Date> genererDatesVirementPermanentVersionProduction(Date premierDateExecution, Date dateFinExecution, EVType frequence) {
         List<Date> datesExecution = new ArrayList<>();
 
         LocalDateTime dateTimeDebut = premierDateExecution.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
@@ -86,5 +86,5 @@ public class CodeGeneratorImpl implements CodeGenerator{
         }
 
         return datesExecution;
-    }*/
+    }
 }

@@ -34,11 +34,4 @@ public class BeneficierMapperImpl implements BeneficierMapper{
         BeanUtils.copyProperties(beneficierReqDTO,beneficier);
         return beneficier;
     }
-
-    @Override
-    public List<BeneficierResDTO> toBeneficierResDTOs(List<Beneficier> beneficiers) {
-        return beneficiers.stream()
-                .map(this::fromBeneficierToBeneficierResDTO)
-                .collect(Collectors.toList());
-    }
 }

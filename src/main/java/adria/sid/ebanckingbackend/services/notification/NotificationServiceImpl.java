@@ -26,9 +26,7 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public Page<NotificationResDTO> getNotificationsByUserId(Pageable pageable, String userId) {
         List<Notification> notifications = notificationRepository.getNotificationsByUserId(userId);
-        List<NotificationResDTO> notificationResDTOList = notifications.stream()
-                .map(notificationMapper::fromNotificationToNotificationResDTO)
-                .collect(Collectors.toList());
+        List<NotificationResDTO> notificationResDTOList = notificationMapper.toNotificationResDTOs(notifications);
 
         log.info("Retrieved {} notifications for user ID: {}", notifications.size(), userId);
 
