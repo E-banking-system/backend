@@ -1,9 +1,5 @@
 package adria.sid.ebanckingbackend.dtos.operation;
 
-import adria.sid.ebanckingbackend.ennumerations.EVType;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

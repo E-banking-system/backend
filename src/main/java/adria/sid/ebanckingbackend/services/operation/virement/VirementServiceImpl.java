@@ -74,7 +74,6 @@ public class VirementServiceImpl implements VirementService{
             Beneficier beneficier=beneficierRepository.getBeneficiersByNumCompte(beneficierCompte.getNumCompte());
             virementUnitaire.setBeneficier(beneficier);
             virementUnitaireRepository.save(virementUnitaire);
-            System.out.println(virementUnitaire.getEstVirementUnitaire());
         } catch (Exception e){
             throw new OperationNotSaved("This unit transfer is not saved");
         }
@@ -178,22 +177,20 @@ public class VirementServiceImpl implements VirementService{
             creditVirementPermanent(clientCompte, virementProgramme.getMontant());
             debit(beneficierCompte, virementProgramme.getMontant());
         } else {
-            System.out.println("Virement programme non effectué, Solde infsifusant");
-            return;
+            operationNotificationService.sendSoldeInsifisantCompteNotificationToClient(clientCompte.getNumCompte(),clientCompte.getUser());
         }
 
-        // Save the transfer details in the virementPermanantRepository
-        VirementPermanant virementPermanant=virementMapper.fromVirementProgrammeToVirementPermanent(virementProgramme);
-        virementPermanant.setFrequence(virementProgramme.getFrequence());
-        virementPermanant.setCompte(clientCompte);
-        virementPermanant.setDateOperation(new Date());
-
-        Beneficier beneficier=beneficierRepository.getBeneficiersByNumCompte(beneficierCompte.getNumCompte());
-        virementPermanant.setBeneficier(beneficier);
-
         try {
+            // Save the transfer details in the virementPermanantRepository
+            VirementPermanant virementPermanant=virementMapper.fromVirementProgrammeToVirementPermanent(virementProgramme);
+            virementPermanant.setFrequence(virementProgramme.getFrequence());
+            virementPermanant.setCompte(clientCompte);
+            virementPermanant.setDateOperation(new Date());
+
+            Beneficier beneficier=beneficierRepository.getBeneficiersByNumCompte(virementProgramme.getNumCompteBeneficier());
+            virementPermanant.setBeneficier(beneficier);
             virementPermanentRepository.save(virementPermanant);
-        }catch (Exception e){
+        } catch (Exception e){
             throw new OperationNotSaved("This programed transfer is not saved");
         }
 
@@ -218,7 +215,5 @@ public class VirementServiceImpl implements VirementService{
                 virementProgrammeRepository.save(virementProgramme);
             }
         }
-
-        System.out.println("Aucun virement programme n'a été effectué");
     }
 }

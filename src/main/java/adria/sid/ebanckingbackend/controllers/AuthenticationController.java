@@ -39,7 +39,7 @@ public class AuthenticationController {
     try {
       Boolean success = authenticationService.changeOperateur(changeOperateurReqDTO);
       if (success) {
-        return ResponseEntity.ok().body("Your operateur field is changed with success"); // Return 200 OK
+        return ResponseEntity.ok().body("Your operateur field is changed with success");
       } else {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update operateur.");
       }
