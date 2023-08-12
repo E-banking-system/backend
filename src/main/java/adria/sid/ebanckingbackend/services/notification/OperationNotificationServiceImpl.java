@@ -82,8 +82,6 @@ public class OperationNotificationServiceImpl implements OperationNotificationSe
 
     @Override
     public void sendClientCompteNotActiveNotificationToClient(Compte clientCompte) throws NotificationNotSended {
-        System.out.println("sendClientCompteNotActiveNotificationToClient");
-        System.out.println(clientCompte.getNumCompte());
         try {
             Notification clientNotification = new Notification();
             clientNotification.setId(UUID.randomUUID().toString());
@@ -103,10 +101,7 @@ public class OperationNotificationServiceImpl implements OperationNotificationSe
 
     @Override
     public void sendBeneficierCompteNotActiveNotificationToClient(Compte clientCompte, Compte beneficierCompte) throws NotificationNotSended {
-        System.out.println("sendBeneficierCompteNotActiveNotificationToClient");
-        System.out.println(clientCompte.getNumCompte());
-        System.out.println(beneficierCompte.getNumCompte());
-        /*try {
+        try {
             Notification clientNotification = new Notification();
             clientNotification.setId(UUID.randomUUID().toString());
 
@@ -121,31 +116,27 @@ public class OperationNotificationServiceImpl implements OperationNotificationSe
             notificationRepository.save(clientNotification);
         } catch (Exception e){
             throw new NotificationNotSended("This notification is not sended");
-        }*/
+        }
     }
 
     @Override
     public void sendVirementPermanentNotificationToClientCompte(Compte clientCompte, double montant) throws NotificationNotSended {
-        System.out.println("sendVirementPermanentNotificationToClientCompte");
-        System.out.println(clientCompte.getNumCompte());
-        /*try {
+        try {
             Notification clientNotification = new Notification();
             clientNotification.setId(UUID.randomUUID().toString());
-            clientNotification.setContenu("VIREMENT WEB PROGRAMMÉ REÇU DE "+clientCompte.getUser().getNom() +" "+ clientNotification.getUser().getPrenom());
+            clientNotification.setContenu("VIREMENT WEB PROGRAMMÉ REÇU DE "+clientCompte.getUser().getNom() +" "+ clientCompte.getUser().getPrenom());
             clientNotification.setUser(clientCompte.getUser());
             clientNotification.setDateEnvoie(new Date());
             clientNotification.setTitre("+"+montant+"DH");
             notificationRepository.save(clientNotification);
         } catch (Exception e){
-            System.out.println("This notification is not sended");
-        }*/
+            throw new NotificationNotSended("This notification is not sended");
+        }
     }
 
     @Override
     public void sendVirementPermanentNotificationToBeneficierCompte(Compte beneficierCompte, double montant) throws NotificationNotSended {
-        System.out.println("sendVirementPermanentNotificationToBeneficierCompte");
-        System.out.println(beneficierCompte.getNumCompte());
-        /*try {
+        try {
             Notification clientNotification = new Notification();
             clientNotification.setId(UUID.randomUUID().toString());
             clientNotification.setContenu("VIREMENT WEB PROGRAMMÉ ENVOYÉ A "+beneficierCompte.getUser().getNom() +" "+ beneficierCompte.getUser().getPrenom());
@@ -154,8 +145,8 @@ public class OperationNotificationServiceImpl implements OperationNotificationSe
             clientNotification.setTitre(montant+"DH");
             notificationRepository.save(clientNotification);
         } catch (Exception e){
-            System.out.println("This notification is not sended");
-        }*/
+            throw new NotificationNotSended("This notification is not sended");
+        }
     }
 
     @Override

@@ -27,7 +27,7 @@ public class Compte {
     @Enumerated(EnumType.STRING)
     private EtatCompte etatCompte;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private UserEntity user;
 

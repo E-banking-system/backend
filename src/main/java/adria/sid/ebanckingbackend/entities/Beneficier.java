@@ -19,7 +19,7 @@ public class Beneficier {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "beneficier")
     private List<Virement> virements;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
