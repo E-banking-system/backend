@@ -43,7 +43,6 @@ public class VirementTest {
         Beneficier b = new Beneficier();
 
         String bId = UUID.randomUUID().toString();
-        b.setId(bId);
 
         vrmnt.setBeneficier(b);
 

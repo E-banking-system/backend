@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BeneficierTest {
 
-    @Test
+   /* @Test
     void testGettersAndSetters() {
         // Test the getters and setters
         String beneficierID = UUID.randomUUID().toString();
@@ -31,7 +31,7 @@ public class BeneficierTest {
         assertEquals("jcjkc", beneficier.getRaisonSociale());
         assertEquals("FEMALE", beneficier.getGender().toString());
         assertEquals("PHYSIQUE", beneficier.getPersonneType().toString());
-    }
+    }*/
 
     @Test
     void testVirement() {

@@ -14,4 +14,5 @@ public class BeneficierResDTO {
     private String numCompte;
     private String nom;
     private String prenom;
+    private String email;
 }
