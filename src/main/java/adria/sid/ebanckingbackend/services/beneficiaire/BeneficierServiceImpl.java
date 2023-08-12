@@ -69,6 +69,7 @@ public class BeneficierServiceImpl implements BeneficierService {
 
         Beneficier updatedBeneficier = beneficierMapper.fromBeneficierReqDTOToBeneficier(beneficierReqDTO);
         updatedBeneficier.setBeneficier_id(existingBeneficier.getBeneficier_id());
+        updatedBeneficier.setParent_user(existingBeneficier.getUser());
         beneficiaireRepository.save(updatedBeneficier);
     }
 
