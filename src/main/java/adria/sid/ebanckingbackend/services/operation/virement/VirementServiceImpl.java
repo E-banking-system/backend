@@ -11,7 +11,6 @@ import adria.sid.ebanckingbackend.services.notification.OperationNotificationSer
 import adria.sid.ebanckingbackend.utils.codeGenerators.CodeGenerator;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
-import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -185,6 +184,7 @@ public class VirementServiceImpl implements VirementService{
         if (!clientCompte.getEtatCompte().equals(EtatCompte.ACTIVE)) {
             operationNotificationService.sendClientCompteNotActiveNotificationToClient(clientCompte);
         }
+
 
         Compte beneficierCompte = compteRepository.getCompteByNumCompte(virementProgramme.getNumCompteBeneficier());
         // Validate the state of the beneficiary's account (must be ACTIVE)
