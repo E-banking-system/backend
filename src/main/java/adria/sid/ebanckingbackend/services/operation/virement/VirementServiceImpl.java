@@ -11,6 +11,7 @@ import adria.sid.ebanckingbackend.services.notification.OperationNotificationSer
 import adria.sid.ebanckingbackend.utils.codeGenerators.CodeGenerator;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,7 @@ import java.util.UUID;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class VirementServiceImpl implements VirementService{
     final private CompteRepository compteRepository;
     final private VirementProgrammeRepository virementProgrammeRepository;
@@ -40,23 +42,27 @@ public class VirementServiceImpl implements VirementService{
         // Get client's account details from the repository
         Compte clientCompte = compteRepository.getCompteByNumCompte(virementUnitReqDTO.getNumCompteClient());
         if (clientCompte == null) {
+            log.warn("The client with this ID is not valid");
             throw new CompteNotExistException("The client with this ID is not valid");
         }
 
         // Get beneficiary's account details from the repository
         Compte beneficierCompte = compteRepository.getCompteByNumCompte(virementUnitReqDTO.getNumCompteBeneficier());
         if (beneficierCompte == null) {
-            throw new CompteNotExistException("The beneficier with this ID is not valid");
+            log.warn("The beneficial with this ID is not valid");
+            throw new CompteNotExistException("The beneficial with this ID is not valid");
         }
 
         // Validate the state of the client's account (must be ACTIVE)
         if(!clientCompte.getEtatCompte().equals(EtatCompte.ACTIVE)){
+            log.warn("This client account is not active");
             throw new CompteNotActiveException("This client account is not active");
         }
 
         // Validate the state of the beneficiary's account (must be ACTIVE)
         if(!beneficierCompte.getEtatCompte().equals(EtatCompte.ACTIVE)){
-            throw new CompteNotActiveException("This beneficier account is not active");
+            log.warn("This beneficial account is not active");
+            throw new CompteNotActiveException("This beneficial account is not active");
         }
 
         creditVirementUnitaire(clientCompte, virementUnitReqDTO.getMontant());
@@ -74,7 +80,9 @@ public class VirementServiceImpl implements VirementService{
             Beneficier beneficier=beneficierRepository.getBeneficiersByNumCompte(beneficierCompte.getNumCompte());
             virementUnitaire.setBeneficier(beneficier);
             virementUnitaireRepository.save(virementUnitaire);
+            log.info("Unit transfer is saved with success");
         } catch (Exception e){
+            log.warn("This unit transfer is not saved");
             throw new OperationNotSaved("This unit transfer is not saved");
         }
     }
@@ -85,7 +93,9 @@ public class VirementServiceImpl implements VirementService{
         if(newSolde>=0){
             clientCompte.setSolde(newSolde);
             compteRepository.save(clientCompte);
+            log.info("Credit unit transfer is saved with success");
         } else {
+            log.warn("Credit operation is not possible because this amount is more than the current balance");
             throw new InsufficientBalanceException("Credit operation is not possible because this amount is more than the current balance");
         }
     }
@@ -96,7 +106,9 @@ public class VirementServiceImpl implements VirementService{
         if(newSolde>=0) {
             clientCompte.setSolde(newSolde);
             compteRepository.save(clientCompte);
+            log.info("Credit permanently transfer is saved with success");
         } else{
+            log.warn("Credit operation is not possible because this amount is more than the current balance");
             operationNotificationService.sendSoldeInsifisantCompteNotificationToClient(clientCompte.getNumCompte(),clientCompte.getUser());
         }
     }
@@ -105,6 +117,7 @@ public class VirementServiceImpl implements VirementService{
     public void debit(Compte beneficierCompte, double montant){
         double newSolde= beneficierCompte.getSolde()+montant;
         beneficierCompte.setSolde(newSolde);
+        log.info("Debit is saved with success");
         compteRepository.save(beneficierCompte);
     }
 
@@ -113,29 +126,34 @@ public class VirementServiceImpl implements VirementService{
     @Transactional
     public void virementProgramme(VirementPermaReqDTO virementPermaReqDTO) throws DatesVirementPermanentAreNotValide, CompteNotExistException {
         if (virementPermaReqDTO.getPremierDateExecution().compareTo(virementPermaReqDTO.getDateFinExecution()) > 0) {
+            log.warn("Programed dates for this transfer are not valid");
             throw new DatesVirementPermanentAreNotValide("Programed dates for this transfer are not valid");
         }
 
         // Get client's account details from the repository
         Compte clientCompte = compteRepository.getCompteByNumCompte(virementPermaReqDTO.getNumCompteClient());
         if (clientCompte == null) {
+            log.warn("The client with this ID is not valid");
             throw new CompteNotExistException("The client with this ID is not valid");
         }
 
         // Get beneficiary's account details from the repository
         Compte beneficierCompte = compteRepository.getCompteByNumCompte(virementPermaReqDTO.getNumCompteBeneficier());
         if (beneficierCompte == null) {
-            throw new CompteNotExistException("The beneficier with this ID is not valid");
+            log.warn("The beneficial with this ID is not valid");
+            throw new CompteNotExistException("The beneficial with this ID is not valid");
         }
 
         // Validate the state of the client's account (must be ACTIVE)
         if(!clientCompte.getEtatCompte().equals(EtatCompte.ACTIVE)){
+            log.warn("This client account is not active");
             throw new CompteNotActiveException("This client account is not active");
         }
 
         // Validate the state of the beneficiary's account (must be ACTIVE)
         if(!beneficierCompte.getEtatCompte().equals(EtatCompte.ACTIVE)){
-            throw new CompteNotActiveException("This beneficier account is not active");
+            log.warn("This beneficial account is not active");
+            throw new CompteNotActiveException("This beneficial account is not active");
         }
 
         // Generate the list of execution dates for the scheduled transfer
@@ -153,6 +171,7 @@ public class VirementServiceImpl implements VirementService{
 
             // Save the scheduled transfer in the database
             virementProgrammeRepository.save(virementProgrammeExecution);
+            log.info("Programmed transfer is done with success");
         }
     }
 
@@ -190,8 +209,10 @@ public class VirementServiceImpl implements VirementService{
             Beneficier beneficier=beneficierRepository.getBeneficiersByNumCompte(virementProgramme.getNumCompteBeneficier());
             virementPermanant.setBeneficier(beneficier);
             virementPermanentRepository.save(virementPermanant);
+            log.info("Permanently transfer is saved with success");
         } catch (Exception e){
-            throw new OperationNotSaved("This programed transfer is not saved");
+            log.warn("Permanently transfer is not saved with success");
+            throw new OperationNotSaved("Permanently transfer is not saved with success");
         }
 
         operationNotificationService.sendVirementPermanentNotificationToClientCompte(clientCompte, virementProgramme.getMontant());
@@ -209,10 +230,10 @@ public class VirementServiceImpl implements VirementService{
                     // Execute the pending scheduled transfer immediately
                     virementPermanent(virementProgramme);
                 }
-
                 // Mark the scheduled transfer as executed
                 virementProgramme.setEffectuer(true);
                 virementProgrammeRepository.save(virementProgramme);
+                log.info("Programmed transfer is saved with success on reel time : "+new Date());
             }
         }
     }

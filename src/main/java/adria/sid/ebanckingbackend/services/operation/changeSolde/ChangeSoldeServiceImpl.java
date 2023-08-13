@@ -14,6 +14,7 @@ import adria.sid.ebanckingbackend.repositories.RetraitRepository;
 import adria.sid.ebanckingbackend.services.notification.OperationNotificationService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -21,6 +22,7 @@ import java.util.UUID;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class ChangeSoldeServiceImpl implements ChangeSoldeService {
     final private CompteRepository compteRepository;
     final private OperationNotificationService operationNotificationService;
@@ -33,7 +35,8 @@ public class ChangeSoldeServiceImpl implements ChangeSoldeService {
         Compte compte=compteRepository.getCompteByNumCompte(depotReqDTO.getNumCompte());
         if(compte != null){
             if(!compte.getEtatCompte().equals(EtatCompte.ACTIVE)){
-                throw new CompteNotActiveException("This account is not active.");
+                log.warn("This account is not active");
+                throw new CompteNotActiveException("This account is not active");
             }
 
             double newSolde=compte.getSolde()+depotReqDTO.getMontant();
@@ -49,12 +52,15 @@ public class ChangeSoldeServiceImpl implements ChangeSoldeService {
                 depot.setCompte(compte);
 
                 depotRepository.save(depot);
+                log.info("Depot is saved with success");
             } catch (Exception e){
+                log.warn("This depot is not saved");
                 throw new OperationNotSaved("This depot is not saved");
             }
 
         } else {
-            throw new IllegalArgumentException("This account is not found with the given ID");
+            log.warn("This account is not found");
+            throw new IllegalArgumentException("This account is not found");
         }
     }
 
@@ -64,7 +70,8 @@ public class ChangeSoldeServiceImpl implements ChangeSoldeService {
         Compte compte=compteRepository.getCompteByNumCompte(retraitReqDTO.getNumCompte());
         if(compte != null){
             if(!compte.getEtatCompte().equals(EtatCompte.ACTIVE)){
-                throw new CompteNotActiveException("This account is not active.");
+                log.warn("This account is not active");
+                throw new CompteNotActiveException("This account is not active");
             }
 
             double newSolde=compte.getSolde()+retraitReqDTO.getMontant();
@@ -82,15 +89,19 @@ public class ChangeSoldeServiceImpl implements ChangeSoldeService {
                     retrait.setCompte(compte);
 
                     retraitRepository.save(retrait);
+                    log.info("retract is saved with success");
                 } catch (Exception e){
-                    throw new OperationNotSaved("This retrait is not saved");
+                    log.warn("This retract is not saved");
+                    throw new OperationNotSaved("This retract is not saved");
                 }
             } else{
-                throw new InsufficientBalanceException("Insufficient balance.");
+                log.warn("Insufficient balance");
+                throw new InsufficientBalanceException("Insufficient balance");
             }
 
         } else {
-            throw new IllegalArgumentException("This account is not found with the given ID");
+            log.warn("This account is not found");
+            throw new IllegalArgumentException("This account is not found");
         }
     }
 }

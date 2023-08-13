@@ -29,8 +29,10 @@ public class OperationNotificationServiceImpl implements OperationNotificationSe
             notification.setDateEnvoie(new Date());
             notification.setTitre("Numéro du compte : " + compte.getNumCompte());
             notificationRepository.save(notification);
+            log.info("Send deposit amount notification to client");
         } catch (Exception e){
-            throw new NotificationNotSended("This notification is not sended");
+            log.warn("This notification is not sent");
+            throw new NotificationNotSended("This notification is not sent");
         }
     }
 
@@ -45,8 +47,10 @@ public class OperationNotificationServiceImpl implements OperationNotificationSe
             notification.setDateEnvoie(new Date());
             notification.setTitre("Numéro du compte : " + compte.getNumCompte());
             notificationRepository.save(notification);
+            log.info("Send retract amount notification to client");
         } catch (Exception e){
-            throw new NotificationNotSended("This notification is not sended");
+            log.warn("This notification is not sent");
+            throw new NotificationNotSended("This notification is not sent");
         }
     }
 
@@ -60,8 +64,10 @@ public class OperationNotificationServiceImpl implements OperationNotificationSe
             clientNotification.setDateEnvoie(new Date());
             clientNotification.setTitre("+"+montant+"DH");
             notificationRepository.save(clientNotification);
+            log.info("Send unit transfer notification to beneficial");
         } catch (Exception e){
-            throw new NotificationNotSended("This notification is not sended");
+            log.warn("This notification is not sent");
+            throw new NotificationNotSended("This notification is not sent");
         }
     }
 
@@ -75,8 +81,10 @@ public class OperationNotificationServiceImpl implements OperationNotificationSe
             clientNotification.setDateEnvoie(new Date());
             clientNotification.setTitre(montant+"DH");
             notificationRepository.save(clientNotification);
+            log.info("Send unit transfer notification to client");
         } catch (Exception e){
-            throw new NotificationNotSended("This notification is not sended");
+            log.warn("This notification is not sent");
+            throw new NotificationNotSended("This notification is not sent");
         }
     }
 
@@ -94,8 +102,10 @@ public class OperationNotificationServiceImpl implements OperationNotificationSe
             clientNotification.setTitre("Votre compte numéro "+clientCompte.getNumCompte()+" n'est pas active");
 
             notificationRepository.save(clientNotification);
+            log.info("Send client account is not active notification to client");
         } catch (Exception e){
-            throw new NotificationNotSended("This notification is not sended");
+            log.warn("This notification is not sent");
+            throw new NotificationNotSended("This notification is not sent");
         }
     }
 
@@ -114,8 +124,10 @@ public class OperationNotificationServiceImpl implements OperationNotificationSe
             clientNotification.setTitre("le compte beneficier de monsieur " + beneficier.getNom()+" "+beneficier.getPrenom()+" n'est pas active");
 
             notificationRepository.save(clientNotification);
+            log.info("Send beneficial account is not active notification to client");
         } catch (Exception e){
-            throw new NotificationNotSended("This notification is not sended");
+            log.warn("This notification is not sent");
+            throw new NotificationNotSended("This notification is not sent");
         }
     }
 
@@ -129,8 +141,10 @@ public class OperationNotificationServiceImpl implements OperationNotificationSe
             clientNotification.setDateEnvoie(new Date());
             clientNotification.setTitre("+"+montant+"DH");
             notificationRepository.save(clientNotification);
+            log.info("Send permanently transfer notification to client");
         } catch (Exception e){
-            throw new NotificationNotSended("This notification is not sended");
+            log.warn("This notification is not sent");
+            throw new NotificationNotSended("This notification is not sent");
         }
     }
 
@@ -144,8 +158,10 @@ public class OperationNotificationServiceImpl implements OperationNotificationSe
             clientNotification.setDateEnvoie(new Date());
             clientNotification.setTitre(montant+"DH");
             notificationRepository.save(clientNotification);
+            log.info("Send permanently transfer notification to beneficial");
         } catch (Exception e){
-            throw new NotificationNotSended("This notification is not sended");
+            log.warn("This notification is not sent");
+            throw new NotificationNotSended("This notification is not sent");
         }
     }
 
@@ -159,8 +175,10 @@ public class OperationNotificationServiceImpl implements OperationNotificationSe
             notification.setDateEnvoie(new Date());
             notification.setTitre("Activation d'un compte effectuée avec success");
             notificationRepository.save(notification);
+            log.info("Send activated account notification to client");
         } catch (Exception e){
-            throw new NotificationNotSended("This notification is not sended");
+            log.warn("This notification is not sent");
+            throw new NotificationNotSended("This notification is not sent");
         }
     }
 
@@ -174,8 +192,10 @@ public class OperationNotificationServiceImpl implements OperationNotificationSe
             notification.setDateEnvoie(new Date());
             notification.setTitre("Bloackage d'un compte effectuée avec success");
             notificationRepository.save(notification);
+            log.info("Send blocked account notification to client");
         } catch (Exception e){
-            throw new NotificationNotSended("This notification is not sended");
+            log.warn("This notification is not sent");
+            throw new NotificationNotSended("This notification is not sent");
         }
     }
 
@@ -189,8 +209,10 @@ public class OperationNotificationServiceImpl implements OperationNotificationSe
             notification.setDateEnvoie(new Date());
             notification.setTitre("Suspension d'un compte effectué avec success");
             notificationRepository.save(notification);
+            log.info("Send suspended account notification to client");
         } catch (Exception e){
-            throw new NotificationNotSended("This notification is not sended");
+            log.warn("This notification is not sent");
+            throw new NotificationNotSended("This notification is not sent");
         }
     }
 
@@ -204,8 +226,10 @@ public class OperationNotificationServiceImpl implements OperationNotificationSe
             notification.setDateEnvoie(new Date());
             notification.setTitre("Demande de suspension d'un compte");
             notificationRepository.save(notification);
+            log.info("Send request to suspend account notification to banker");
         } catch (Exception e){
-            throw new NotificationNotSended("This notification is not sended");
+            log.warn("This notification is not sent");
+            throw new NotificationNotSended("This notification is not sent");
         }
     }
 
@@ -219,8 +243,10 @@ public class OperationNotificationServiceImpl implements OperationNotificationSe
             notification.setDateEnvoie(new Date());
             notification.setTitre("Demande de blockage d'un compte");
             notificationRepository.save(notification);
+            log.info("Send request to block account notification to banker");
         } catch (Exception e){
-            throw new NotificationNotSended("This notification is not sended");
+            log.warn("This notification is not sent");
+            throw new NotificationNotSended("This notification is not sent");
         }
     }
 
@@ -234,8 +260,10 @@ public class OperationNotificationServiceImpl implements OperationNotificationSe
             notification.setDateEnvoie(new Date());
             notification.setTitre("Demande d'activation d'un compte");
             notificationRepository.save(notification);
+            log.info("Send request to activate account notification to banker");
         } catch (Exception e){
-            throw new NotificationNotSended("This notification is not sended");
+            log.warn("This notification is not sent");
+            throw new NotificationNotSended("This notification is not sent");
         }
     }
 
@@ -249,8 +277,10 @@ public class OperationNotificationServiceImpl implements OperationNotificationSe
             notification.setDateEnvoie(new Date());
             notification.setTitre("Numéro du compte : " + numCompte);
             notificationRepository.save(notification);
+            log.info("Send Insignificant sold to client");
         } catch (Exception e){
-            throw new NotificationNotSended("This notification is not sended");
+            log.warn("This notification is not sent");
+            throw new NotificationNotSended("This notification is not sent");
         }
     }
 }

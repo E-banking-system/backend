@@ -45,19 +45,22 @@ public class BeneficierServiceImpl implements BeneficierService {
         Compte compte = compteRepository.getCompteByNumCompte(beneficier.getNumCompte());
 
         if (compte == null) {
-            throw new CompteNotExistException("Ce compte n'existe pas pour ce beneficier");
+            log.warn("This beneficiary account does not exist");
+            throw new CompteNotExistException("This beneficiary account does not exist");
         }
 
         if (!Objects.equals(compte.getEtatCompte().toString(), "ACTIVE")) {
-            throw new CompteNotExistException("Ce compte n'est pas actif");
+            log.warn("This beneficiary account does not active");
+            throw new CompteNotExistException("This beneficiary account does not active");
         }
 
         UserEntity user=userRepository.findByEmail(beneficierReqDTO.getEmail()).orElseThrow(null);
         if(user == null){
-            throw new BeneficierEmailIsNotExiste("This email is not related with any existed client");
+            log.warn("This email is not related with any existing client");
+            throw new BeneficierEmailIsNotExiste("This email is not related with any existing client");
         }
         beneficier.setParent_user(user);
-        // Save the Beneficier entity
+        log.info("beneficiary saved with success");
         beneficiaireRepository.save(beneficier);
     }
 
@@ -70,20 +73,24 @@ public class BeneficierServiceImpl implements BeneficierService {
         Compte compte = compteRepository.getCompteByNumCompte(beneficierReqDTO.getNumCompte());
 
         if (compte == null) {
-            throw new CompteNotExistException("Ce compte n'existe pas pour ce beneficier");
+            log.warn("This beneficiary account does not exist");
+            throw new CompteNotExistException("This beneficiary account does not exist");
         }
 
         Beneficier updatedBeneficier = beneficierMapper.fromBeneficierReqDTOToBeneficier(beneficierReqDTO);
         updatedBeneficier.setBeneficier_id(existingBeneficier.getBeneficier_id());
         updatedBeneficier.setParent_user(existingBeneficier.getUser());
+        log.info("beneficiary updated with success");
         beneficiaireRepository.save(updatedBeneficier);
     }
 
     public void supprimerBeneficier(String beneficierId) throws Exception {
         if (isBeneficiaryReferencedInVirement(beneficierId)) {
-            throw new Exception("Ce beneficier est une clé étrangère");
+            log.warn("This beneficiary cannot be deleted because you have done some operations with him");
+            throw new Exception("This beneficiary cannot be deleted because you have done some operations with him");
         }
 
+        log.info("beneficiary deleted with success");
         beneficiaireRepository.deleteById(beneficierId);
     }
 
@@ -100,7 +107,8 @@ public class BeneficierServiceImpl implements BeneficierService {
     public Page<BeneficierResDTO> getBeneficiersByClientId(Pageable pageable, String clientId) {
         Optional<UserEntity> existingUser = userRepository.findById(clientId);
         if (existingUser.isEmpty()) {
-            throw new IdUserIsNotValideException("Client is not exists: " + clientId);
+            log.warn("This client is not exists: " + clientId);
+            throw new IdUserIsNotValideException("This client is not exists: " + clientId);
         }
 
         List<Beneficier> beneficiers = beneficiaireRepository.findByUserId(clientId);

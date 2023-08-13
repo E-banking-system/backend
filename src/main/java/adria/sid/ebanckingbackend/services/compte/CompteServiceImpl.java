@@ -35,7 +35,6 @@ public class CompteServiceImpl implements CompteService {
     final private EmailSender emailSender;
     final private CompteMapper compteMapper;
     final private OperationMapper operationMapper;
-    final private VirementUnitaireRepository virementUnitaireRepository;
     final private OperationRepository operationRepository;
 
     @Override
@@ -51,16 +50,19 @@ public class CompteServiceImpl implements CompteService {
                     operationResDTO.setBeneficierId(virement.getBeneficier().getBeneficier_id());
                 }
 
+                log.info("Get account operations is done");
                 return operationResDTO;
             });
         } catch (Exception e) {
-            throw new CompteNotExistException("This account with this id is not exists");
+            log.warn("This account is not exists");
+            throw new CompteNotExistException("This account is not exists");
         }
     }
 
     @Override
     public Page<CompteResDTO> searchComptes(Pageable pageable, String keyword) {
         Page<Compte> comptePage = compteRepository.searchComptes(pageable, keyword);
+        log.info("Search for accounts by keyword");
         return comptePage.map(compteMapper::fromCompteToCompteResDTO);
     }
 
@@ -68,10 +70,6 @@ public class CompteServiceImpl implements CompteService {
     @Override
     @Transactional
     public void ajouterCompte(CompteReqDTO compteDTO) {
-        if (compteDTO == null || compteDTO.getEmail() == null) {
-            throw new IllegalArgumentException("Invalid compte");
-        }
-
         Compte newCompte = compteMapper.fromCompteDTOToCompte(compteDTO);
 
         Optional<UserEntity> existingUserOptional = userRepository.findByEmail(compteDTO.getEmail());
@@ -85,15 +83,16 @@ public class CompteServiceImpl implements CompteService {
             // Send account info email to existing user
             emailSender.sendAccountInfosByEmail(existingUser, newCompte.getCodePIN());
 
-            log.info("Added compte for user with email: {}", compteDTO.getEmail());
+            log.info("Account added to client that has this email : {}", compteDTO.getEmail());
         } else {
-            log.warn("User with email {} not found.", compteDTO.getEmail());
+            log.warn("Client not found with this email : {}", compteDTO.getEmail());
         }
     }
 
     @Override
     public Page<CompteResDTO> getComptes(Pageable pageable) {
         Page<Compte> comptePage = compteRepository.findAll(pageable);
+        log.info("Get accounts is done");
         return comptePage.map(compteMapper::fromCompteToCompteResDTO);
     }
 
@@ -104,8 +103,10 @@ public class CompteServiceImpl implements CompteService {
             compte.activerCompte();
             compteRepository.save(compte);
             notificationServiceVirement.sendActiverCompteNotificationToClient(compte.getId(),compte.getUser());
+            log.info("Activate account is done");
         } else {
-            throw new IllegalArgumentException("Compte not found with the given ID");
+            log.warn("Account not found with the given ID");
+            throw new IllegalArgumentException("Account not found with the given ID");
         }
     }
 
@@ -117,9 +118,10 @@ public class CompteServiceImpl implements CompteService {
             compte.blockerCompte();
             compteRepository.save(compte);
             notificationServiceVirement.sendBlockeCompteNotificationToClient(compte.getId(),compte.getUser());
-            log.info("Blocked compte with ID: {}", compteId);
+            log.info("Blocked account with ID: {}", compteId);
         } else {
-            throw new IllegalArgumentException("Compte not found with the given ID");
+            log.warn("Account is not found with the given ID");
+            throw new IllegalArgumentException("Account is not found with the given ID");
         }
     }
 
@@ -131,9 +133,9 @@ public class CompteServiceImpl implements CompteService {
             compte.suspenduCompte();
             compteRepository.save(compte);
             notificationServiceVirement.sendSuspendCompteNotificationToClient(compte.getId(),compte.getUser());
-            log.info("Suspended compte with ID: {}", compteId);
+            log.info("Suspended account with ID: {}", compteId);
         } else {
-            throw new IllegalArgumentException("Compte not found with the given ID");
+            throw new IllegalArgumentException("Account not found with the given ID");
         }
     }
 
@@ -143,6 +145,7 @@ public class CompteServiceImpl implements CompteService {
             keyword = "";
         }
         Page<Compte> comptePage = compteRepository.searchComptesByUserIdAndKeyword(userId, keyword, pageable);
+        log.info("Get client accounts is done");
         return comptePage.map(compteMapper::fromCompteToCompteResDTO);
     }
 
@@ -150,20 +153,20 @@ public class CompteServiceImpl implements CompteService {
     public void demandeSuspendCompte(DemandeSuspendDTO demandeSuspendDTO) throws NotificationNotSended {
         UserEntity user=userRepository.findByRole(ERole.BANQUIER).get(0);
         notificationServiceVirement.sendDemandeSuspendCompteNotificationToBanquier(demandeSuspendDTO.getCompteId(),user);
-        log.info("Sent demande de suspend d'un compte numéro : "+demandeSuspendDTO.getCompteId());
+        log.info("Sent request to suspend an account that has this ID : "+demandeSuspendDTO.getCompteId());
     }
 
     @Override
     public void demandeBlockCompte(DemandeBlockDTO demandeBlockDTO) throws NotificationNotSended {
         UserEntity user=userRepository.findByRole(ERole.BANQUIER).get(0);
         notificationServiceVirement.sendDemandeBlockCompteNotificationToBanquier(demandeBlockDTO.getCompteId(),user);
-        log.info("Sent demande de block d'un compte numéro : "+demandeBlockDTO.getCompteId());
+        log.info("Sent request to block an account that has this ID : "+demandeBlockDTO.getCompteId());
     }
 
     @Override
     public void demandeActivateCompte(DemandeActivateDTO demandeActivateDTO) throws NotificationNotSended {
         UserEntity user=userRepository.findByRole(ERole.BANQUIER).get(0);
         notificationServiceVirement.sendDemandeActivateCompteNotificationToBanquier(demandeActivateDTO.getCompteId(), user);
-        log.info("Sent demande d'activer d'un compte numéro : "+demandeActivateDTO.getCompteId());
+        log.info("Sent request to activate an account that has this ID : "+demandeActivateDTO.getCompteId());
     }
 }

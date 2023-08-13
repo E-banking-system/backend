@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CompteReqDTO {
-
+    @NotNull
     @NotBlank(message = "nature is required")
     private String nature;
 
@@ -20,6 +20,7 @@ public class CompteReqDTO {
     @Min(value = 0, message = "solde must be greater than zero")
     private Double solde;
 
+    @NotNull
     @NotBlank(message = "Email is required")
     @Email(message = "Invalid email format")
     private String email;

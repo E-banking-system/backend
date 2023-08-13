@@ -78,6 +78,7 @@ public class EmailSenderImpl implements EmailSender {
         else{
             senderName = userEntity.getRaisonSociale();
         }
+
         emailCorps.setBody(htmlCodeGenerator.generateActivatedAccountInfoEmail(pin, senderName));
         emailCorps.setFromEmail("etafweb2021@gmail.com");
         emailCorps.setToEmail(userEntity.getEmail());

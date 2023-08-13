@@ -65,17 +65,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
   @Override
   public Boolean changeOperateur(ChangeOperateurReqDTO changeOperateurReqDTO) {
-    // Find the user by ID
     Optional<UserEntity> optionalUser = userRepository.findById(changeOperateurReqDTO.getUserId());
     UserEntity user = optionalUser.orElseThrow(() -> new IdUserIsNotValideException("User ID is not valid"));
-
-    // Update the operateur value
     user.setOperateur(changeOperateurReqDTO.getOperateur());
-
-    // Save the updated user entity
     userRepository.save(user);
-
-    // Return true to indicate the operation was successful
+    log.info("Operator field for client changed with success");
     return true;
   }
 
@@ -83,8 +77,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
   public UserInfosResDTO getUserInfos(String userId){
       UserEntity user=userRepository.findById(userId).orElse(null);
       if(user != null) {
+        log.info("Get user infos is done");
         return userMapper.fromUserToUserResDTO(user);
       } else{
+        log.warn("User id is not valide");
         throw new IdUserIsNotValideException("User id is not valide");
       }
   }
@@ -92,6 +88,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
   @Override
   public Page<ClientResDTO> getClientVirements(Pageable pageable) {
     Page<UserEntity> clientsPage = userRepository.findAllUsersByRole(ERole.CLIENT, pageable);
+    log.info("Get client transfers is done");
     return clientsPage.map(clientMapper::fromUserToClientResDTO);
   }
 
@@ -100,6 +97,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     String email = clientPhysiqueDTO.getEmail();
     Optional<UserEntity> existingUser = userRepository.findByEmail(email);
     if (existingUser.isPresent()) {
+      log.warn("Email already exists: "+email);
       throw new UserAlreadyExists("Email already exists: " + email);
     }
 
@@ -115,6 +113,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     String email = clientMoraleDTO.getEmail();
     Optional<UserEntity> existingUser = userRepository.findByEmail(email);
     if (existingUser.isPresent()) {
+      log.warn("Email already exists: "+ email);
       throw new UserAlreadyExists("Email already exists: " + email);
     }
 
@@ -138,10 +137,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
               .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
       if (!user.getEnabled()) {
+        log.warn("User not verified. Please check your email for verification instructions.");
         throw new UserNotEnabledException("User not verified. Please check your email for verification instructions.");
       }
 
       if (user.getRole().equals(ERole.CLIENT) && user.getComptes().size() == 0) {
+        log.warn("You must visit your bank to create a banking account");
         throw new UserHasNotAnyCompte("You must visit your bank to create a banking account");
       }
 
@@ -167,6 +168,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
   @Override
   public void saveUserVerificationToken(UserEntity theUser, String token) {
     var verificationToken = new VerificationToken(token, theUser);
+    log.info("Save user verification token is done");
     tokenVerificationRepository.save(verificationToken);
   }
 
@@ -174,16 +176,19 @@ public class AuthenticationServiceImpl implements AuthenticationService {
   public String validateToken(String theToken) {
     VerificationToken token = tokenVerificationRepository.findByToken(theToken);
     if (token == null) {
+      log.warn("Token invalid");
       return "Token invalid";
     }
     UserEntity user = token.getUser();
     Calendar calendar = Calendar.getInstance();
     if ((token.getExpirationTime().getTime() - calendar.getTime().getTime()) <= 0) {
       tokenVerificationRepository.delete(token);
+      log.warn("Token has expired");
       return "Token has expired";
     }
     user.setEnabled(true);
     userRepository.save(user);
+    log.info("Token is valide");
     return "valid";
   }
 
@@ -197,6 +202,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     saveUserVerificationToken(user, verificationToken);
 
     emailSender.sendVerificationUrlByEmail(user, verificationToken, url);
+    log.info("Get user entity is done");
     return savedUser;
   }
 
@@ -209,6 +215,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             .expired(false)
             .revoked(false)
             .build();
+    log.info("Save user token");
     tokenUserRepository.save(token);
   }
 
@@ -216,12 +223,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
   public void revokeAllUserTokens(UserEntity user) {
     var validUserTokens = tokenUserRepository.findAllValidTokenByUser(user.getId());
     if (validUserTokens.isEmpty()) {
+      log.warn("Valid user tokens is empty");
       return;
     }
     validUserTokens.forEach(token -> {
       token.setExpired(true);
       token.setRevoked(true);
     });
+    log.info("Revoke all user tokens");
     tokenUserRepository.saveAll(validUserTokens);
   }
 
@@ -231,6 +240,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     final String refreshToken;
     final String userEmail;
     if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+      log.warn("Auth header is null or auth header is not started with bearer");
       return;
     }
     refreshToken = authHeader.substring(7);
@@ -254,16 +264,19 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
   @Override
   public void createPasswordResetTokenForUser(UserEntity user, String passwordToken) {
+    log.info("Create password reset token for user");
     passwordResetTokenService.createPasswordResetTokenForUser(user, passwordToken);
   }
 
   @Override
   public String validatePasswordResetToken(String passwordResetToken) {
+    log.info("Validate password reset token");
     return passwordResetTokenService.validatePasswordResetToken(passwordResetToken);
   }
 
   @Override
   public UserEntity findUserByPasswordToken(String passwordResetToken) {
+    log.info("Find user by password token");
     return passwordResetTokenService.findUserByPasswordToken(passwordResetToken).get();
   }
 
@@ -276,6 +289,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
   @Override
   public Optional<UserEntity> findByEmail(String email) {
+    log.info("Find user by email");
     return userRepository.findByEmail(email);
   }
 
@@ -285,5 +299,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     saveUserVerificationToken(user, verificationToken);
 
     emailSender.sentPasswordResetVerificationEmail(user,resetPasswordUrl);
+    log.info("Send password reset by email");
   }
 }

@@ -39,6 +39,7 @@ public class SendeEmail implements ApplicationListener<SendeEmailEvent> {
         messageHelper.setSubject(subject);
         messageHelper.setText(emailCorps.getBody(), true);
         mailSender.send(message);
+        log.info("Email sent with success");
     }
 }
 
