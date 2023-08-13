@@ -9,4 +9,5 @@ import java.util.List;
 public interface BeneficierMapper {
     BeneficierResDTO fromBeneficierToBeneficierResDTO(Beneficier beneficier);
     Beneficier fromBeneficierReqDTOToBeneficier(BeneficierReqDTO beneficierReqDTO);
+    List<BeneficierResDTO> toBeneficierResDTOs(List<Beneficier> beneficiers);
 }

@@ -2,7 +2,9 @@ package adria.sid.ebanckingbackend.mappers;
 
 import adria.sid.ebanckingbackend.dtos.beneficier.BeneficierReqDTO;
 import adria.sid.ebanckingbackend.dtos.beneficier.BeneficierResDTO;
+import adria.sid.ebanckingbackend.dtos.notification.NotificationResDTO;
 import adria.sid.ebanckingbackend.entities.Beneficier;
+import adria.sid.ebanckingbackend.entities.Notification;
 import adria.sid.ebanckingbackend.entities.UserEntity;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -33,5 +35,12 @@ public class BeneficierMapperImpl implements BeneficierMapper{
         beneficier.setUser(client);
         BeanUtils.copyProperties(beneficierReqDTO,beneficier);
         return beneficier;
+    }
+
+    @Override
+    public List<BeneficierResDTO> toBeneficierResDTOs(List<Beneficier> beneficiers) {
+        return beneficiers.stream()
+                .map(this::fromBeneficierToBeneficierResDTO)
+                .collect(Collectors.toList());
     }
 }
