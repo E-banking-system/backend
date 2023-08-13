@@ -112,7 +112,13 @@ public class BeneficierServiceImpl implements BeneficierService {
         }
 
         List<Beneficier> beneficiers = beneficiaireRepository.findByUserId(clientId);
-        List<BeneficierResDTO> beneficierResDTOList = beneficierMapper.toBeneficierResDTOs(beneficiers);
+        List<BeneficierResDTO> beneficierResDTOList = beneficiers.stream()
+                .map(beneficier -> {
+                    BeneficierResDTO dto = beneficierMapper.fromBeneficierToBeneficierResDTO(beneficier);
+                    dto.setEmail(beneficier.getUser().getEmail());
+                    return dto;
+                })
+                .collect(Collectors.toList());
 
         log.info("Retrieved {} notifications for user ID: {}", beneficiers.size(), clientId);
 
