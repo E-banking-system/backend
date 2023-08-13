@@ -11,6 +11,7 @@ import adria.sid.ebanckingbackend.services.notification.OperationNotificationSer
 import adria.sid.ebanckingbackend.utils.codeGenerators.CodeGenerator;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -219,7 +220,7 @@ public class VirementServiceImpl implements VirementService{
         operationNotificationService.sendVirementPermanentNotificationToBeneficierCompte(beneficierCompte, virementProgramme.getMontant());
     }
 
-    @Scheduled(fixedRate = 5000) // Run every 5000 milliseconds (5 seconds)
+    @Scheduled(fixedRateString = "${myapp.scheduled-task.fixed-rate}") // Run every 5000 milliseconds (5 seconds)
     public void effectuerVirementProgramme() throws NotificationNotSended, OperationNotSaved {
         // Find pending scheduled transfers that are due for execution
         List<VirementProgramme> virementsProgramme = virementProgrammeRepository.findPendingVirements(new Date());
