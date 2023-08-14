@@ -9,4 +9,5 @@ public interface HtmlCodeGenerator {
     String generateActivatedEmailHTML(String url, String username);
     String generateActivatedAccountInfoEmail(String pin,String username);
     String generateResetPasswordEmailHTML(String username,String url);
+    String generateOTPverificationHTML(String otpCode, String senderName);
 }

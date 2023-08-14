@@ -3,6 +3,8 @@ package adria.sid.ebanckingbackend.utils.codeGenerators;
 import adria.sid.ebanckingbackend.entities.UserEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 @Service
 public class HtmlCodeGeneratorImpl implements HtmlCodeGenerator {
 
@@ -78,7 +80,7 @@ public class HtmlCodeGeneratorImpl implements HtmlCodeGenerator {
 
     @Override
     public String generateActivatedEmailHTML(String url, String username) {
-        String mailContent = "<!DOCTYPE html>"
+        return "<!DOCTYPE html>"
                 + "<html>"
                 + "<head>"
                 + "<meta charset=\"UTF-8\">"
@@ -97,13 +99,12 @@ public class HtmlCodeGeneratorImpl implements HtmlCodeGenerator {
                 + "</div>"
                 + "</body>"
                 + "</html>";
-        return mailContent;
     }
 
     @Override
     public String generateActivatedAccountInfoEmail(String pin, String username) {
 
-        String mailContent = "<!DOCTYPE html>"
+        return "<!DOCTYPE html>"
                 + "<html>"
                 + "<head>"
                 + "<meta charset=\"UTF-8\">"
@@ -122,7 +123,6 @@ public class HtmlCodeGeneratorImpl implements HtmlCodeGenerator {
                 + "</div>"
                 + "</body>"
                 + "</html>";
-        return mailContent;
     }
     @Override
     public String generateResetPasswordEmailHTML(String username,String url) {
@@ -141,6 +141,28 @@ public class HtmlCodeGeneratorImpl implements HtmlCodeGenerator {
                 + "<h1>Bienvenue, " + username + "!</h1>"
                 + "<h4>Consulter ce lien pour réinitialiser votre mot de passe: </h4>"
                 + "<h4>"+ url + "</h4>"
+                + "<p>Merci <br> <b>BANQUE XXX</b></p>"
+                + "</div>"
+                + "</body>"
+                + "</html>";
+    }
+
+    @Override
+    public String generateOTPverificationHTML(String otpCode, String senderName) {
+        return "<!DOCTYPE html>"
+                + "<html>"
+                + "<head>"
+                + "<meta charset=\"UTF-8\">"
+                + "<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">"
+                + "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">"
+                + "<title>Email Verification</title>"
+                + "<link href=\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css\" rel=\"stylesheet\">"
+                + getCommonStyles()
+                + "</head>"
+                + "<body>"
+                + "<div class=\"container\">"
+                + "<h1>Bonjour " + senderName + ",</h1>"
+                + "<p>Nous avons reçu une demande de vérification de votre identité avant de vous permetra d'effectuer un virement unitaire. \n Entrez le code de vérification suivant : "+otpCode+"</p>"
                 + "<p>Merci <br> <b>BANQUE XXX</b></p>"
                 + "</div>"
                 + "</body>"

@@ -37,6 +37,7 @@ public class SecurityConfiguration {
             .disable()
             .authorizeHttpRequests()
             .requestMatchers(
+                    "/api/v1/virement/**",
                     "/api/v1/virement/unitaire/**",
                     "/api/v1/virement/permanent/**",
                     "/api/v1/compte/**",

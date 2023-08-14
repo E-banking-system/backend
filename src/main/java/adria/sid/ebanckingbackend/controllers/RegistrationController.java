@@ -102,7 +102,7 @@ public class RegistrationController {
                 passwordResetUrl = passwordResetEmailLink(applicationUrl(request), passwordResetToken, passwordResetRequest.getPassword());
                 authenticationService.sendPasswordResetEmail(user.get(), passwordResetUrl);
             } else {
-                return "User not found"; // Return an appropriate error message if the user is not found.
+                return "User not found";
             }
 
             return passwordResetUrl;
@@ -112,8 +112,7 @@ public class RegistrationController {
     }
 
     private String passwordResetEmailLink(String applicationUrl, String passwordResetToken, String pw) {
-        String url = applicationUrl + "/api/v1/register/client/nouveaumdp?token=" + passwordResetToken + "&password=" + pw;
-        return url;
+        return applicationUrl + "/api/v1/register/client/nouveaumdp?token=" + passwordResetToken + "&password=" + pw;
     }
 
     private String applicationUrl(HttpServletRequest request) {

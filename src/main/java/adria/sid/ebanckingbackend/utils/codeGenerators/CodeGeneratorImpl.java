@@ -14,6 +14,11 @@ import java.util.concurrent.ThreadLocalRandom;
 @Service
 public class CodeGeneratorImpl implements CodeGenerator{
     @Override
+    public String generateOtpVerificationCode() {
+        return generatePinCode();
+    }
+
+    @Override
     public String generatePinCode() {
         Random random = new Random();
         int pin = random.nextInt(10000); // Generate a random number between 0 and 9999

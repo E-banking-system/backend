@@ -38,7 +38,9 @@ public class ExceptionHandling {
             IdUserIsNotValideException.class,
             InternalError.class,
             InsufficientBalanceException.class,
-            OperationNotSaved.class
+            OperationNotSaved.class,
+            ExpiredTransferToken.class,
+            InvalidTransferOtpCode.class
     })
     public ResponseEntity<String> handleInternalErrors(Exception e) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
@@ -66,4 +68,5 @@ public class ExceptionHandling {
     public ResponseEntity<String> handleBadCredentialsException(BadCredentialsException e) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
     }
+
 }

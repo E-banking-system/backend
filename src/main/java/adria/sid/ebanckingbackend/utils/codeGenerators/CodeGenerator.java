@@ -8,6 +8,7 @@ import java.util.List;
 
 @Service
 public interface CodeGenerator {
+    String generateOtpVerificationCode();
     String generatePinCode();
     String generateRIBCode();
     Long numeroCompte();

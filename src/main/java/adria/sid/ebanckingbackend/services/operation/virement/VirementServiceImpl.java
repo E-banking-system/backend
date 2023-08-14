@@ -32,6 +32,7 @@ public class VirementServiceImpl implements VirementService{
     final private VirementMapper virementMapper;
     final private VirementUnitaireRepository virementUnitaireRepository;
 
+
     @Transactional
     @Override
     public void virementUnitaire(VirementUnitReqDTO virementUnitReqDTO) throws InsufficientBalanceException, MontantNotValide, CompteNotExistException, NotificationNotSended, OperationNotSaved {

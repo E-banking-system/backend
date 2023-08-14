@@ -8,4 +8,5 @@ public interface EmailSender {
     void sendVerificationUrlByEmail(UserEntity userEntity,String verificationToken,String applicationUrl);
     void sentPasswordResetVerificationEmail(UserEntity userEntity,String url);
     void sendAccountInfosByEmail(UserEntity userEntity, String pin);
+    void sendUnitTransferVerificationByEmail(UserEntity userEntity,String otpCode);
 }

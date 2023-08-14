@@ -2,12 +2,14 @@ package adria.sid.ebanckingbackend.controllers;
 
 import adria.sid.ebanckingbackend.dtos.operation.VirementPermaReqDTO;
 import adria.sid.ebanckingbackend.dtos.operation.VirementUnitReqDTO;
+import adria.sid.ebanckingbackend.dtos.otp.OtpReqStepOneDTO;
+import adria.sid.ebanckingbackend.dtos.otp.OtpReqStepTwoDTO;
 import adria.sid.ebanckingbackend.exceptions.*;
 import adria.sid.ebanckingbackend.services.operation.virement.VirementService;
+import adria.sid.ebanckingbackend.services.operation.virement.otpTransferVerification.OtpTransferService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +19,23 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/virement")
 public class VirementController {
     final private VirementService virementService;
+    final private OtpTransferService otpTransferService;
+
+    @PostMapping("/verify")
+    public ResponseEntity<?> verifyOtp(@RequestBody @Valid OtpReqStepTwoDTO otpReqStepTwoDTO){
+        try {
+            otpTransferService.validateOtpTransferResetToken(otpReqStepTwoDTO);
+            return ResponseEntity.ok("OTP verified with success");
+        } catch (IdUserIsNotValideException | InvalidTransferOtpCode | ExpiredTransferToken e){
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/otp")
+    public ResponseEntity<String> otp(@RequestBody @Valid OtpReqStepOneDTO otpReqStepOneDTO){
+        otpTransferService.createOtpTransferResetTokenForUser(otpReqStepOneDTO);
+        return ResponseEntity.ok("OTP created with success");
+    }
 
     @PostMapping("/unitaire")
     public ResponseEntity<String> effectuerVirementUnitaire(@RequestBody @Valid VirementUnitReqDTO virementUnitReqDTO) {

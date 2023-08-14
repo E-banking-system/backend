@@ -93,4 +93,30 @@ public class EmailSenderImpl implements EmailSender {
             log.error("Failed to send account info email to: {}", userEntity.getEmail(), e);
         }
     }
+
+    @Override
+    public void sendUnitTransferVerificationByEmail(UserEntity userEntity, String otpCode) {
+        EmailCorps emailCorps = new EmailCorps();
+        String senderName;
+        if(userEntity.getNom() != null){
+            senderName = userEntity.getNom()+" "+userEntity.getPrenom();
+        }
+        else{
+            senderName = userEntity.getRaisonSociale();
+        }
+        emailCorps.setBody(htmlCodeGenerator.generateOTPverificationHTML(otpCode, senderName));
+        emailCorps.setFromEmail("etafweb2021@gmail.com");
+        emailCorps.setToEmail(userEntity.getEmail());
+
+        emailCorps.setSenderName(senderName);
+        emailCorps.setSubject(otpCode + " est votre code de vérification pour effectuer un virement unitaire");
+
+        try {
+            publisher.publishEvent(new SendeEmailEvent(userEntity, emailCorps));
+            log.info("Account info email sent successfully to: {}", userEntity.getEmail());
+        } catch (Exception e) {
+            log.error("Failed to send account info email to: {}", userEntity.getEmail(), e);
+        }
+    }
+
 }
