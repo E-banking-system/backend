@@ -111,11 +111,14 @@ public class BeneficierServiceImpl implements BeneficierService {
             throw new IdUserIsNotValideException("This client is not exists: " + clientId);
         }
 
+
         List<Beneficier> beneficiers = beneficiaireRepository.findByUserId(clientId);
         List<BeneficierResDTO> beneficierResDTOList = beneficiers.stream()
                 .map(beneficier -> {
                     BeneficierResDTO dto = beneficierMapper.fromBeneficierToBeneficierResDTO(beneficier);
                     dto.setEmail(beneficier.getUser().getEmail());
+                    Compte compte = compteRepository.getCompteByNumCompte(beneficier.getNumCompte());
+                    dto.setRib(compte.getRib());
                     return dto;
                 })
                 .collect(Collectors.toList());
