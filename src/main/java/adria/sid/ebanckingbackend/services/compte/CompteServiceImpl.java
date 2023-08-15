@@ -19,6 +19,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -36,6 +37,16 @@ public class CompteServiceImpl implements CompteService {
     final private CompteMapper compteMapper;
     final private OperationMapper operationMapper;
     final private OperationRepository operationRepository;
+
+    @Override
+    public Double getClientSolde(String userId){
+        return compteRepository.getTotalSoldeByUserId(userId);
+    }
+
+    @Override
+    public Date getLatestOperationByUserId(String userId){
+        return compteRepository.getLatestOperationByUserId(userId);
+    }
 
     @Override
     public Page<OperationResDTO> getCompteOperations(Pageable pageable, String compteId, String userId) throws CompteNotExistException {

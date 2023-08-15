@@ -19,6 +19,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+
 @RestController
 @RequestMapping("/api/v1/compte")
 @Validated
@@ -27,6 +29,16 @@ import org.springframework.web.bind.annotation.*;
 public class CompteController {
     final private CompteService compteService;
     final private ChangeSoldeService changeSoldeService;
+
+    @GetMapping("/soldeTotalClient")
+    public Double getSoldeTotalClient(@RequestParam String userId){
+        return compteService.getClientSolde(userId);
+    }
+
+    @GetMapping("/latestOperationClient")
+    public Date getLatestOperationDateByUserId(@RequestParam String userId){
+        return compteService.getLatestOperationByUserId(userId);
+    }
 
     @GetMapping("/operations")
     public ResponseEntity<?> getCompteOperations(

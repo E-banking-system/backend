@@ -8,6 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 @Service
 public interface CompteService {
     void ajouterCompte(CompteReqDTO accountDTO);
@@ -23,4 +25,7 @@ public interface CompteService {
 
     Page<CompteResDTO> searchComptes(Pageable pageable, String keyword);
     Page<CompteResDTO> getClientComptes(String userId, Pageable pageable, String keyword);
+
+    Double getClientSolde(String userId);
+    Date getLatestOperationByUserId(String userId);
 }

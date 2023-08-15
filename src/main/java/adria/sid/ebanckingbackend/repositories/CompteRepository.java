@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.domain.*;
+
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -22,4 +24,10 @@ public interface CompteRepository extends JpaRepository<Compte, String> {
 
     @Query("SELECT c FROM Compte c WHERE c.user.id = :userId AND (LOWER(c.nature) LIKE %:keyword% OR c.rib LIKE %:keyword% OR LOWER(c.etatCompte) LIKE %:keyword%)")
     Page<Compte> searchComptesByUserIdAndKeyword(@Param("userId") String userId, @Param("keyword") String keyword, Pageable pageable);
+
+    @Query("SELECT sum(c.solde) FROM Compte c WHERE c.user.id = :userId")
+    Double getTotalSoldeByUserId(@Param("userId") String userId);
+
+    @Query("SELECT MAX(o.dateOperation) FROM Operation o WHERE o.compte.user.id = :userId")
+    Date getLatestOperationByUserId(@Param("userId") String userId);
 }
