@@ -31,13 +31,21 @@ public class CompteController {
     final private ChangeSoldeService changeSoldeService;
 
     @GetMapping("/soldeTotalClient")
-    public Double getSoldeTotalClient(@RequestParam String userId){
-        return compteService.getClientSolde(userId);
+    public ResponseEntity<?> getSoldeTotalClient(@RequestParam String userId){
+        try {
+            return ResponseEntity.ok(compteService.getClientSolde(userId));
+        } catch (IdUserIsNotValideException e){
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
     }
 
     @GetMapping("/latestOperationClient")
-    public Date getLatestOperationDateByUserId(@RequestParam String userId){
-        return compteService.getLatestOperationByUserId(userId);
+    public ResponseEntity<?> getLatestOperationDateByUserId(@RequestParam String userId){
+        try {
+            return ResponseEntity.ok(compteService.getLatestOperationByUserId(userId));
+        } catch (IdUserIsNotValideException e){
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
     }
 
     @GetMapping("/operations")

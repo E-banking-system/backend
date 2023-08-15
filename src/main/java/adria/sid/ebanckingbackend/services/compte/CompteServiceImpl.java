@@ -5,6 +5,7 @@ import adria.sid.ebanckingbackend.dtos.operation.OperationResDTO;
 import adria.sid.ebanckingbackend.ennumerations.ERole;
 import adria.sid.ebanckingbackend.entities.*;
 import adria.sid.ebanckingbackend.exceptions.CompteNotExistException;
+import adria.sid.ebanckingbackend.exceptions.IdUserIsNotValideException;
 import adria.sid.ebanckingbackend.exceptions.NotificationNotSended;
 import adria.sid.ebanckingbackend.mappers.CompteMapper;
 import adria.sid.ebanckingbackend.mappers.OperationMapper;
@@ -39,12 +40,28 @@ public class CompteServiceImpl implements CompteService {
     final private OperationRepository operationRepository;
 
     @Override
-    public Double getClientSolde(String userId){
+    public double getClientSolde(String userId){
+        UserEntity userEntity = userRepository.findById(userId).orElse(null);
+
+        if(userEntity == null){
+            log.warn("You cannot get client solde because the user id is not valid");
+            throw new IdUserIsNotValideException("This user is not exists");
+        }
+
+        log.info("Get client solde is done");
         return compteRepository.getTotalSoldeByUserId(userId);
     }
 
     @Override
     public Date getLatestOperationByUserId(String userId){
+        UserEntity userEntity = userRepository.findById(userId).orElse(null);
+
+        if(userEntity == null){
+            log.warn("You cannot get the latest operation date because the user id is not valid");
+            throw new IdUserIsNotValideException("This user is not exists");
+        }
+
+        log.info("Get letest operation date is done");
         return compteRepository.getLatestOperationByUserId(userId);
     }
 
