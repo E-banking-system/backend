@@ -56,9 +56,9 @@ public class OtpTransferServiceImpl implements OtpTransferService {
             throw new IdUserIsNotValideException("This user is not exist");
         }
 
-        OtpTransferToken token = otpTransferRepository.findByToken(otpReqStepTwoDTO.getOtpCode());
+        OtpTransferToken token = otpTransferRepository.findByToken(otpReqStepTwoDTO.getOtpToken());
         if (token == null) {
-            log.warn("Invalid otp transfer token: {}", otpReqStepTwoDTO.getOtpCode());
+            log.warn("Invalid otp transfer token: {}", otpReqStepTwoDTO.getOtpToken());
             throw new InvalidTransferOtpCode("This verification code is not valid");
         }
 
