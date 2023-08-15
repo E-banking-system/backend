@@ -16,7 +16,6 @@ public interface OperationRepository extends JpaRepository<Operation, String> {
 
     @Query(value = "SELECT " +
             "   DATE_FORMAT(date_operation, '%Y-%m-%d') AS timeIntervalStart," +
-            "   DATE_ADD(DATE_FORMAT(date_operation, '%Y-%m-%d'), INTERVAL 24 HOUR) AS timeIntervalEnd," +
             "   COUNT(*) AS operationsCount" +
             " FROM operation o" +
             " WHERE o.compte_id IN (SELECT c.id FROM compte c WHERE c.user_id = :userId)" +

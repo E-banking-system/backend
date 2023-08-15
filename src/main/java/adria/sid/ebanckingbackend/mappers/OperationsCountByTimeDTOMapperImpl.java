@@ -13,9 +13,8 @@ public class OperationsCountByTimeDTOMapperImpl implements OperationsCountByTime
 
     public OperationsCountByTimeDTO mapToDTO(Object[] queryResult) {
         String timeIntervalStart = (String) queryResult[0];
-        String timeIntervalEnd = (String) queryResult[1];
-        Long operationsCount = (Long) queryResult[2];
-        return new OperationsCountByTimeDTO(timeIntervalStart, timeIntervalEnd, operationsCount);
+        Long operationsCount = (Long) queryResult[1];
+        return new OperationsCountByTimeDTO(timeIntervalStart, operationsCount);
     }
 
     public List<OperationsCountByTimeDTO> mapToDTOList(List<Object[]> queryResults) {

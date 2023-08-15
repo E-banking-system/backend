@@ -12,7 +12,6 @@ import java.util.Date;
 @AllArgsConstructor
 public class OperationsCountByTimeDTO {
     private String timeIntervalStart;
-    private String timeIntervalEnd;
     private Long operationsCount;
 
 }
