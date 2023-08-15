@@ -37,6 +37,10 @@ public class CompteServiceImpl implements CompteService {
     final private OperationMapper operationMapper;
     final private OperationRepository operationRepository;
 
+    public Double getClientSolde(String userId){
+        return compteRepository.getTotalSoldeByUserId(userId);
+    }
+
     @Override
     public Page<OperationResDTO> getCompteOperations(Pageable pageable, String compteId, String userId) throws CompteNotExistException {
         try {

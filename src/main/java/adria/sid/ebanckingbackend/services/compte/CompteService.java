@@ -23,4 +23,6 @@ public interface CompteService {
 
     Page<CompteResDTO> searchComptes(Pageable pageable, String keyword);
     Page<CompteResDTO> getClientComptes(String userId, Pageable pageable, String keyword);
+
+    Double getClientSolde(String userId);
 }

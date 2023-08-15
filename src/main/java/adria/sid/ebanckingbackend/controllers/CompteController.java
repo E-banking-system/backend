@@ -28,6 +28,11 @@ public class CompteController {
     final private CompteService compteService;
     final private ChangeSoldeService changeSoldeService;
 
+    @GetMapping("/soldeTotalClient")
+    public Double getSoldeTotalClient(@RequestParam String userId){
+        return compteService.getClientSolde(userId);
+    }
+
     @GetMapping("/operations")
     public ResponseEntity<?> getCompteOperations(
             @RequestParam(defaultValue = "0") int page,

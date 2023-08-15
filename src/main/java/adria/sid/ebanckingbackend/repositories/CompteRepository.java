@@ -22,4 +22,7 @@ public interface CompteRepository extends JpaRepository<Compte, String> {
 
     @Query("SELECT c FROM Compte c WHERE c.user.id = :userId AND (LOWER(c.nature) LIKE %:keyword% OR c.rib LIKE %:keyword% OR LOWER(c.etatCompte) LIKE %:keyword%)")
     Page<Compte> searchComptesByUserIdAndKeyword(@Param("userId") String userId, @Param("keyword") String keyword, Pageable pageable);
+
+    @Query("SELECT sum(c.solde) FROM Compte c WHERE c.user.id = :userId")
+    Double getTotalSoldeByUserId(@Param("userId") String userId);
 }
