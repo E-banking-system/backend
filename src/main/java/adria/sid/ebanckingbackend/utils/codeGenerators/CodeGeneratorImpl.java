@@ -15,7 +15,9 @@ import java.util.concurrent.ThreadLocalRandom;
 public class CodeGeneratorImpl implements CodeGenerator{
     @Override
     public String generateOtpVerificationCode() {
-        return generatePinCode();
+        Random random = new Random();
+        int code = random.nextInt(1000000000); // Generate a random number between 0 and 99999999
+        return String.format("%08d", code); // Format the number to have exactly 8 digits
     }
 
     @Override

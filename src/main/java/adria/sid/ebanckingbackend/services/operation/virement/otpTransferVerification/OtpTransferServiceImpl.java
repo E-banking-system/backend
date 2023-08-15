@@ -69,6 +69,15 @@ public class OtpTransferServiceImpl implements OtpTransferService {
             throw new ExpiredTransferToken("Otp tansfer token has expired for user");
         }
 
+        try {
+            token.setVerified(true);
+            otpTransferRepository.save(token);
+            log.info("This otp verification token entity is verified with success");
+        } catch (Exception e){
+            log.warn("Cannot update otp verification token entity");
+            throw new Error("Cannot verify otp verification token entity");
+        }
+
         log.info("Valid otp transfer reset token for user: {}", user.getUsername());
         return "valid";
     }

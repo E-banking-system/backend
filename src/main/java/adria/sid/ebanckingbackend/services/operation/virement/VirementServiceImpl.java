@@ -7,6 +7,8 @@ import adria.sid.ebanckingbackend.entities.*;
 import adria.sid.ebanckingbackend.exceptions.*;
 import adria.sid.ebanckingbackend.mappers.VirementMapper;
 import adria.sid.ebanckingbackend.repositories.*;
+import adria.sid.ebanckingbackend.security.otpTransferToken.OtpTransferRepository;
+import adria.sid.ebanckingbackend.security.otpTransferToken.OtpTransferToken;
 import adria.sid.ebanckingbackend.services.notification.OperationNotificationService;
 import adria.sid.ebanckingbackend.utils.codeGenerators.CodeGenerator;
 import jakarta.transaction.Transactional;
@@ -31,11 +33,27 @@ public class VirementServiceImpl implements VirementService{
     final private OperationNotificationService operationNotificationService;
     final private VirementMapper virementMapper;
     final private VirementUnitaireRepository virementUnitaireRepository;
+    final private OtpTransferRepository otpTransferRepository;
+    final private UserRepository userRepository;
 
 
     @Transactional
     @Override
-    public void virementUnitaire(VirementUnitReqDTO virementUnitReqDTO) throws InsufficientBalanceException, MontantNotValide, CompteNotExistException, NotificationNotSended, OperationNotSaved {
+    public void virementUnitaire(VirementUnitReqDTO virementUnitReqDTO) throws InsufficientBalanceException, MontantNotValide, CompteNotExistException, NotificationNotSended, OperationNotSaved, OtpTokenIsNotValid, OtpTokenIsNotVerified {
+        UserEntity userEntity=userRepository.findById(virementUnitReqDTO.getUserId()).orElse(null);
+        if(userEntity == null){
+            throw new IdUserIsNotValideException("This user is not exists");
+        }
+
+        OtpTransferToken otpTransferToken=otpTransferRepository.findByUserIdAndToken(virementUnitReqDTO.getUserId(),virementUnitReqDTO.getOtpToken());
+        if(otpTransferToken == null){
+            throw new OtpTokenIsNotValid("This token is not valid");
+        }
+
+        if(!otpTransferToken.getVerified()){
+            throw new OtpTokenIsNotVerified("This token is not verified");
+        }
+
         if (virementUnitReqDTO.getMontant() < 100) {
             throw new MontantNotValide("The amount must be more than 100 dirhams");
         }

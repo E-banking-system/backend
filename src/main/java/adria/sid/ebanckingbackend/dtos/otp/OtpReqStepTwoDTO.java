@@ -13,5 +13,5 @@ public class OtpReqStepTwoDTO {
     String userId;
 
     @NotNull
-    String otpCode;
+    String otpToken;
 }

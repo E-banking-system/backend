@@ -21,6 +21,7 @@ public class OtpTransferToken {
     private String token;
     private Date expirationTime;
     private static final int EXPIRATION_TIME = 15;
+    private Boolean verified=false;
 
     @OneToOne
     @JoinColumn(name = "user_id")

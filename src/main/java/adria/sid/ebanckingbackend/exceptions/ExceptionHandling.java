@@ -40,7 +40,9 @@ public class ExceptionHandling {
             InsufficientBalanceException.class,
             OperationNotSaved.class,
             ExpiredTransferToken.class,
-            InvalidTransferOtpCode.class
+            InvalidTransferOtpCode.class,
+            OtpTokenIsNotValid.class,
+            OtpTokenIsNotVerified.class
     })
     public ResponseEntity<String> handleInternalErrors(Exception e) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());

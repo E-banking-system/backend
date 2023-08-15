@@ -21,8 +21,8 @@ public class VirementController {
     final private VirementService virementService;
     final private OtpTransferService otpTransferService;
 
-    @PostMapping("/verify")
-    public ResponseEntity<?> verifyOtp(@RequestBody @Valid OtpReqStepTwoDTO otpReqStepTwoDTO){
+    @PostMapping("/verify_token")
+    public ResponseEntity<?> verifyOtpVerificationToken(@RequestBody @Valid OtpReqStepTwoDTO otpReqStepTwoDTO){
         try {
             otpTransferService.validateOtpTransferResetToken(otpReqStepTwoDTO);
             return ResponseEntity.ok("OTP verified with success");
@@ -31,10 +31,14 @@ public class VirementController {
         }
     }
 
-    @PostMapping("/otp")
-    public ResponseEntity<String> otp(@RequestBody @Valid OtpReqStepOneDTO otpReqStepOneDTO){
-        otpTransferService.createOtpTransferResetTokenForUser(otpReqStepOneDTO);
-        return ResponseEntity.ok("OTP created with success");
+    @PostMapping("/generate_token")
+    public ResponseEntity<String> generateOtpVerificationToken(@RequestBody @Valid OtpReqStepOneDTO otpReqStepOneDTO){
+        try {
+            otpTransferService.createOtpTransferResetTokenForUser(otpReqStepOneDTO);
+            return ResponseEntity.ok("OTP verification token generated with success, verify your email");
+        }catch (IdUserIsNotValideException e){
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
     }
 
     @PostMapping("/unitaire")
@@ -45,9 +49,9 @@ public class VirementController {
         } catch (IllegalArgumentException |
                  CompteNotExistException | MontantNotValide e) {
             return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (Exception e) {
+        } catch (Exception | OtpTokenIsNotVerified e) {
             return ResponseEntity.internalServerError().body(e.getMessage());
-        } catch (NotificationNotSended | InsufficientBalanceException | OperationNotSaved e) {
+        } catch (NotificationNotSended | InsufficientBalanceException | OperationNotSaved | OtpTokenIsNotValid e) {
             throw new RuntimeException(e);
         }
     }
