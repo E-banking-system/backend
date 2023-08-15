@@ -2,6 +2,7 @@ package adria.sid.ebanckingbackend.services.compte;
 
 import adria.sid.ebanckingbackend.dtos.compte.*;
 import adria.sid.ebanckingbackend.dtos.operation.OperationResDTO;
+import adria.sid.ebanckingbackend.dtos.operation.OperationsCountByTimeDTO;
 import adria.sid.ebanckingbackend.exceptions.CompteNotExistException;
 import adria.sid.ebanckingbackend.exceptions.NotificationNotSended;
 import org.springframework.data.domain.Page;
@@ -9,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 public interface CompteService {
@@ -28,4 +30,5 @@ public interface CompteService {
 
     double getClientSolde(String userId);
     Date getLatestOperationByUserId(String userId);
+    List<OperationsCountByTimeDTO> getOperationsCountByTime(String userId);
 }

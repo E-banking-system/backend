@@ -3,6 +3,7 @@ package adria.sid.ebanckingbackend.controllers;
 import adria.sid.ebanckingbackend.dtos.compte.*;
 import adria.sid.ebanckingbackend.dtos.operation.DepotReqDTO;
 import adria.sid.ebanckingbackend.dtos.operation.OperationResDTO;
+import adria.sid.ebanckingbackend.dtos.operation.OperationsCountByTimeDTO;
 import adria.sid.ebanckingbackend.dtos.operation.RetraitReqDTO;
 import adria.sid.ebanckingbackend.exceptions.*;
 import adria.sid.ebanckingbackend.services.compte.CompteService;
@@ -20,6 +21,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/compte")
@@ -29,6 +31,11 @@ import java.util.Date;
 public class CompteController {
     final private CompteService compteService;
     final private ChangeSoldeService changeSoldeService;
+
+    @GetMapping("/countClientOpsByTime")
+    public List<OperationsCountByTimeDTO> getOperationsCountByTime(@RequestParam String userId) {
+        return compteService.getOperationsCountByTime(userId);
+    }
 
     @GetMapping("/soldeTotalClient")
     public ResponseEntity<?> getSoldeTotalClient(@RequestParam String userId){

@@ -2,6 +2,7 @@ package adria.sid.ebanckingbackend.services.compte;
 
 import adria.sid.ebanckingbackend.dtos.compte.*;
 import adria.sid.ebanckingbackend.dtos.operation.OperationResDTO;
+import adria.sid.ebanckingbackend.dtos.operation.OperationsCountByTimeDTO;
 import adria.sid.ebanckingbackend.ennumerations.ERole;
 import adria.sid.ebanckingbackend.entities.*;
 import adria.sid.ebanckingbackend.exceptions.CompteNotExistException;
@@ -9,6 +10,7 @@ import adria.sid.ebanckingbackend.exceptions.IdUserIsNotValideException;
 import adria.sid.ebanckingbackend.exceptions.NotificationNotSended;
 import adria.sid.ebanckingbackend.mappers.CompteMapper;
 import adria.sid.ebanckingbackend.mappers.OperationMapper;
+import adria.sid.ebanckingbackend.mappers.OperationsCountByTimeDTOMapper;
 import adria.sid.ebanckingbackend.repositories.CompteRepository;
 import adria.sid.ebanckingbackend.repositories.OperationRepository;
 import adria.sid.ebanckingbackend.repositories.UserRepository;
@@ -24,6 +26,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -38,6 +41,13 @@ public class CompteServiceImpl implements CompteService {
     final private CompteMapper compteMapper;
     final private OperationMapper operationMapper;
     final private OperationRepository operationRepository;
+    final private OperationsCountByTimeDTOMapper dtoMapper;
+
+
+    public List<OperationsCountByTimeDTO> getOperationsCountByTime(String userId) {
+        List<Object[]> rawQueryResults = operationRepository.countOperationsByTimeRaw(userId);
+        return dtoMapper.mapToDTOList(rawQueryResults);
+    }
 
     @Override
     public double getClientSolde(String userId){
