@@ -24,9 +24,11 @@ public class WebSocketEventListener {
         String username = (String) headerAccessor.getSessionAttributes().get("username");
         if (username != null) {
             log.info("user disconnected: {}", username);
+            UserEntity userEntity=new UserEntity();
+            userEntity.setNom(username);
             var chatMessage = Message.builder()
                     .type(MessageType.LEAVE)
-                    .sender(new UserEntity())
+                    .sender(userEntity)
                     .build();
             messagingTemplate.convertAndSend("/topic/public", chatMessage);
         }
