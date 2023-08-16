@@ -1,19 +1,25 @@
 package adria.sid.ebanckingbackend.entities;
 
+import adria.sid.ebanckingbackend.ennumerations.MessageType;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Builder
 public class Message {
     @Id
     private String id;
     private String message;
     private Boolean isRead=false;
+    private MessageType type;
+    private String content;
+    private Date localDateTime;
 
     private LocalDateTime timestamp; // Timestamp of the message
 
