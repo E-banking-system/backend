@@ -33,8 +33,12 @@ public class CompteController {
     final private ChangeSoldeService changeSoldeService;
 
     @GetMapping("/countClientOpsByTime")
-    public List<OperationsCountByTimeDTO> getOperationsCountByTime(@RequestParam String userId) {
-        return compteService.getOperationsCountByTime(userId);
+    public ResponseEntity<?> getOperationsCountByTime(@RequestParam String userId) {
+        try {
+            return ResponseEntity.ok(compteService.getOperationsCountByTime(userId));
+        } catch (IdUserIsNotValideException e){
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
     }
 
     @GetMapping("/soldeTotalClient")

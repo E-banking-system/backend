@@ -37,15 +37,15 @@ public class BeneficierServiceImpl implements BeneficierService {
     final private BeneficierMapper beneficierMapper;
     final private UserRepository userRepository;
     final private CompteRepository compteRepository;
-        private final VirementRepository virementRepository;
+    private final VirementRepository virementRepository;
 
-        @Override
-        public void ajouterBeneficiair(BeneficierReqDTO beneficierReqDTO) throws CompteNotExistException, BeneficierEmailIsNotExiste {
-            Beneficier beneficier = beneficierMapper.fromBeneficierReqDTOToBeneficier(beneficierReqDTO);
-            Compte compte = compteRepository.getCompteByNumCompte(beneficier.getNumCompte());
+    @Override
+    public void ajouterBeneficiair(BeneficierReqDTO beneficierReqDTO) throws CompteNotExistException, BeneficierEmailIsNotExiste {
+        Beneficier beneficier = beneficierMapper.fromBeneficierReqDTOToBeneficier(beneficierReqDTO);
+        Compte compte = compteRepository.getCompteByNumCompte(beneficier.getNumCompte());
 
-            if (compte == null) {
-                log.warn("This beneficiary account does not exist");
+        if (compte == null) {
+            log.warn("This beneficiary account does not exist");
             throw new CompteNotExistException("This beneficiary account does not exist");
         }
 

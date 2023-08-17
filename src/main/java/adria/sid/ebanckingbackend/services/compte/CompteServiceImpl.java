@@ -45,7 +45,14 @@ public class CompteServiceImpl implements CompteService {
 
 
     public List<OperationsCountByTimeDTO> getOperationsCountByTime(String userId) {
+        UserEntity userEntity=userRepository.findById(userId).orElse(null);
+        if(userEntity == null){
+            log.warn("You cannot get operations count by time is done because this user is not valid");
+            throw new IdUserIsNotValideException("This user is not valid");
+        }
+
         List<Object[]> rawQueryResults = operationRepository.countOperationsByTimeRaw(userId);
+        log.info("GET operations count by time is done");
         return dtoMapper.mapToDTOList(rawQueryResults);
     }
 
