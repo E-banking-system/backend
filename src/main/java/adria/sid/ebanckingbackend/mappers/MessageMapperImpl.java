@@ -20,6 +20,11 @@ public class MessageMapperImpl implements MessageMapper{
     @Override
     public MessageResDTO fromMessageToMessageResDTO(Message message) {
         MessageResDTO messageResDTO=new MessageResDTO();
+        if(message.getReceiver() != null)
+            messageResDTO.setReceiver(message.getReceiver().getId());
+        if(message.getSender() != null)
+            messageResDTO.setSender(message.getSender().getId());
+
         BeanUtils.copyProperties(message,messageResDTO);
         return messageResDTO;
     }

@@ -3,5 +3,9 @@ package adria.sid.ebanckingbackend.repositories;
 import adria.sid.ebanckingbackend.entities.Message;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface MessageRepository extends JpaRepository<Message, String> {}
+import java.util.List;
+
+public interface MessageRepository extends JpaRepository<Message, String> {
+    List<Message> getMessagesBySenderIdOrReceiverId(String senderId,String receiverId);
+}
 

@@ -12,8 +12,7 @@ import java.util.Date;
 @AllArgsConstructor
 public class MessageResDTO {
     private String id;
-    private String message;
-    private Boolean isRead;
+    private Boolean isReaded;
     private MessageType type;
     private String content;
     private Date localDateTime;

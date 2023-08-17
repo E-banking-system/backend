@@ -15,21 +15,20 @@ import java.util.Date;
 public class Message {
     @Id
     private String id;
-    private String message;
-    private Boolean isRead=false;
+    private Boolean isReaded=false;
     private MessageType type;
     private String content;
     private Date localDateTime;
 
     private LocalDateTime timestamp; // Timestamp of the message
 
-    /*@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sender_id")*/
-    private String sender;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sender_id")
+    private UserEntity sender;
 
-    /*@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "receiver_id")*/
-    private String receiver;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "receiver_id")
+    private UserEntity receiver;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")

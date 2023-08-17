@@ -2,16 +2,19 @@ package adria.sid.ebanckingbackend.controllers;
 
 import adria.sid.ebanckingbackend.dtos.message.MessageResDTO;
 import adria.sid.ebanckingbackend.entities.Message;
+import adria.sid.ebanckingbackend.exceptions.IdUserIsNotValideException;
 import adria.sid.ebanckingbackend.mappers.MessageMapper;
 import adria.sid.ebanckingbackend.repositories.MessageRepository;
+import adria.sid.ebanckingbackend.services.chat.MessageService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Date;
@@ -20,10 +23,11 @@ import java.util.UUID;
 
 @Controller
 @AllArgsConstructor
-//@CrossOrigin("*")
 public class ChatController {
     final private MessageRepository messageRepository;
     final private MessageMapper messageMapper;
+    final private MessageService messageService;
+
     @MessageMapping("/chat.sendMessage")
     @SendTo("/topic/public")
     public MessageResDTO sendMessage(
@@ -52,7 +56,11 @@ public class ChatController {
 
     @GetMapping("/messages")
     @ResponseBody
-    public List<MessageResDTO> getMessages(){
-        return messageMapper.toMessageResDTOs(messageRepository.findAll());
+    public ResponseEntity<?> getMessages(@RequestParam String userId){
+        try {
+            return ResponseEntity.ok(messageService.getAllBeneficierMessages(userId));
+        } catch (IdUserIsNotValideException e){
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
     }
 }
