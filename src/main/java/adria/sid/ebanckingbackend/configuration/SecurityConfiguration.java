@@ -14,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
+import org.springframework.web.filter.CorsFilter;
 
 import static adria.sid.ebanckingbackend.ennumerations.ERole.BANQUIER;
 import static adria.sid.ebanckingbackend.ennumerations.ERole.CLIENT;
@@ -28,6 +29,7 @@ public class SecurityConfiguration {
   private final JwtAuthenticationFilter jwtAuthFilter;
   private final AuthenticationProvider authenticationProvider;
   private final LogoutHandler logoutHandler;
+  private final CorsFilter corsFilter;
 
 
   @Bean
@@ -35,6 +37,7 @@ public class SecurityConfiguration {
     http
             .csrf()
             .disable()
+            .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
             .authorizeHttpRequests()
             .requestMatchers(
                     "/api/v1/virement/**",
@@ -66,9 +69,9 @@ public class SecurityConfiguration {
                     "/webjars/**",
                     "/swagger-ui.html",
                     "/topic/public",
-                    "/messages",
+                    "/messages/**",
                     "/app/chat.addUser",
-                    "/ws"
+                    "/ws/**"
             )
             .permitAll()
             //.requestMatchers(GET,"/api/v1/notification/**").hasAnyRole(BANQUIER.name(),CLIENT.name())
