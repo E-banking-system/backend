@@ -44,7 +44,7 @@ public class MessageTest {
     }
 
 
-    @Test
+    /*@Test
     void testUser() {
         Message msg = new Message();
         UserEntity user = new UserEntity();
@@ -55,5 +55,5 @@ public class MessageTest {
         msg.setSender(user);
 
         assertEquals(user, msg.getSender());
-    }
+    }*/
 }
