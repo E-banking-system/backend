@@ -18,7 +18,6 @@ import java.util.UUID;
 
 @Controller
 @AllArgsConstructor
-@CrossOrigin("*")
 public class ChatController {
     final private MessageRepository messageRepository;
 
