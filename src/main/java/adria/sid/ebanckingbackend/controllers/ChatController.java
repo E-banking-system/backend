@@ -1,6 +1,8 @@
 package adria.sid.ebanckingbackend.controllers;
 
+import adria.sid.ebanckingbackend.dtos.message.MessageResDTO;
 import adria.sid.ebanckingbackend.entities.Message;
+import adria.sid.ebanckingbackend.mappers.MessageMapper;
 import adria.sid.ebanckingbackend.repositories.MessageRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -18,25 +20,25 @@ import java.util.UUID;
 
 @Controller
 @AllArgsConstructor
-@CrossOrigin("*")
+//@CrossOrigin("*")
 public class ChatController {
     final private MessageRepository messageRepository;
-
+    final private MessageMapper messageMapper;
     @MessageMapping("/chat.sendMessage")
     @SendTo("/topic/public")
-    public Message sendMessage(
+    public MessageResDTO sendMessage(
             @Payload Message chatMessage
     ) {
         chatMessage.setId(UUID.randomUUID().toString());
         chatMessage.setLocalDateTime(new Date());
         messageRepository.save(chatMessage);
         System.out.println(messageRepository.findAll().size() + " messages are saved now");
-        return chatMessage;
+        return messageMapper.fromMessageToMessageResDTO(chatMessage);
     }
 
     @MessageMapping("/chat.addUser")
     @SendTo("/topic/public")
-    public Message addUser(
+    public MessageResDTO addUser(
             @Payload Message chatMessage,
             SimpMessageHeaderAccessor headerAccessor
     ) {
@@ -45,12 +47,12 @@ public class ChatController {
         // Add username in web socket session
         headerAccessor.getSessionAttributes().put("username", chatMessage.getSender());
         System.out.println(messageRepository.findAll().size() + " messages are saved now");
-        return chatMessage;
+        return messageMapper.fromMessageToMessageResDTO(chatMessage);
     }
 
     @GetMapping("/messages")
     @ResponseBody
-    public List<Message> getMessages(){
-        return messageRepository.findAll();
+    public List<MessageResDTO> getMessages(){
+        return messageMapper.toMessageResDTOs(messageRepository.findAll());
     }
 }

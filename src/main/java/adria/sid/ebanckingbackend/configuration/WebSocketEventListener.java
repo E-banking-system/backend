@@ -28,7 +28,7 @@ public class WebSocketEventListener {
             userEntity.setNom(username);
             var chatMessage = Message.builder()
                     .type(MessageType.LEAVE)
-                    .sender(userEntity)
+                    .sender("achraf")
                     .build();
             messagingTemplate.convertAndSend("/topic/public", chatMessage);
         }

@@ -40,6 +40,7 @@ public class SecurityConfiguration {
             .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
             .authorizeHttpRequests()
             .requestMatchers(
+                    "/messages/**",
                     "/api/v1/virement/**",
                     "/api/v1/virement/unitaire/**",
                     "/api/v1/virement/permanent/**",

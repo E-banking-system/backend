@@ -23,13 +23,13 @@ public class Message {
 
     private LocalDateTime timestamp; // Timestamp of the message
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sender_id")
-    private UserEntity sender;
+    /*@ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sender_id")*/
+    private String sender;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "receiver_id")
-    private UserEntity receiver;
+    /*@ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "receiver_id")*/
+    private String receiver;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")
