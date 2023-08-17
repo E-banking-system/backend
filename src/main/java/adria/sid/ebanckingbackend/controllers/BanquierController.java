@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/banquier")
 @Tag(name = "Banquier")
-@Slf4j
 @AllArgsConstructor
 public class BanquierController {
     private final AuthenticationService authenticationService;

@@ -27,7 +27,6 @@ import java.util.List;
 @RequestMapping("/api/v1/compte")
 @Validated
 @RequiredArgsConstructor
-@Slf4j
 public class CompteController {
     final private CompteService compteService;
     final private ChangeSoldeService changeSoldeService;

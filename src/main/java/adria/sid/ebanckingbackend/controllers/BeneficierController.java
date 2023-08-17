@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/beneficier")
 @Validated
 @RequiredArgsConstructor
-@Slf4j
 public class BeneficierController {
     final private BeneficierService beneficierService;
 

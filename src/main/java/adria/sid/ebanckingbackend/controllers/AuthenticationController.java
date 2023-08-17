@@ -4,7 +4,6 @@ import adria.sid.ebanckingbackend.dtos.authentification.AuthReqDTO;
 import adria.sid.ebanckingbackend.dtos.authentification.AuthResDTO;
 import adria.sid.ebanckingbackend.dtos.authentification.ChangeOperateurReqDTO;
 import adria.sid.ebanckingbackend.dtos.authentification.UserInfosResDTO;
-import adria.sid.ebanckingbackend.dtos.client.ClientResDTO;
 import adria.sid.ebanckingbackend.exceptions.IdUserIsNotValideException;
 import adria.sid.ebanckingbackend.exceptions.UserHasNotAnyCompte;
 import adria.sid.ebanckingbackend.services.authentification.AuthenticationService;
@@ -14,9 +13,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -30,7 +26,6 @@ import java.io.IOException;
 @RequestMapping("/api/v1/auth")
 @Validated
 @RequiredArgsConstructor
-@Slf4j
 public class AuthenticationController {
   private final AuthenticationService authenticationService;
 

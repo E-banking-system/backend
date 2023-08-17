@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/client")
 @Tag(name = "Client")
-@Slf4j
 @AllArgsConstructor
 public class ClientController {
     private final CompteService compteService;
