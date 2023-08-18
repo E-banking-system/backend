@@ -40,6 +40,24 @@ public class CompteController {
         }
     }
 
+    @GetMapping("/latestOperation")
+    public ResponseEntity<?> getLatestOperationDate(){
+        try {
+            return ResponseEntity.ok(compteService.getLatestOperation());
+        } catch (IdUserIsNotValideException e){
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/getCountActiveAccount")
+    public ResponseEntity<?> getCountActiveAccount(){
+        try {
+            return ResponseEntity.ok(compteService.getCountActiveAccount());
+        } catch (IdUserIsNotValideException e){
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
+
     @GetMapping("/countClientOpsByTime")
     public ResponseEntity<?> getOperationsCountByTime(@RequestParam String userId) {
         try {

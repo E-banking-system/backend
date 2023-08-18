@@ -15,6 +15,8 @@ import java.util.List;
 @Service
 public interface CompteService {
     List<OperationsCountByTimeDTO> getAllOperationsCountByTime();
+    Date getLatestOperation();
+    Long getCountActiveAccount();
     void ajouterCompte(CompteReqDTO accountDTO);
     Page<CompteResDTO> getComptes(Pageable pageable);
     void activerCompte(String compteId) throws NotificationNotSended;

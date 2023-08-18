@@ -51,6 +51,19 @@ public class CompteServiceImpl implements CompteService {
     }
 
     @Override
+    public Date getLatestOperation(){
+        log.info("Get letest operation date is done");
+        return compteRepository.getLatestOperation();
+    }
+
+    @Override
+    public Long getCountActiveAccount(){
+        log.info("Get count active account is done");
+        return compteRepository.getCountActiveAccount();
+    }
+
+
+    @Override
     public List<OperationsCountByTimeDTO> getOperationsCountByTime(String userId) {
         UserEntity userEntity=userRepository.findById(userId).orElse(null);
         if(userEntity == null){

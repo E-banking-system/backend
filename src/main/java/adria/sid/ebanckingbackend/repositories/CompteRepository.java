@@ -28,6 +28,12 @@ public interface CompteRepository extends JpaRepository<Compte, String> {
     @Query("SELECT sum(c.solde) FROM Compte c WHERE c.user.id = :userId")
     Double getTotalSoldeByUserId(@Param("userId") String userId);
 
+    @Query("SELECT MAX(o.dateOperation) FROM Operation o")
+    Date getLatestOperation();
+
     @Query("SELECT MAX(o.dateOperation) FROM Operation o WHERE o.compte.user.id = :userId")
     Date getLatestOperationByUserId(@Param("userId") String userId);
+
+    @Query("SELECT COUNT(c.id) FROM Compte c WHERE c.etatCompte='ACTIVE'")
+    Long getCountActiveAccount();
 }
