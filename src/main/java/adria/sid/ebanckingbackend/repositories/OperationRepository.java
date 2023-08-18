@@ -18,6 +18,14 @@ public interface OperationRepository extends JpaRepository<Operation, String> {
             "   DATE_FORMAT(date_operation, '%Y-%m-%d') AS timeIntervalStart," +
             "   COUNT(*) AS operationsCount" +
             " FROM operation o" +
+            " GROUP BY DATE_FORMAT(date_operation, '%Y-%m-%d')",
+            nativeQuery = true)
+    List<Object[]> countAllOperationsByTimeRaw();
+
+    @Query(value = "SELECT " +
+            "   DATE_FORMAT(date_operation, '%Y-%m-%d') AS timeIntervalStart," +
+            "   COUNT(*) AS operationsCount" +
+            " FROM operation o" +
             " WHERE o.compte_id IN (SELECT c.id FROM compte c WHERE c.user_id = :userId)" +
             " GROUP BY DATE_FORMAT(date_operation, '%Y-%m-%d')",
             nativeQuery = true)

@@ -43,7 +43,14 @@ public class CompteServiceImpl implements CompteService {
     final private OperationRepository operationRepository;
     final private OperationsCountByTimeDTOMapper dtoMapper;
 
+    @Override
+    public List<OperationsCountByTimeDTO> getAllOperationsCountByTime() {
+        List<Object[]> rawQueryResults = operationRepository.countAllOperationsByTimeRaw();
+        log.info("GET operations count by time is done");
+        return dtoMapper.mapToDTOList(rawQueryResults);
+    }
 
+    @Override
     public List<OperationsCountByTimeDTO> getOperationsCountByTime(String userId) {
         UserEntity userEntity=userRepository.findById(userId).orElse(null);
         if(userEntity == null){
