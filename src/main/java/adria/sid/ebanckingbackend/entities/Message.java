@@ -20,8 +20,6 @@ public class Message {
     private String content;
     private Date localDateTime;
 
-    private LocalDateTime timestamp; // Timestamp of the message
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sender_id")
     private UserEntity sender;

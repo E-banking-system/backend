@@ -1,46 +1,44 @@
 package adria.sid.ebanckingbackend.controllers;
 
+import adria.sid.ebanckingbackend.dtos.message.BankerMessageReqDTO;
+import adria.sid.ebanckingbackend.dtos.message.ClientMessageReqDTO;
 import adria.sid.ebanckingbackend.dtos.message.MessageResDTO;
-import adria.sid.ebanckingbackend.entities.Message;
 import adria.sid.ebanckingbackend.exceptions.IdUserIsNotValideException;
-import adria.sid.ebanckingbackend.mappers.MessageMapper;
-import adria.sid.ebanckingbackend.repositories.MessageRepository;
 import adria.sid.ebanckingbackend.services.chat.MessageService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
-
 @Controller
 @AllArgsConstructor
 public class ChatController {
-    final private MessageRepository messageRepository;
-    final private MessageMapper messageMapper;
     final private MessageService messageService;
 
-    @MessageMapping("/chat.sendMessage")
+    @MessageMapping("/client.chat.sendMessage")
     @SendTo("/topic/public")
-    public MessageResDTO sendMessage(
-            @Payload Message chatMessage
+    public MessageResDTO clientSendMessage(
+            @Payload @Valid ClientMessageReqDTO messageReqDTO
     ) {
-        chatMessage.setId(UUID.randomUUID().toString());
-        chatMessage.setLocalDateTime(new Date());
-        messageRepository.save(chatMessage);
-        System.out.println(messageRepository.findAll().size() + " messages are saved now");
-        return messageMapper.fromMessageToMessageResDTO(chatMessage);
+        return messageService.clientSendMessage(messageReqDTO);
     }
 
-    @MessageMapping("/chat.addUser")
+    @MessageMapping("/banker.chat.sendMessage")
+    @SendTo("/topic/public")
+    public MessageResDTO bankerSendMessage(
+            @Payload @Valid BankerMessageReqDTO bankerMessageReqDTO
+    ) {
+        return messageService.bankerSendMessage(bankerMessageReqDTO);
+    }
+
+    /*@MessageMapping("/chat.addUser")
     @SendTo("/topic/public")
     public MessageResDTO addUser(
             @Payload Message chatMessage,
@@ -50,13 +48,12 @@ public class ChatController {
         messageRepository.save(chatMessage);
         // Add username in web socket session
         headerAccessor.getSessionAttributes().put("username", chatMessage.getSender());
-        System.out.println(messageRepository.findAll().size() + " messages are saved now");
         return messageMapper.fromMessageToMessageResDTO(chatMessage);
-    }
+    }*/
 
     @GetMapping("/messages")
     @ResponseBody
-    public ResponseEntity<?> getMessages(@RequestParam String userId){
+    public ResponseEntity<?> getMessages(@RequestParam @NotNull String userId){
         try {
             return ResponseEntity.ok(messageService.getAllBeneficierMessages(userId));
         } catch (IdUserIsNotValideException e){
