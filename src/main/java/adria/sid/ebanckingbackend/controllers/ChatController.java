@@ -60,4 +60,14 @@ public class ChatController {
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
+
+    @GetMapping("/BankerClientMessages")
+    @ResponseBody
+    public ResponseEntity<?> getMessagesBetweenBankerAndClient(@RequestParam @NotNull String userId, @RequestParam @NotNull String receiverId){
+        try {
+            return ResponseEntity.ok(messageService.getConvoMessages(userId,receiverId));
+        } catch (IdUserIsNotValideException e){
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
 }

@@ -23,6 +23,17 @@ public class MessageServiceImpl implements MessageService{
     final private MessageMapper messageMapper;
 
     @Override
+    public List<MessageResDTO> getConvoMessages(String userId, String receiverId){
+        UserEntity userEntity=userRepository.findById(userId).orElse(null);
+
+        if(userEntity == null){
+            throw new IdUserIsNotValideException("This user is not exists");
+        }
+        List<Message> messages=messageRepository.getMessagesBySenderIdAndReceiverId(userId,receiverId);
+        return messageMapper.toMessageResDTOs(messages);
+    }
+
+    @Override
     public List<MessageResDTO> getAllBeneficierMessages(String userId){
         UserEntity userEntity=userRepository.findById(userId).orElse(null);
 
