@@ -41,6 +41,7 @@ public class SecurityConfiguration {
             .authorizeHttpRequests()
             .requestMatchers(
                     "/messages/**",
+                    "/BankerClientMessages/**",
                     "/api/v1/virement/**",
                     "/api/v1/virement/unitaire/**",
                     "/api/v1/virement/permanent/**",
