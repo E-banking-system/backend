@@ -10,8 +10,8 @@ import java.util.List;
 public interface CodeGenerator {
     String generateOtpVerificationCode();
     String generatePinCode();
-    String generateRIBCode();
-    Long numeroCompte();
+    String generateRIBCode(String banque, String ville, String numCompte, String cle);
+    String numeroCompte();
     List<Date> genererDatesVirementPermanentVersionTest(Date premierDateExecution, Date dateFinExecution, EVType frequence);
     List<Date> genererDatesVirementPermanentVersionProduction(Date premierDateExecution, Date dateFinExecution, EVType frequence);
 }

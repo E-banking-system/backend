@@ -28,19 +28,41 @@ public class CodeGeneratorImpl implements CodeGenerator{
     }
 
     @Override
-    public String generateRIBCode() {
+    public String generateRIBCode(String banque, String ville, String numCompte, String cle) {
+        // Validate input lengths
+        if (banque.length() != 3 || !isNumeric(banque)) {
+            throw new IllegalArgumentException("Banque must have 3 numeric digits.");
+        }
+
+        if (ville.length() != 3 || !isNumeric(ville)) {
+            throw new IllegalArgumentException("Ville must have 3 numeric digits.");
+        }
+
+        if (numCompte.length() != 16 || !isNumeric(numCompte)) {
+            throw new IllegalArgumentException("NumCompte must have 16 numeric digits.");
+        }
+
+        if (cle.length() != 2 || !isNumeric(cle)) {
+            throw new IllegalArgumentException("Cle must have 2 numeric digits.");
+        }
+
+        return banque + ville + numCompte + cle;
+    }
+
+    // Helper method to check if a string is numeric
+    private boolean isNumeric(String str) {
+        return str.matches("\\d+");
+    }
+
+    @Override
+    public String numeroCompte() {
         Random random = new Random();
-        StringBuilder sb = new StringBuilder(24);
-        for (int i = 0; i < 24; i++) {
+        StringBuilder sb = new StringBuilder(16);
+        for (int i = 0; i < 16; i++) {
             int digit = random.nextInt(10); // Generates a random digit (0 to 9)
             sb.append(digit);
         }
         return sb.toString();
-    }
-
-    @Override
-    public Long numeroCompte() {
-        return ThreadLocalRandom.current().nextLong(Long.MAX_VALUE);
     }
 
     //test version

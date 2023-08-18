@@ -27,11 +27,11 @@ public class CompteMapperImpl implements CompteMapper{
     }
 
     @Override
-    public Compte fromCompteDTOToCompte(CompteReqDTO compteDTO) {
+    public Compte fromCompteReqDTOToCompte(CompteReqDTO compteDTO) {
         Compte newCompte = new Compte();
-        String rib = codeGenerator.generateRIBCode();
+        String numeroCompte = codeGenerator.numeroCompte();
+        String rib = codeGenerator.generateRIBCode("874","985",numeroCompte,"55");
         String pin = codeGenerator.generatePinCode();
-        Long numeroCompte = codeGenerator.numeroCompte();
 
         // Manually set the ID for the Compte entity
         newCompte.setId(UUID.randomUUID().toString());

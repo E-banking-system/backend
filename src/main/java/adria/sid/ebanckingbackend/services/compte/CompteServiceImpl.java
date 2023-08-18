@@ -115,7 +115,7 @@ public class CompteServiceImpl implements CompteService {
     @Override
     @Transactional
     public void ajouterCompte(CompteReqDTO compteDTO) {
-        Compte newCompte = compteMapper.fromCompteDTOToCompte(compteDTO);
+        Compte newCompte = compteMapper.fromCompteReqDTOToCompte(compteDTO);
 
         Optional<UserEntity> existingUserOptional = userRepository.findByEmail(compteDTO.getEmail());
 

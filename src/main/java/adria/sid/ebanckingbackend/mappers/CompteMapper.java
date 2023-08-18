@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface CompteMapper {
     CompteResDTO fromCompteToCompteResDTO(Compte compte);
-    Compte fromCompteDTOToCompte(CompteReqDTO compteDTO);
+    Compte fromCompteReqDTOToCompte(CompteReqDTO compteDTO);
 }
