@@ -20,7 +20,7 @@ public class OtpTransferToken {
     private Long id;
     private String token;
     private Date expirationTime;
-    private static final int EXPIRATION_TIME = 20;
+    private static final int EXPIRATION_TIME = 60;
     private Boolean verified=false;
 
     @OneToOne
