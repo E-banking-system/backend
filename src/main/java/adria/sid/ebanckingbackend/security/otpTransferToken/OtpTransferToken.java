@@ -20,7 +20,7 @@ public class OtpTransferToken {
     private Long id;
     private String token;
     private Date expirationTime;
-    private static final int EXPIRATION_TIME = 15;
+    private static final int EXPIRATION_TIME = 20;
     private Boolean verified=false;
 
     @OneToOne
@@ -43,7 +43,7 @@ public class OtpTransferToken {
     public Date getTokenExpirationTime() {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(new Date().getTime());
-        calendar.add(Calendar.MINUTE, EXPIRATION_TIME);
+        calendar.add(Calendar.SECOND, EXPIRATION_TIME);
         return new Date(calendar.getTime().getTime());
     }
 }
