@@ -32,4 +32,11 @@ public class NotificationServiceImpl implements NotificationService {
 
         return new PageImpl<>(notificationResDTOList, pageable, notifications.size());
     }
+
+    @Override
+    public int getNbrNotificationsByUserId(String userId) {
+        return notificationRepository.getNbrNotificationsByUserId(userId);
+    }
+
+
 }

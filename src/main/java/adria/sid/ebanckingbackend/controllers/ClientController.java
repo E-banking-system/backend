@@ -3,6 +3,7 @@ package adria.sid.ebanckingbackend.controllers;
 import adria.sid.ebanckingbackend.dtos.compte.CompteResDTO;
 import adria.sid.ebanckingbackend.exceptions.IdUserIsNotValideException;
 import adria.sid.ebanckingbackend.services.compte.CompteService;
+import adria.sid.ebanckingbackend.services.notification.NotificationService;
 import adria.sid.ebanckingbackend.services.operation.virement.VirementService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 public class ClientController {
     private final CompteService compteService;
+    private final NotificationService notificationService;
 
     @GetMapping("/comptes")
     public ResponseEntity<Page<CompteResDTO>> getClientComptes(
@@ -37,5 +39,10 @@ public class ClientController {
         } catch (InternalError e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
+    }
+
+    @GetMapping("/nbrNotification")
+    public int getClientNbrNotification(@RequestParam String userId){
+        return notificationService.getNbrNotificationsByUserId(userId);
     }
 }
