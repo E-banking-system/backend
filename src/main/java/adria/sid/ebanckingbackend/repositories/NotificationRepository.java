@@ -12,4 +12,7 @@ public interface NotificationRepository extends JpaRepository<Notification,Strin
 
     @Query(value = "SELECT COUNT(n) FROM Notification n WHERE n.user.id = :userId")
     int getNbrNotificationsByUserId(@Param("userId") String userId);
+
+    @Query(value = "SELECT COUNT(m) FROM Message m WHERE m.sender.id = :userId or m.receiver.id = :userId")
+    int getNbrMessagesByUserId(@Param("userId") String userId);
 }

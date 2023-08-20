@@ -8,4 +8,5 @@ import org.springframework.data.domain.Pageable;
 public interface NotificationService {
     Page<NotificationResDTO> getNotificationsByUserId(Pageable pageable, String userId);
     int getNbrNotificationsByUserId(String userId);
+    int getNbrMessagesByUserId(String userId);
 }

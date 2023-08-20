@@ -45,4 +45,9 @@ public class ClientController {
     public int getClientNbrNotification(@RequestParam String userId){
         return notificationService.getNbrNotificationsByUserId(userId);
     }
+
+    @GetMapping("/nbrMessages")
+    public int getClientNbrMessages(@RequestParam String userId){
+        return notificationService.getNbrMessagesByUserId(userId);
+    }
 }

@@ -38,5 +38,10 @@ public class NotificationServiceImpl implements NotificationService {
         return notificationRepository.getNbrNotificationsByUserId(userId);
     }
 
+    @Override
+    public int getNbrMessagesByUserId(String userId) {
+        return notificationRepository.getNbrMessagesByUserId(userId);
+    }
+
 
 }
