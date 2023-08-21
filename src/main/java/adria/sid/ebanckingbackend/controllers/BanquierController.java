@@ -22,11 +22,19 @@ public class BanquierController {
     @GetMapping("/clients")
     public ResponseEntity<Page<ClientResDTO>> getClients(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String keyword
     ) {
         try {
             Pageable pageable = PageRequest.of(page, size);
-            Page<ClientResDTO> clients = authenticationService.getClientVirements(pageable);
+            Page<ClientResDTO> clients;
+
+            if (keyword != null && !keyword.isEmpty()) {
+                clients = authenticationService.searchClients(pageable, keyword);
+            } else {
+                clients = authenticationService.getClientVirements(pageable);
+            }
+
             return ResponseEntity.ok(clients);
         } catch (InternalError e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);

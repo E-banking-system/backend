@@ -1,6 +1,7 @@
 package adria.sid.ebanckingbackend.repositories;
 
 import adria.sid.ebanckingbackend.ennumerations.ERole;
+import adria.sid.ebanckingbackend.entities.Compte;
 import adria.sid.ebanckingbackend.entities.UserEntity;
 import adria.sid.ebanckingbackend.entities.Virement;
 import adria.sid.ebanckingbackend.exceptions.UserAlreadyExists;
@@ -22,4 +23,7 @@ public interface UserRepository extends JpaRepository<UserEntity,String> {
     Page<UserEntity> findAllUsersByRole(@Param("role") ERole role, Pageable pageable);
     @Query("SELECT u FROM UserEntity u INNER JOIN u.comptes c WHERE c.id = :compteId")
     UserEntity getUserByCompteId(@Param("compteId") String compteId);
+    @Query("SELECT u FROM UserEntity u WHERE u.role = :role AND (LOWER(u.nom) LIKE CONCAT('%', :keyword, '%') OR LOWER(u.prenom) LIKE CONCAT('%', :keyword, '%') OR LOWER(u.address) LIKE CONCAT('%', :keyword, '%') OR LOWER(u.cin) LIKE CONCAT('%', :keyword, '%') OR LOWER(u.email) LIKE CONCAT('%', :keyword, '%') OR LOWER(u.tel) LIKE CONCAT('%', :keyword, '%'))")
+    Page<UserEntity> searchClients(@Param("role") ERole role, Pageable pageable, @Param("keyword") String keyword);
+
 }

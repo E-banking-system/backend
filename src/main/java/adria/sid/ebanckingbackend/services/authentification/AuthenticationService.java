@@ -36,4 +36,5 @@ public interface AuthenticationService {
     void resetUserPassword(UserEntity user, String newPassword);
     Optional<UserEntity> findByEmail(String email);
     void sendPasswordResetEmail(UserEntity user, String resetPasswordUrl);
+    Page<ClientResDTO> searchClients(Pageable pageable, String keyword);
 }

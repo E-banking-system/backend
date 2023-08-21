@@ -7,7 +7,9 @@ import adria.sid.ebanckingbackend.dtos.authentification.UserInfosResDTO;
 import adria.sid.ebanckingbackend.dtos.client.ClientMoraleDTO;
 import adria.sid.ebanckingbackend.dtos.client.ClientPhysiqueDTO;
 import adria.sid.ebanckingbackend.dtos.client.ClientResDTO;
+import adria.sid.ebanckingbackend.dtos.compte.CompteResDTO;
 import adria.sid.ebanckingbackend.ennumerations.ERole;
+import adria.sid.ebanckingbackend.entities.Compte;
 import adria.sid.ebanckingbackend.exceptions.IdUserIsNotValideException;
 import adria.sid.ebanckingbackend.exceptions.UserAlreadyExists;
 import adria.sid.ebanckingbackend.exceptions.UserHasNotAnyCompte;
@@ -61,6 +63,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
   private final ClientMoraleMapper clientMoraleMapper;
   private final ClientMapper clientMapper;
   private final UserMapper userMapper;
+
+  @Override
+  public Page<ClientResDTO> searchClients(Pageable pageable, String keyword) {
+    Page<UserEntity> clientPage = userRepository.searchClients(ERole.CLIENT, pageable, keyword);
+    log.info("Search for clients by keyword");
+    return clientPage.map(clientMapper::fromUserToClientResDTO);
+  }
 
 
   @Override
