@@ -1,6 +1,7 @@
 package adria.sid.ebanckingbackend.entities;
 
 import adria.sid.ebanckingbackend.ennumerations.MessageType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,8 +29,9 @@ public class Message {
     @JoinColumn(name = "receiver_id")
     private UserEntity receiver;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "address_id")
-    private PJ pj;
-
+    // New fields for sending files
+    @JsonIgnore
+    private byte[] fileData;
+    private String fileName;
+    private String fileType;
 }

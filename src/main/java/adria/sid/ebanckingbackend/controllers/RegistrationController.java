@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -28,26 +29,22 @@ public class RegistrationController {
     private final HtmlCodeGenerator htmlCodeGenerator;
 
     @PostMapping("/physique")
-    public String registerClientPhysique(@RequestBody @Valid ClientPhysiqueDTO reqRegisterClientPhysiqueDTO, final HttpServletRequest request) {
+    public ResponseEntity<?> registerClientPhysique(@RequestBody @Valid ClientPhysiqueDTO reqRegisterClientPhysiqueDTO, final HttpServletRequest request) {
         try {
             authenticationService.registerClientPhysique(reqRegisterClientPhysiqueDTO, applicationUrl(request));
-            return "Bravo ! Check your e-mail to finalize your inscription";
-        } catch (UserAlreadyExists ex) {
-            return "Error: " + ex.getMessage();
-        } catch (Exception e) {
-            return "An error occurred during registration: " + e.getMessage();
+            return ResponseEntity.ok("Bravo ! Check your e-mail to finalize your inscription");
+        } catch (UserAlreadyExists e) {
+            return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
 
     @PostMapping("/morale")
-    public String registerClientMorale(@RequestBody @Valid ClientMoraleDTO reqRegisterClientMoraleDTO, final HttpServletRequest request) {
+    public ResponseEntity<?> registerClientMorale(@RequestBody @Valid ClientMoraleDTO reqRegisterClientMoraleDTO, final HttpServletRequest request) {
         try {
             authenticationService.registerClientMorale(reqRegisterClientMoraleDTO, applicationUrl(request));
-            return "Bravo ! Check your e-mail to finalize your inscription";
-        } catch (UserAlreadyExists ex) {
-            return "Error: " + ex.getMessage();
-        } catch (Exception e) {
-            return "An error occurred during registration: " + e.getMessage();
+            return ResponseEntity.ok("Bravo ! Check your e-mail to finalize your inscription");
+        } catch (UserAlreadyExists e) {
+            return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
 
