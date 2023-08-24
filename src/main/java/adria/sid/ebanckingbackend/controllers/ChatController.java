@@ -127,7 +127,6 @@ public class ChatController {
         try {
             byte[] fileContent = Base64.getDecoder().decode(chatMessage.getContent());
 
-
             if (fileContent != null && fileContent.length <= 65536) {
                 String fileName = chatMessage.getFileName(); // Extract file name from the message
 
@@ -145,18 +144,24 @@ public class ChatController {
                 responseMessage.setLocalDateTime(new Date());
                 messageRepository.save(responseMessage);
                 responseMessage.setFileData(fileContent);
+
+                return responseMessage;
+            } else {
+                System.out.println("-----------------------------file content size error-------------------------------------");
+                throw new FileStorageException("File content size exceeds the limit");
             }
         } catch (FileStorageException ex) {
             // Handle the exception and return an error ChatMessage
             System.out.println("Error");
+            return Message.builder()
+                    .id(UUID.randomUUID().toString())
+                    .content("ERROR")
+                    .type(MessageType.FILE)
+                    .localDateTime(new Date())
+                    .fileName("ERROR")
+                    .build();
         }
-        return Message.builder()
-                .id(UUID.randomUUID().toString())
-                .content("ERROR")
-                .type(MessageType.FILE)
-                .localDateTime(new Date())
-                .fileName("ERROR")
-                .build();
+
     }
 
     @GetMapping("/BankerClientMessages")
