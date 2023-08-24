@@ -63,9 +63,9 @@ public class ChatController {
         }
     }
 
-    @MessageMapping("/chat.sendFile")
+    @MessageMapping("/client.chat.sendFile")
     @SendTo("/topic/public")
-    public Message sendFile(@Payload Message chatMessage) {
+    public Message clientSendFile(@Payload Message chatMessage) {
         try {
             System.out.println("-------------------------------start----------------------------");
             byte[] fileContent = Base64.getDecoder().decode(chatMessage.getContent());
@@ -73,7 +73,6 @@ public class ChatController {
 
             if (fileContent != null && fileContent.length <= 65536) {
                 String fileName = chatMessage.getFileName(); // Extract file name from the message
-
 
                 
                 // Store the file content with the given file name
@@ -98,6 +97,47 @@ public class ChatController {
             }
         } catch (FileStorageException ex) {
             System.out.println("-----------------------------error-----------------------------");
+            // Handle the exception and return an error ChatMessage
+            return Message.builder()
+                    .id(UUID.randomUUID().toString())
+                    .content("ERROR: " + ex.getMessage())
+                    .type(MessageType.FILE)
+                    .localDateTime(new Date())
+                    .fileName("ERROR")
+                    .build();
+        }
+    }
+
+    @MessageMapping("/banker.chat.sendFile")
+    @SendTo("/topic/public")
+    public Message bankerSendFile(@Payload Message chatMessage) {
+        try {
+            byte[] fileContent = Base64.getDecoder().decode(chatMessage.getContent());
+
+
+            if (fileContent != null && fileContent.length <= 65536) {
+                String fileName = chatMessage.getFileName(); // Extract file name from the message
+
+                // Store the file content with the given file name
+                fileStorageService.storeFile(fileContent, fileName);
+
+                Message responseMessage = new Message();
+                responseMessage.setId(UUID.randomUUID().toString());
+                responseMessage.setContent(fileName);
+                responseMessage.setType(MessageType.FILE);
+                responseMessage.setFileType("FILE");
+                responseMessage.setFileName(fileName);
+                responseMessage.setSender(userRepository.findById(chatMessage.getSender().getId()).orElse(null));
+                responseMessage.setReceiver(userRepository.findById(chatMessage.getReceiver().getId()).orElse(null));
+                responseMessage.setLocalDateTime(new Date());
+                messageRepository.save(responseMessage);
+                responseMessage.setFileData(fileContent);
+
+                return responseMessage; // You can send a response message here if needed
+            } else {
+                throw new FileStorageException("File content size exceeds the limit");
+            }
+        } catch (FileStorageException ex) {
             // Handle the exception and return an error ChatMessage
             return Message.builder()
                     .id(UUID.randomUUID().toString())
