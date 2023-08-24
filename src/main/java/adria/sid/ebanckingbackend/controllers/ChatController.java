@@ -64,6 +64,7 @@ public class ChatController {
     @SendTo("/topic/public")
     public Message sendFile(@Payload Message chatMessage) {
         try {
+            System.out.println("-------------------------------start----------------------------");
             byte[] fileContent = Base64.getDecoder().decode(chatMessage.getContent());
 
             if (fileContent != null && fileContent.length <= 65536) {
@@ -85,9 +86,11 @@ public class ChatController {
 
                 return responseMessage; // You can send a response message here if needed
             } else {
+                System.out.println("-----------------------------file content size error-------------------------------------");
                 throw new FileStorageException("File content size exceeds the limit");
             }
         } catch (FileStorageException ex) {
+            System.out.println("-----------------------------error-----------------------------");
             // Handle the exception and return an error ChatMessage
             return Message.builder()
                     .id(UUID.randomUUID().toString())
