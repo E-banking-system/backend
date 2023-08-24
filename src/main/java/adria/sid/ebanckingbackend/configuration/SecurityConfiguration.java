@@ -41,6 +41,9 @@ public class SecurityConfiguration {
             .authorizeHttpRequests()
             .requestMatchers(
                     "/messages/**",
+                    "/uploadFile",
+                    "/uploadMultipleFiles",
+                    "/downloadFile/**",
                     "/BankerClientMessages/**",
                     "/api/v1/virement/**",
                     "/api/v1/virement/unitaire/**",
@@ -73,6 +76,7 @@ public class SecurityConfiguration {
                     "/topic/public",
                     "/messages/**",
                     "/app/chat.addUser",
+                    "/chat.sendFile",
                     "/ws/**"
             )
             .permitAll()

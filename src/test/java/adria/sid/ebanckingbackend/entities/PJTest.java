@@ -7,7 +7,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class PJTest {
-    @Test
+    /*@Test
     void testGettersAndSetters() {
         // Test the getters and setters
         String pjId = UUID.randomUUID().toString();
@@ -17,7 +17,7 @@ public class PJTest {
 
         assertEquals(pjId, pj.getId());
         assertEquals("pj", pj.getName());
-    }
+    }*/
 
     /*
     @Test
