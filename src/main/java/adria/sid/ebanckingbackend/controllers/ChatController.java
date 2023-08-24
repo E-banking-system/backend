@@ -6,6 +6,7 @@ import adria.sid.ebanckingbackend.dtos.message.MessageResDTO;
 import adria.sid.ebanckingbackend.ennumerations.ERole;
 import adria.sid.ebanckingbackend.ennumerations.MessageType;
 import adria.sid.ebanckingbackend.entities.Message;
+import adria.sid.ebanckingbackend.entities.UserEntity;
 import adria.sid.ebanckingbackend.exceptions.FileStorageException;
 import adria.sid.ebanckingbackend.exceptions.IdUserIsNotValideException;
 import adria.sid.ebanckingbackend.repositories.MessageRepository;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
 import java.util.UUID;
@@ -84,13 +86,24 @@ public class ChatController {
                 responseMessage.setType(MessageType.FILE);
                 responseMessage.setFileType("FILE");
                 responseMessage.setFileName(fileName);
-                responseMessage.setSender(userRepository.findById(chatMessage.getSender().getId()).orElse(null));
-                responseMessage.setReceiver(userRepository.findByRole(ERole.BANQUIER).get(0));
+                UserEntity sender=userRepository.findById(chatMessage.getSender().getId()).orElse(null);
+                responseMessage.setSender(sender);
+                UserEntity client=userRepository.findByRole(ERole.BANQUIER).get(0);
+                responseMessage.setReceiver(client);
                 responseMessage.setLocalDateTime(new Date());
                 messageRepository.save(responseMessage);
                 responseMessage.setFileData(fileContent);
 
-                return responseMessage; // You can send a response message here if needed
+                Message responseMessage2 = new Message();
+                responseMessage2.setId(UUID.randomUUID().toString());
+                responseMessage2.setContent(fileName);
+                responseMessage2.setType(MessageType.FILE);
+                responseMessage2.setFileType("FILE");
+                responseMessage2.setFileName(fileName);
+                responseMessage2.setLocalDateTime(new Date());
+                responseMessage2.setFileData(fileContent);
+
+                return responseMessage2; // You can send a response message here if needed
             } else {
                 System.out.println("-----------------------------file content size error-------------------------------------");
                 throw new FileStorageException("File content size exceeds the limit");
@@ -132,21 +145,18 @@ public class ChatController {
                 responseMessage.setLocalDateTime(new Date());
                 messageRepository.save(responseMessage);
                 responseMessage.setFileData(fileContent);
-
-                return responseMessage; // You can send a response message here if needed
-            } else {
-                throw new FileStorageException("File content size exceeds the limit");
             }
         } catch (FileStorageException ex) {
             // Handle the exception and return an error ChatMessage
-            return Message.builder()
-                    .id(UUID.randomUUID().toString())
-                    .content("ERROR: " + ex.getMessage())
-                    .type(MessageType.FILE)
-                    .localDateTime(new Date())
-                    .fileName("ERROR")
-                    .build();
+            System.out.println("Error");
         }
+        return Message.builder()
+                .id(UUID.randomUUID().toString())
+                .content("ERROR")
+                .type(MessageType.FILE)
+                .localDateTime(new Date())
+                .fileName("ERROR")
+                .build();
     }
 
     @GetMapping("/BankerClientMessages")

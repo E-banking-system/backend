@@ -42,7 +42,9 @@ public class ExceptionHandling {
             ExpiredTransferToken.class,
             InvalidTransferOtpCode.class,
             OtpTokenIsNotValid.class,
-            OtpTokenIsNotVerified.class
+            OtpTokenIsNotVerified.class,
+            FileStorageException.class,
+
     })
     public ResponseEntity<String> handleInternalErrors(Exception e) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
