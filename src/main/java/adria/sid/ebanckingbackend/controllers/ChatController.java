@@ -3,11 +3,13 @@ package adria.sid.ebanckingbackend.controllers;
 import adria.sid.ebanckingbackend.dtos.message.BankerMessageReqDTO;
 import adria.sid.ebanckingbackend.dtos.message.ClientMessageReqDTO;
 import adria.sid.ebanckingbackend.dtos.message.MessageResDTO;
+import adria.sid.ebanckingbackend.ennumerations.ERole;
 import adria.sid.ebanckingbackend.ennumerations.MessageType;
 import adria.sid.ebanckingbackend.entities.Message;
 import adria.sid.ebanckingbackend.exceptions.FileStorageException;
 import adria.sid.ebanckingbackend.exceptions.IdUserIsNotValideException;
 import adria.sid.ebanckingbackend.repositories.MessageRepository;
+import adria.sid.ebanckingbackend.repositories.UserRepository;
 import adria.sid.ebanckingbackend.services.chat.MessageService;
 import adria.sid.ebanckingbackend.services.storage.FileStorageService;
 import jakarta.validation.Valid;
@@ -32,6 +34,7 @@ public class ChatController {
     final private MessageService messageService;
     final private MessageRepository messageRepository;
     private final FileStorageService fileStorageService;
+    final private UserRepository userRepository;
 
 
     @MessageMapping("/client.chat.sendMessage")
@@ -66,10 +69,13 @@ public class ChatController {
         try {
             System.out.println("-------------------------------start----------------------------");
             byte[] fileContent = Base64.getDecoder().decode(chatMessage.getContent());
+            
 
             if (fileContent != null && fileContent.length <= 65536) {
                 String fileName = chatMessage.getFileName(); // Extract file name from the message
 
+
+                
                 // Store the file content with the given file name
                 fileStorageService.storeFile(fileContent, fileName);
 
@@ -79,7 +85,8 @@ public class ChatController {
                 responseMessage.setType(MessageType.FILE);
                 responseMessage.setFileType("FILE");
                 responseMessage.setFileName(fileName);
-                //responseMessage.setSender();
+                responseMessage.setSender(userRepository.findById(chatMessage.getSender().getId()).orElse(null));
+                responseMessage.setReceiver(userRepository.findByRole(ERole.BANQUIER).get(0));
                 responseMessage.setLocalDateTime(new Date());
                 messageRepository.save(responseMessage);
                 responseMessage.setFileData(fileContent);
