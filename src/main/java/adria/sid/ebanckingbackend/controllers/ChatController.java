@@ -9,9 +9,11 @@ import adria.sid.ebanckingbackend.entities.Message;
 import adria.sid.ebanckingbackend.entities.UserEntity;
 import adria.sid.ebanckingbackend.exceptions.FileStorageException;
 import adria.sid.ebanckingbackend.exceptions.IdUserIsNotValideException;
+import adria.sid.ebanckingbackend.mappers.MessageMapper;
 import adria.sid.ebanckingbackend.repositories.MessageRepository;
 import adria.sid.ebanckingbackend.repositories.UserRepository;
 import adria.sid.ebanckingbackend.services.chat.MessageService;
+import adria.sid.ebanckingbackend.services.storage.FileStorageService;
 import adria.sid.ebanckingbackend.services.storage.FileStorageServiceImpl;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -34,8 +36,9 @@ import java.util.UUID;
 public class ChatController {
     final private MessageService messageService;
     final private MessageRepository messageRepository;
-    private final FileStorageServiceImpl fileStorageService;
+    private final FileStorageService fileStorageService;
     final private UserRepository userRepository;
+    final private MessageMapper messageMapper;
 
 
     @MessageMapping("/client.chat.sendMessage")
@@ -66,16 +69,13 @@ public class ChatController {
 
     @MessageMapping("/client.chat.sendFile")
     @SendTo("/topic/public")
-    public Message clientSendFile(@Payload Message chatMessage) {
+    public ResponseEntity<?> clientSendFile(@Payload Message chatMessage) {
         try {
-            System.out.println("-------------------------------start----------------------------");
             byte[] fileContent = Base64.getDecoder().decode(chatMessage.getContent());
-            
 
             if (fileContent != null && fileContent.length <= 65536) {
                 String fileName = chatMessage.getFileName(); // Extract file name from the message
 
-                
                 // Store the file content with the given file name
                 fileStorageService.storeFile(fileContent, fileName);
 
@@ -92,37 +92,18 @@ public class ChatController {
                 responseMessage.setLocalDateTime(new Date());
                 messageRepository.save(responseMessage);
                 responseMessage.setFileData(fileContent);
-
-                Message responseMessage2 = new Message();
-                responseMessage2.setId(UUID.randomUUID().toString());
-                responseMessage2.setContent(fileName);
-                responseMessage2.setType(MessageType.FILE);
-                responseMessage2.setFileType("FILE");
-                responseMessage2.setFileName(fileName);
-                responseMessage2.setLocalDateTime(new Date());
-                responseMessage2.setFileData(fileContent);
-
-                return responseMessage2; // You can send a response message here if needed
+                return ResponseEntity.ok(messageMapper.fromMessageToMessageFileResDTO(responseMessage)); // You can send a response message here if needed
             } else {
-                System.out.println("-----------------------------file content size error-------------------------------------");
-                throw new FileStorageException("File content size exceeds the limit");
+                return ResponseEntity.ok().body(null);
             }
         } catch (FileStorageException ex) {
-            System.out.println("-----------------------------error-----------------------------");
-            // Handle the exception and return an error ChatMessage
-            return Message.builder()
-                    .id(UUID.randomUUID().toString())
-                    .content("ERROR: " + ex.getMessage())
-                    .type(MessageType.FILE)
-                    .localDateTime(new Date())
-                    .fileName("ERROR")
-                    .build();
+            return ResponseEntity.internalServerError().body(ex.getMessage());
         }
     }
 
     @MessageMapping("/banker.chat.sendFile")
     @SendTo("/topic/public")
-    public Message bankerSendFile(@Payload Message chatMessage) {
+    public ResponseEntity<?> bankerSendFile(@Payload Message chatMessage) {
         try {
             byte[] fileContent = Base64.getDecoder().decode(chatMessage.getContent());
 
@@ -143,24 +124,13 @@ public class ChatController {
                 responseMessage.setLocalDateTime(new Date());
                 messageRepository.save(responseMessage);
                 responseMessage.setFileData(fileContent);
-
-                return responseMessage;
+                return ResponseEntity.ok(messageMapper.fromMessageToMessageFileResDTO(responseMessage)); // You can send a response message here if needed
             } else {
-                System.out.println("-----------------------------file content size error-------------------------------------");
-                throw new FileStorageException("File content size exceeds the limit");
+                return ResponseEntity.ok().body(null);
             }
         } catch (FileStorageException ex) {
-            // Handle the exception and return an error ChatMessage
-            System.out.println("Error");
-            return Message.builder()
-                    .id(UUID.randomUUID().toString())
-                    .content("ERROR")
-                    .type(MessageType.FILE)
-                    .localDateTime(new Date())
-                    .fileName("ERROR")
-                    .build();
+           return ResponseEntity.internalServerError().body(ex.getMessage());
         }
-
     }
 
     @GetMapping("/BankerClientMessages")

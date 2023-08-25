@@ -1,9 +1,6 @@
 package adria.sid.ebanckingbackend.mappers;
 
-import adria.sid.ebanckingbackend.dtos.message.BankerMessageReqDTO;
-import adria.sid.ebanckingbackend.dtos.message.ClientMessageFileReqDTO;
-import adria.sid.ebanckingbackend.dtos.message.ClientMessageReqDTO;
-import adria.sid.ebanckingbackend.dtos.message.MessageResDTO;
+import adria.sid.ebanckingbackend.dtos.message.*;
 import adria.sid.ebanckingbackend.ennumerations.MessageType;
 import adria.sid.ebanckingbackend.entities.*;
 import lombok.AllArgsConstructor;
@@ -29,6 +26,13 @@ public class MessageMapperImpl implements MessageMapper{
 
         BeanUtils.copyProperties(message,messageResDTO);
         return messageResDTO;
+    }
+
+    @Override
+    public MessageFileResDTO fromMessageToMessageFileResDTO(Message message) {
+        MessageFileResDTO messageFileResDTO=new MessageFileResDTO();
+        BeanUtils.copyProperties(message,messageFileResDTO);
+        return messageFileResDTO;
     }
 
     @Override
