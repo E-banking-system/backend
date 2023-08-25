@@ -1,6 +1,7 @@
 package adria.sid.ebanckingbackend.mappers;
 
 import adria.sid.ebanckingbackend.dtos.message.BankerMessageReqDTO;
+import adria.sid.ebanckingbackend.dtos.message.ClientMessageFileReqDTO;
 import adria.sid.ebanckingbackend.dtos.message.ClientMessageReqDTO;
 import adria.sid.ebanckingbackend.dtos.message.MessageResDTO;
 import adria.sid.ebanckingbackend.ennumerations.MessageType;
@@ -41,6 +42,14 @@ public class MessageMapperImpl implements MessageMapper{
     }
 
     @Override
+    public Message fromClientMessageFileReqDTOToMessage(ClientMessageFileReqDTO clientMessageFileReqDTO) {
+        Message message=new Message();
+        message.setId(UUID.randomUUID().toString());
+        BeanUtils.copyProperties(clientMessageFileReqDTO,message);
+        return message;
+    }
+
+    @Override
     public Message fromBankerMessageReqDTOToMessage(BankerMessageReqDTO bankerMessageReqDTO) {
         System.out.println(bankerMessageReqDTO);
         Message message=new Message();
@@ -50,6 +59,8 @@ public class MessageMapperImpl implements MessageMapper{
         BeanUtils.copyProperties(bankerMessageReqDTO,message);
         return message;
     }
+
+
 
     @Override
     public List<MessageResDTO> toMessageResDTOs(List<Message> messages) {

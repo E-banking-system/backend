@@ -12,7 +12,7 @@ import adria.sid.ebanckingbackend.exceptions.IdUserIsNotValideException;
 import adria.sid.ebanckingbackend.repositories.MessageRepository;
 import adria.sid.ebanckingbackend.repositories.UserRepository;
 import adria.sid.ebanckingbackend.services.chat.MessageService;
-import adria.sid.ebanckingbackend.services.storage.FileStorageService;
+import adria.sid.ebanckingbackend.services.storage.FileStorageServiceImpl;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
 import java.util.UUID;
@@ -35,7 +34,7 @@ import java.util.UUID;
 public class ChatController {
     final private MessageService messageService;
     final private MessageRepository messageRepository;
-    private final FileStorageService fileStorageService;
+    private final FileStorageServiceImpl fileStorageService;
     final private UserRepository userRepository;
 
 
