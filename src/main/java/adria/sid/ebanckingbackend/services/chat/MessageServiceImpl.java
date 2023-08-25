@@ -1,19 +1,23 @@
 package adria.sid.ebanckingbackend.services.chat;
 
-import adria.sid.ebanckingbackend.dtos.message.BankerMessageReqDTO;
-import adria.sid.ebanckingbackend.dtos.message.ClientMessageReqDTO;
-import adria.sid.ebanckingbackend.dtos.message.MessageResDTO;
+import adria.sid.ebanckingbackend.dtos.message.*;
 import adria.sid.ebanckingbackend.ennumerations.ERole;
+import adria.sid.ebanckingbackend.ennumerations.MessageType;
 import adria.sid.ebanckingbackend.entities.Message;
 import adria.sid.ebanckingbackend.entities.UserEntity;
 import adria.sid.ebanckingbackend.exceptions.IdUserIsNotValideException;
 import adria.sid.ebanckingbackend.mappers.MessageMapper;
 import adria.sid.ebanckingbackend.repositories.MessageRepository;
 import adria.sid.ebanckingbackend.repositories.UserRepository;
+import adria.sid.ebanckingbackend.services.storage.FileStorageService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Base64;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -21,6 +25,7 @@ public class MessageServiceImpl implements MessageService{
     final private MessageRepository messageRepository;
     final private UserRepository userRepository;
     final private MessageMapper messageMapper;
+    final private FileStorageService fileStorageService;
 
     @Override
     public List<MessageResDTO> getConvoMessages(String userId, String receiverId){
@@ -84,5 +89,62 @@ public class MessageServiceImpl implements MessageService{
 
         return messageMapper.fromMessageToMessageResDTO(message);
     }
+
+    @Override
+    public MessageFileResDTO clientSendFileMessage(Message message) {
+        byte[] fileContent = Base64.getDecoder().decode(message.getContent());
+
+        if (fileContent != null && fileContent.length <= 65536) {
+            String fileName = message.getFileName(); // Extract file name from the message
+
+            // Store the file content with the given file name
+            fileStorageService.storeFile(fileContent, fileName);
+
+            Message responseMessage = new Message();
+            responseMessage.setId(UUID.randomUUID().toString());
+            responseMessage.setContent(fileName);
+            responseMessage.setType(MessageType.FILE);
+            responseMessage.setFileType("FILE");
+            responseMessage.setFileName(fileName);
+            UserEntity sender=userRepository.findById(message.getSender().getId()).orElse(null);
+            responseMessage.setSender(sender);
+            UserEntity client=userRepository.findByRole(ERole.BANQUIER).get(0);
+            responseMessage.setReceiver(client);
+            responseMessage.setLocalDateTime(new Date());
+            messageRepository.save(responseMessage);
+            responseMessage.setFileData(fileContent);
+            return messageMapper.fromMessageToMessageFileResDTO(responseMessage); // You can send a response message here if needed
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public MessageFileResDTO bankerSendFileMessage(Message message) {
+        byte[] fileContent = Base64.getDecoder().decode(message.getContent());
+
+        if (fileContent != null && fileContent.length <= 65536) {
+            String fileName = message.getFileName(); // Extract file name from the message
+
+            // Store the file content with the given file name
+            fileStorageService.storeFile(fileContent, fileName);
+
+            Message responseMessage = new Message();
+            responseMessage.setId(UUID.randomUUID().toString());
+            responseMessage.setContent(fileName);
+            responseMessage.setType(MessageType.FILE);
+            responseMessage.setFileType("FILE");
+            responseMessage.setFileName(fileName);
+            responseMessage.setSender(userRepository.findById(message.getSender().getId()).orElse(null));
+            responseMessage.setReceiver(userRepository.findById(message.getReceiver().getId()).orElse(null));
+            responseMessage.setLocalDateTime(new Date());
+            messageRepository.save(responseMessage);
+            responseMessage.setFileData(fileContent);
+            return messageMapper.fromMessageToMessageFileResDTO(responseMessage); // You can send a response message here if needed
+        } else {
+            return null;
+        }
+    }
+
 
 }

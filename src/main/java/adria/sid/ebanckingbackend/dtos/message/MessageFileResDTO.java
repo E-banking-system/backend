@@ -20,9 +20,6 @@ public class MessageFileResDTO {
     private MessageType type;
     private String content;
     private Date localDateTime;
-    private UserEntity sender;
-    private UserEntity receiver;
-    @JsonIgnore
     private byte[] fileData;
     private String fileName;
     private String fileType;

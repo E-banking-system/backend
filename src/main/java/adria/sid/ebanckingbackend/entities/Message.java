@@ -29,8 +29,7 @@ public class Message {
     @JoinColumn(name = "receiver_id")
     private UserEntity receiver;
 
-    // New fields for sending files
-    @JsonIgnore
+    // some fields for sending files
     private byte[] fileData;
     private String fileName;
     private String fileType;
